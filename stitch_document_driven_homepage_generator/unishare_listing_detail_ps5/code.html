@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Listing Detail - UniShare</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+                  "on-error-container": "#93000a",
+                  "surface-container-low": "#f6f3f2",
+                  "outline-variant": "#dbc0bf",
+                  "surface-bright": "#fcf9f8",
+                  "error-container": "#ffdad6",
+                  "surface-container-highest": "#e5e2e1",
+                  "on-secondary-fixed-variant": "#2a3aa6",
+                  "on-primary-fixed-variant": "#7d2b2e",
+                  "inverse-on-surface": "#f3f0ef",
+                  "background": "#fcf9f8",
+                  "secondary": "#4453bf",
+                  "error": "#ba1a1a",
+                  "on-secondary-container": "#0a1e91",
+                  "outline": "#887271",
+                  "on-tertiary-fixed-variant": "#005138",
+                  "surface-dim": "#dcd9d9",
+                  "on-secondary": "#ffffff",
+                  "on-primary-fixed": "#410008",
+                  "tertiary-fixed": "#8cf7c6",
+                  "primary-fixed-dim": "#ffb3b1",
+                  "on-primary": "#ffffff",
+                  "secondary-fixed-dim": "#bcc2ff",
+                  "on-surface": "#1c1b1b",
+                  "surface-tint": "#9b4243",
+                  "primary-container": "#ea7f7f",
+                  "on-secondary-fixed": "#000c61",
+                  "surface-container": "#f0eded",
+                  "inverse-surface": "#313030",
+                  "on-tertiary-fixed": "#002114",
+                  "surface": "#fcf9f8",
+                  "on-tertiary-container": "#003e2a",
+                  "on-error": "#ffffff",
+                  "primary": "#9b4243",
+                  "tertiary-fixed-dim": "#70daab",
+                  "tertiary-container": "#44b185",
+                  "on-tertiary": "#ffffff",
+                  "surface-container-high": "#eae7e7",
+                  "on-background": "#1c1b1b",
+                  "surface-variant": "#e5e2e1",
+                  "on-primary-container": "#66191e",
+                  "surface-container-lowest": "#ffffff",
+                  "secondary-container": "#808fff",
+                  "tertiary": "#006c4b",
+                  "primary-fixed": "#ffdad8",
+                  "on-surface-variant": "#554242",
+                  "inverse-primary": "#ffb3b1",
+                  "secondary-fixed": "#dfe0ff"
+          },
+          "borderRadius": {
+                  "DEFAULT": "0.25rem",
+                  "lg": "0.5rem",
+                  "xl": "0.75rem",
+                  "full": "9999px"
+          },
+          "spacing": {},
+          "fontFamily": {
+                  "headline": [
+                          "Space Grotesk"
+                  ],
+                  "body": [
+                          "Inter"
+                  ],
+                  "label": [
+                          "Inter"
+                  ]
+          }
+        },
+      },
+    }
+  </script>
+</head>
+<body class="bg-surface text-on-surface font-body antialiased selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl shadow-sm dark:shadow-none no-border tonal-transition font-['Inter'] text-sm tracking-tight text-[#9b4243] dark:text-[#ea7f7f]">
+<div class="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto">
+<div class="text-2xl font-['Space_Grotesk'] font-bold tracking-tighter text-[#9b4243] dark:text-[#ea7f7f] scale-95 active:scale-90 transition-transform">
+        UniShare
+      </div>
+<!-- Search Bar -->
+<div class="hidden md:flex flex-1 max-w-md mx-8 relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant" style="font-variation-settings: 'FILL' 0;">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container-low focus:bg-surface-container-lowest focus:ring-1 focus:ring-primary/40 focus:outline-none rounded-DEFAULT text-on-surface placeholder-on-surface-variant transition-all duration-200 border-none h-10" placeholder="Search for items, categories..." type="text"/>
+</div>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-[#9b4243] dark:text-[#ea7f7f] font-bold border-b-2 border-[#9b4243] hover:text-[#ea7f7f] transition-colors duration-200" href="#">Browse</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="text-[#9b4243] dark:text-[#ea7f7f] font-medium hover:text-[#ea7f7f] transition-colors duration-200 px-4 py-2 rounded-DEFAULT scale-95 active:scale-90 transition-transform">Login</button>
+<button class="bg-gradient-to-r from-primary to-primary-container text-on-primary px-5 py-2 rounded-DEFAULT font-medium hover:opacity-90 transition-all shadow-sm scale-95 active:scale-90 transition-transform">Register</button>
+</div>
+</div>
+</header>
+<!-- Main Layout Wrapper -->
+<main class="max-w-7xl mx-auto px-6 pt-28 pb-20">
+<!-- Breadcrumb Row -->
+<div class="flex flex-col md:flex-row md:items-center justify-between py-4 mb-6 bg-surface-container-low px-4 rounded-DEFAULT">
+<a class="inline-flex items-center text-primary font-medium text-sm hover:opacity-80 transition-opacity group" href="#">
+<span class="material-symbols-outlined mr-1 text-[18px] group-hover:-translate-x-1 transition-transform" style="font-variation-settings: 'FILL' 0;">arrow_back</span>
+        Back to listings
+      </a>
+<div class="text-[13px] text-on-surface-variant mt-2 md:mt-0 font-medium">
+        Home <span class="mx-2">/</span> Electronics <span class="mx-2">/</span> <span class="text-on-surface">Sony PlayStation 5 Console</span>
+</div>
+</div>
+<!-- Two-Column Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 relative">
+<!-- LEFT: Image Gallery (55%) -->
+<div class="lg:col-span-7 flex flex-col gap-4">
+<!-- Main Image -->
+<div class="relative w-full h-[400px] rounded-lg overflow-hidden bg-surface-container-lowest shadow-sm group">
+<img alt="PlayStation 5" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="sleek modern white gaming console standing upright next to controller on minimal wooden desk with soft ambient lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDba5lBGqUlIlsGMPpjhgYZfMixlU4MZ4FaD6Rn4xI3EwFFjRvqk6f2v6PHzwoiGk8HM3NJFex4-vcHuTBaho5qEb8LrgpMQ18Liq8EuB01zEapNpFTAQJa3ZNrhmesFZO3smGbsZl3CLlVlSHZS-qI8WatIkDf3BbprsO96MFtm2L0A3dnVN5JWbHTU98Pqz97-tIlIbQnbZ6B1wj19Ei22lwrjXCw85WN-QZHe2-qZkrjacxiLeFcxloD-N87F49TuG1MTL1yFPQ"/>
+<!-- Image Counter -->
+<div class="absolute top-4 right-4 bg-inverse-surface/80 backdrop-blur-md text-on-error px-3 py-1 rounded-full text-xs font-medium flex items-center shadow-md">
+<span class="material-symbols-outlined mr-1 text-[14px]" style="font-variation-settings: 'FILL' 1;">photo_library</span>
+            1 / 4
+          </div>
+</div>
+<!-- Thumbnails -->
+<div class="flex gap-2 overflow-x-auto pb-2 snap-x hide-scrollbar">
+<button class="w-[80px] h-[60px] flex-shrink-0 rounded-DEFAULT overflow-hidden border-2 border-primary ring-2 ring-primary-container/30 relative snap-start">
+<img alt="PS5 Thumbnail 1" class="w-full h-full object-cover" data-alt="close up of playstation 5 controller buttons white background studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCbnKeKCtIU2nbVH8uwX3jmDjJ01HumOx1AK4oqKG6E8j_uZq5SfqIQEoEk1L4Ef_vOVAOT0M5Vu64_76FtlJlKOfuXTaBGQGCgeaILDHOU14-NGKIQR426dT75CdTtepLchblXmtnSjpGwD_pQ4xd8zKJj3n_G3gBYrNTYnt6qVqW-TaqsV3QFHRBZBEjOtpMgnsdfOi2nIu2NZbS_QTDNnj9pmcyI77Jr_XbXpTZU8FbUFRUXaQR3T_pXmfqCXyiIiKcwnQLwvSI"/>
+<div class="absolute inset-0 bg-white/20"></div>
+</button>
+<button class="w-[80px] h-[60px] flex-shrink-0 rounded-DEFAULT overflow-hidden border-2 border-transparent hover:border-outline-variant transition-colors snap-start opacity-70 hover:opacity-100">
+<img alt="PS5 Thumbnail 2" class="w-full h-full object-cover" data-alt="playstation 5 console side profile laying horizontally minimal setup" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB3GwKzYSXYPrgclDk-LCMGoSBqMdlESwPCXtN5T2cfUTHV51aSnbpgXyepqcyw2W5Pwb7MfINSEwi9_PfH20w1XwdVquPb4QxMsswa0bBJKdu4KZksHww3EJVGIeM0G53tCjV14Q5Y5_IY15TdpLm8ugUCdTbUNJx7Bh5sB_dpgHk8dZNfLHpyGzzmPCSTQMlgBv3T1mPVjL_yenwv_lhi8UCBPnkV5WS-nZdAO9SffjBhcypWogkWRCT9DkeNp1AqfESRPpT-Ibo"/>
+</button>
+<button class="w-[80px] h-[60px] flex-shrink-0 rounded-DEFAULT overflow-hidden border-2 border-transparent hover:border-outline-variant transition-colors snap-start opacity-70 hover:opacity-100">
+<img alt="PS5 Thumbnail 3" class="w-full h-full object-cover" data-alt="dual sense wireless controller close up resting on textured dark surface dramatic lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuARrQPzcowH4vQXtZUPMkMRmzQ62MPCIzWV1dgUnVRn_zT9afF0UE1Vmg6cTYWEISid21lLPw6MowMDhXOwludvO_OLLod9sAuZyeaLP1gaxjwrHdB5hVs4av3XnFxPR0vhOsNmx3FuSD2xoib-FHmW4cSuqqzaLAz2dDtpYoRae-hNghfvXtxwQmLLSF0e4SUbgEbyywu0r20un3o5094azgTCAZg3VyacXZ2SkxPnyPOXokOmI4EBOxafbfi_D6gxY02JMJgogDQ"/>
+</button>
+<button class="w-[80px] h-[60px] flex-shrink-0 rounded-DEFAULT overflow-hidden border-2 border-transparent hover:border-outline-variant transition-colors snap-start opacity-70 hover:opacity-100">
+<img alt="PS5 Thumbnail 4" class="w-full h-full object-cover" data-alt="playstation 5 packaging box sitting on floor next to tv stand sunny living room" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCJY_sxsHBSyP2CkdHkvR1w8hw9TbHiCeVtl7HJTxnkgNlaz_thiIdrqVXcTcOV2HT1bV87L8ky-NTbzoxBXl7_5SU2cwfdXWsM5WE5jf8oUSkDDcSEPKRAk7nwNLJ8a5-Euk8oZsSe7qxVA0hoIslb5OQPAF2u9ImqtdjyZNbIAk_luRNYWBHqFoGyScHu4RtU-z6iprqVbhSF5VCUuuiYAZsqzNuNR29_stgSmPHS8e6LYYZUKcq-k_AH2Q3_uyO2BEwP2kyvK0s"/>
+</button>
+</div>
+</div>
+<!-- RIGHT: Booking Panel (45%) -->
+<div class="lg:col-span-5">
+<!-- Sticky Container Wrapper -->
+<div class="sticky top-28 bg-surface-container-lowest p-6 rounded-lg shadow-sm lg:shadow-md border border-surface-container-highest/50">
+<!-- Header Area -->
+<h1 class="font-headline font-bold text-2xl text-on-surface mb-3 tracking-tight">Sony PlayStation 5 Console</h1>
+<!-- Rating -->
+<div class="flex items-center mb-4">
+<div class="flex text-[#FFC107] mr-2">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 0;">star_half</span>
+</div>
+<span class="text-sm font-semibold text-on-surface mr-1">4.5</span>
+<span class="text-[13px] text-on-surface-variant font-medium">· 23 reviews</span>
+</div>
+<!-- Price -->
+<div class="flex items-baseline mb-5">
+<span class="font-headline font-bold text-[28px] text-primary-container tracking-tighter">$30</span>
+<span class="text-base text-on-surface-variant ml-1 font-medium">/ day</span>
+</div>
+<!-- Badges -->
+<div class="flex gap-2 mb-6">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-tertiary-container/20 text-tertiary">
+<span class="material-symbols-outlined mr-1 text-[12px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+              Like New
+            </span>
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-surface-container-high text-on-surface-variant">
+              Electronics
+            </span>
+</div>
+<!-- Owner Info -->
+<div class="flex items-center justify-between p-4 bg-surface-container-low rounded-DEFAULT mb-6 transition-colors hover:bg-surface-container group cursor-pointer">
+<div class="flex items-center gap-3">
+<img alt="Ahmed K." class="w-10 h-10 rounded-full object-cover ring-2 ring-white" data-alt="headshot of young male university student smiling casual attire soft natural lighting outdoors" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCUAEvvq1eqOq1O3HLfdUYyk-ffcBdRJeBNEd0GJWTmCwkxrqH4xyPXr38j_teXPLuyP0kVF1E23P0pbWaONH7onEi880NMoc-tUih25gTO4jjYFPFFk0tpUMs-Le4_c3oQXSfAtXnkrvGQNz9HrBJkIuPFdyXcs2W56PTFccGbGlogDS7SGBAbMDO6cSrymcPR0KzCtOsCQN3-GUU-LZQEfPx5d06KcyqUdGtO5wpYN8bS3sAUjBTsPB8RhIt2E-MWjnno_HdmQro"/>
+<div>
+<p class="text-sm font-semibold text-on-surface">Listed by Ahmed K.</p>
+<p class="text-xs text-on-surface-variant mt-0.5">Member since Jan 2024</p>
+</div>
+</div>
+<span class="text-primary text-sm font-semibold group-hover:text-primary-container transition-colors">View Profile</span>
+</div>
+<!-- Booking Form -->
+<form class="space-y-6">
+<!-- Dates -->
+<div>
+<label class="block text-sm font-semibold text-on-surface mb-2">Select Rental Dates</label>
+<div class="grid grid-cols-2 gap-3">
+<div class="relative">
+<input class="w-full h-[42px] pl-3 pr-10 bg-surface-container-low focus:bg-surface-container-lowest focus:ring-1 focus:ring-primary/40 rounded-DEFAULT border-none text-sm text-on-surface transition-all placeholder-on-surface-variant cursor-pointer" placeholder="Start Date" type="text"/>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none text-[18px]">calendar_today</span>
+</div>
+<div class="relative">
+<input class="w-full h-[42px] pl-3 pr-10 bg-surface-container-low focus:bg-surface-container-lowest focus:ring-1 focus:ring-primary/40 rounded-DEFAULT border-none text-sm text-on-surface transition-all placeholder-on-surface-variant cursor-pointer" placeholder="End Date" type="text"/>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none text-[18px]">calendar_today</span>
+</div>
+</div>
+<p class="text-xs text-on-surface-variant italic mt-2">Already booked dates are disabled</p>
+</div>
+<!-- Location -->
+<div>
+<label class="block text-sm font-semibold text-on-surface mb-2">Pickup Location</label>
+<div class="relative">
+<select class="w-full h-[42px] pl-3 pr-10 bg-surface-container-low focus:bg-surface-container-lowest focus:ring-1 focus:ring-primary/40 rounded-DEFAULT border-none text-sm text-on-surface transition-all appearance-none cursor-pointer">
+<option disabled="" selected="" value="">Select a campus location...</option>
+<option value="library">Library</option>
+<option value="student_center">Student Center</option>
+<option value="main_gate">Main Gate</option>
+<option value="cafeteria">Cafeteria</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none text-[18px]">expand_more</span>
+</div>
+</div>
+<!-- Summary -->
+<div class="bg-surface-container-low rounded-DEFAULT p-3 flex flex-col gap-2">
+<div class="flex justify-between text-sm">
+<span class="text-on-surface">$30 × 5 days</span>
+<span class="text-on-surface font-medium">$150.00</span>
+</div>
+<div class="flex justify-between text-sm">
+<span class="text-on-surface-variant">Platform fee</span>
+<span class="text-on-surface-variant">$0.00</span>
+</div>
+<div class="w-full h-px bg-surface-container-highest my-1"></div>
+<div class="flex justify-between items-center">
+<span class="text-base font-bold text-on-surface">Total</span>
+<span class="text-base font-bold text-on-surface">$150.00</span>
+</div>
+</div>
+<!-- Actions -->
+<div class="flex flex-col gap-3 pt-2">
+<button class="w-full h-[48px] bg-gradient-to-r from-primary to-primary-container text-on-primary rounded-DEFAULT font-headline font-semibold text-base shadow-sm hover:opacity-90 transition-opacity active:scale-[0.98]" type="button">
+                Book Now
+              </button>
+<button class="w-full h-[48px] bg-secondary-fixed-dim text-on-secondary-fixed rounded-DEFAULT font-semibold text-base hover:bg-secondary-fixed transition-colors active:scale-[0.98]" type="button">
+                Message Owner
+              </button>
+</div>
+<!-- Trust -->
+<div class="flex items-center justify-center gap-1.5 pt-2">
+<span class="material-symbols-outlined text-[14px] text-secondary" style="font-variation-settings: 'FILL' 1;">lock</span>
+<span class="text-xs text-on-surface-variant font-medium">Verified student listings only</span>
+</div>
+</form>
+</div>
+</div>
+</div> <!-- End Two-Column Grid -->
+<!-- Description Section -->
+<section class="mt-12 bg-surface-container-lowest p-6 lg:p-8 rounded-lg shadow-sm border border-surface-container-highest/50 max-w-4xl">
+<h2 class="font-headline font-bold text-[20px] text-on-surface mb-4 tracking-tight flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">info</span>
+        About this listing
+      </h2>
+<div class="prose prose-sm max-w-none text-on-surface/90 leading-relaxed text-base space-y-4">
+<p>Experience lightning-fast loading with an ultra-high-speed SSD, deeper immersion with support for haptic feedback, adaptive triggers, and 3D Audio, and an all-new generation of incredible PlayStation games.</p>
+<p>This console is in pristine condition and includes one DualSense controller, all necessary cables (HDMI, power, USB-C), and is clean and ready for your next gaming session. Perfect for a weekend tournament or trying out that new exclusive title.</p>
+<!-- Features List Styling -->
+<ul class="space-y-2 mt-4 bg-surface-container-low p-4 rounded-DEFAULT">
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-[18px] text-secondary mt-0.5" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-sm font-medium">Includes 1 DualSense Controller</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-[18px] text-secondary mt-0.5" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-sm font-medium">All cables provided</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-[18px] text-secondary mt-0.5" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-sm font-medium">Fully wiped and updated</span>
+</li>
+</ul>
+</div>
+</section>
+<!-- Reviews Section -->
+<section class="mt-8 bg-surface-container-lowest p-6 lg:p-8 rounded-lg shadow-sm border border-surface-container-highest/50 max-w-4xl">
+<h2 class="font-headline font-bold text-[20px] text-on-surface mb-6 tracking-tight flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">forum</span>
+        Reviews (23)
+      </h2>
+<!-- Review Summary Header -->
+<div class="flex flex-col md:flex-row gap-8 items-start md:items-center mb-8 p-6 bg-surface-container-low rounded-lg">
+<div class="flex flex-col items-center justify-center min-w-[120px]">
+<div class="font-headline font-bold text-[48px] leading-none text-on-surface tracking-tighter">4.5</div>
+<div class="flex text-[#FFC107] my-2">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 0;">star_half</span>
+</div>
+<div class="text-sm text-on-surface-variant font-medium">(23 reviews)</div>
+</div>
+<!-- Rating Bars -->
+<div class="flex-1 w-full space-y-2">
+<!-- 5 Star -->
+<div class="flex items-center gap-3 text-sm">
+<span class="w-4 font-medium text-on-surface-variant">5</span>
+<span class="material-symbols-outlined text-[14px] text-on-surface-variant" style="font-variation-settings: 'FILL' 1;">star</span>
+<div class="flex-1 h-2 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary-container rounded-full" style="width: 80%"></div>
+</div>
+<span class="w-8 text-right text-xs text-on-surface-variant">80%</span>
+</div>
+<!-- 4 Star -->
+<div class="flex items-center gap-3 text-sm">
+<span class="w-4 font-medium text-on-surface-variant">4</span>
+<span class="material-symbols-outlined text-[14px] text-on-surface-variant" style="font-variation-settings: 'FILL' 1;">star</span>
+<div class="flex-1 h-2 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary-container rounded-full" style="width: 15%"></div>
+</div>
+<span class="w-8 text-right text-xs text-on-surface-variant">15%</span>
+</div>
+<!-- 3 Star -->
+<div class="flex items-center gap-3 text-sm">
+<span class="w-4 font-medium text-on-surface-variant">3</span>
+<span class="material-symbols-outlined text-[14px] text-on-surface-variant" style="font-variation-settings: 'FILL' 1;">star</span>
+<div class="flex-1 h-2 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary-container rounded-full" style="width: 5%"></div>
+</div>
+<span class="w-8 text-right text-xs text-on-surface-variant">5%</span>
+</div>
+<!-- 2 & 1 Star (Empty) -->
+<div class="flex items-center gap-3 text-sm opacity-50">
+<span class="w-4 font-medium text-on-surface-variant">2</span>
+<span class="material-symbols-outlined text-[14px] text-on-surface-variant" style="font-variation-settings: 'FILL' 1;">star</span>
+<div class="flex-1 h-2 bg-surface-container-highest rounded-full overflow-hidden"></div>
+<span class="w-8 text-right text-xs text-on-surface-variant">0%</span>
+</div>
+</div>
+</div>
+<!-- Review Cards Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Card 1 -->
+<div class="bg-surface-container-lowest border border-surface-container-highest p-4 rounded-DEFAULT hover:bg-surface-container-low transition-colors duration-200 cursor-default">
+<div class="flex items-start justify-between mb-3">
+<div class="flex items-center gap-3">
+<img alt="Sarah J." class="w-10 h-10 rounded-full object-cover" data-alt="headshot of young female university student smiling warmly natural outdoor lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBrhMaZTYJqMD0xI0miU54DzYaO2krQJswlHCSRfllM28aciV4PMBmSKZjlgme7EP6jeqWQD_eKPzIyrZ10SZUcY-fOwqFbkvgY5-Z5h6S9pSX-xkXGZDzUAqy9ElPpPVSK0-MH1p_ZMLv4IoUWKSCYSLHLorUmKltJ92_QSpJp9iyU61SQ1AH5AXJRv33HF1k9QHfrT9Vs1L1eUZHkxrThEw-YiE8I3iAaidN8Df8KMo9xgL8Wa1wTaJs2Hb3jaPGHfuGTgAMHB3M"/>
+<div>
+<p class="text-sm font-semibold text-on-surface flex items-center gap-2">
+                  Sarah J.
+                  <span class="bg-secondary-container/30 text-on-secondary-container text-[10px] uppercase tracking-wider font-bold px-1.5 py-0.5 rounded-sm">Renter</span>
+</p>
+<div class="flex items-center gap-2 mt-0.5">
+<div class="flex text-[#FFC107]">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<span class="text-xs text-on-surface-variant">March 2026</span>
+</div>
+</div>
+</div>
+</div>
+<p class="text-sm text-on-surface/90 leading-relaxed line-clamp-4">
+            Ahmed was great to deal with. The PS5 was in perfect condition as described and pickup at the library was super convenient. Highly recommend for a weekend gaming binge!
+          </p>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-lowest border border-surface-container-highest p-4 rounded-DEFAULT hover:bg-surface-container-low transition-colors duration-200 cursor-default">
+<div class="flex items-start justify-between mb-3">
+<div class="flex items-center gap-3">
+<img alt="Michael T." class="w-10 h-10 rounded-full object-cover" data-alt="headshot of young male university student casual hoodie indoor library setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBlTIK68BlqgMAhvf_rGESbjf6-LXChy-uV5akqIMv6qAv8xX_wD6GP2BX6clyR0zz4VYfS_uFOgmEp91yLUpHB_yGjeS239j8-38TuoVW8fH0T5_1-HzBaOgXOdxkt-tIoY2_Jg8v-6EBOyKHv3WgUavK6EgfacYYjEDaom4SflZPrRSxCZ-6lXUeuT00U9pAMymk8pns5HtBmaZ1YqPE2jdnuw-wkFo4aT-v8wDcDsWrrBTZO6Guj2Y86woIy1duUVNeWUyH5bqo"/>
+<div>
+<p class="text-sm font-semibold text-on-surface flex items-center gap-2">
+                  Michael T.
+                  <span class="bg-secondary-container/30 text-on-secondary-container text-[10px] uppercase tracking-wider font-bold px-1.5 py-0.5 rounded-sm">Renter</span>
+</p>
+<div class="flex items-center gap-2 mt-0.5">
+<div class="flex text-[#FFC107]">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 0;">star_half</span>
+</div>
+<span class="text-xs text-on-surface-variant">Feb 2026</span>
+</div>
+</div>
+</div>
+</div>
+<p class="text-sm text-on-surface/90 leading-relaxed line-clamp-4">
+            Smooth transaction. Console worked flawlessly. Only giving 4.5 stars because we had to coordinate a slightly different pickup time, but overall excellent experience.
+          </p>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container-lowest border border-surface-container-highest p-4 rounded-DEFAULT hover:bg-surface-container-low transition-colors duration-200 cursor-default">
+<div class="flex items-start justify-between mb-3">
+<div class="flex items-center gap-3">
+<img alt="Jessica L." class="w-10 h-10 rounded-full object-cover" data-alt="headshot of young female university student with glasses smiling coffee shop background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBtu63re4jKrQIclYbeWY05HG74B9a6pKb51jALgkQv8vi5y7WoCST38EaN7EPuV0UnqBvbzb4K_zw3_SvhmsTw4Y5gRpekq5iJr3ck2pQ_Brlwsnj8mTFmgYdREI8-QDmFTi55S89YNCH5HKtFJgRMnBTdnBV4tluQJwCUUNCta1jqSEphldlJR8IvEJYw2cRun6umnWuBNivZ5Amjtmx6eVL8PbKu1618FaOWoqEvhWwaltZ1ga3DTxuY_Tpv4fK0JYcl9C5G_s"/>
+<div>
+<p class="text-sm font-semibold text-on-surface flex items-center gap-2">
+                  Jessica L.
+                  <span class="bg-secondary-container/30 text-on-secondary-container text-[10px] uppercase tracking-wider font-bold px-1.5 py-0.5 rounded-sm">Renter</span>
+</p>
+<div class="flex items-center gap-2 mt-0.5">
+<div class="flex text-[#FFC107]">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<span class="text-xs text-on-surface-variant">Jan 2026</span>
+</div>
+</div>
+</div>
+</div>
+<p class="text-sm text-on-surface/90 leading-relaxed line-clamp-4">
+            Rented this for a game night with friends. Everything was spotless and worked perfectly. Ahmed even threw in an extra charging cable. Awesome!
+          </p>
+</div>
+<!-- Card 4 -->
+<div class="bg-surface-container-lowest border border-surface-container-highest p-4 rounded-DEFAULT hover:bg-surface-container-low transition-colors duration-200 cursor-default">
+<div class="flex items-start justify-between mb-3">
+<div class="flex items-center gap-3">
+<img alt="David W." class="w-10 h-10 rounded-full object-cover" data-alt="headshot of young male university student serious expression wearing a cap campus background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7tqmBa69bBgaW5F77SXg0Vj3ulNLak0FmHu1Li3m1BJyl6tKnevL4FltlEG9B9rMBEyfcBNH27D4sVni7sX_IlyYFWHeutR6RmOFjOjDMeA7VRL4uuix4ehjXtn5CWeRQqQECWF4_l5QS-YEd-6m0D6WgA1seND11pxwWU-Bi_Vc6O6NC3IU60MLorWIDInzi_UJ2vFIEHU7e9o9br9BNTPJ7R0obSBSRDncMvWQPS-3Lw-6kGi0ZAYUYPi050-g5GmiS8Ya7n6o"/>
+<div>
+<p class="text-sm font-semibold text-on-surface flex items-center gap-2">
+                  David W.
+                  <span class="bg-secondary-container/30 text-on-secondary-container text-[10px] uppercase tracking-wider font-bold px-1.5 py-0.5 rounded-sm">Renter</span>
+</p>
+<div class="flex items-center gap-2 mt-0.5">
+<div class="flex text-[#FFC107]">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<span class="text-xs text-on-surface-variant">Dec 2025</span>
+</div>
+</div>
+</div>
+</div>
+<p class="text-sm text-on-surface/90 leading-relaxed line-clamp-4">
+            Exactly what I needed to finish Spiderman 2 over winter break. Console is whisper quiet. No issues at all.
+          </p>
+</div>
+</div>
+<div class="mt-8 text-center">
+<button class="text-primary font-semibold text-sm hover:text-primary-container transition-colors py-2 px-6 rounded-DEFAULT border border-transparent hover:border-outline-variant inline-flex items-center gap-2">
+          Load more reviews
+          <span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 0;">expand_more</span>
+</button>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full py-12 border-t border-slate-100 dark:border-slate-800 bg-[#fcf9f8] dark:bg-slate-950 font-['Inter'] text-xs uppercase tracking-widest text-[#9b4243] dark:text-[#ea7f7f] tonal-shift-bg-surface-container-low flat no-shadows">
+<div class="flex flex-col md:flex-row justify-between items-center px-8 gap-6 max-w-7xl mx-auto opacity-80 hover:opacity-100 transition-opacity duration-300">
+<div class="font-['Space_Grotesk'] font-bold text-lg text-slate-900 dark:text-white normal-case tracking-normal">
+        UniShare
+      </div>
+<div class="flex flex-wrap justify-center gap-6">
+<a class="text-slate-500 dark:text-slate-400 hover:text-[#9b4243] transition-all" href="#">About</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-[#9b4243] transition-all" href="#">Safety</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-[#9b4243] transition-all" href="#">Guidelines</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-[#9b4243] transition-all" href="#">Support</a>
+</div>
+<div class="text-slate-500 dark:text-slate-400 normal-case tracking-normal text-xs">
+        © 2024 UniShare. The Curated Commons. Built for students.
+      </div>
+</div>
+</footer>
+</body></html>

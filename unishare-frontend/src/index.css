@@ -1,0 +1,124 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Inter:wght@300..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Space Grotesk', sans-serif;
+  }
+
+  body {
+    @apply bg-surface text-on-surface;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+}
+
+@layer components {
+  /* Material Symbols base */
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    font-family: 'Material Symbols Outlined';
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
+    display: inline-block;
+    text-transform: none;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-feature-settings: 'liga';
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .material-symbols-filled {
+    font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  }
+
+  /* UniShare Input style */
+  .us-input {
+    @apply w-full bg-surface-container-low border border-transparent rounded-lg px-4 py-3 text-on-surface
+           transition-all duration-200 outline-none
+           focus:bg-surface-container-lowest focus:border-primary/40 focus:ring-0
+           placeholder:text-on-surface-variant/60;
+  }
+
+  /* Glassmorphism nav */
+  .glass-nav {
+    @apply bg-surface/70 backdrop-blur-xl border-b border-outline-variant/20;
+  }
+
+  /* Card base */
+  .us-card {
+    @apply bg-surface-container-lowest rounded-xl shadow-card;
+  }
+
+  /* Navbar links */
+  .nav-link {
+    @apply text-on-surface-variant font-medium hover:text-primary hover:bg-primary/5
+           transition-colors px-3 py-1.5 rounded-lg text-sm;
+  }
+
+  .mobile-nav-link {
+    @apply block text-on-surface font-medium hover:text-primary hover:bg-surface-container-low
+           transition-colors px-3 py-2.5 rounded-lg text-sm;
+  }
+
+  /* Primary gradient button */
+  .btn-primary {
+    @apply bg-gradient-to-r from-primary to-primary-container text-on-primary
+           font-label font-semibold rounded-lg px-6 py-3
+           hover:opacity-90 active:scale-95 transition-all duration-200
+           shadow-primary disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  /* Ghost button */
+  .btn-ghost {
+    @apply text-primary hover:bg-primary/5 font-label font-semibold rounded-lg px-6 py-3
+           transition-all duration-200 active:scale-95;
+  }
+
+  /* Surface button */
+  .btn-surface {
+    @apply bg-surface-container-low text-on-surface font-label font-medium rounded-lg px-4 py-2
+           hover:bg-surface-container-highest transition-colors duration-200 active:scale-95;
+  }
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #bccabd;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #6c7d6d;
+}
+
+/* Page transition */
+.page-enter {
+  opacity: 0;
+  transform: translateY(8px);
+}
+.page-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 200ms ease, transform 200ms ease;
+}

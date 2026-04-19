@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Checkout - The Curated Commons</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-secondary-fixed-variant": "#2a3aa6",
+                        "tertiary": "#006c4b",
+                        "primary": "#9b4243",
+                        "on-secondary": "#ffffff",
+                        "secondary": "#4453bf",
+                        "outline-variant": "#dbc0bf",
+                        "error-container": "#ffdad6",
+                        "on-primary-fixed-variant": "#7d2b2e",
+                        "primary-fixed-dim": "#ffb3b1",
+                        "on-tertiary-fixed-variant": "#005138",
+                        "inverse-surface": "#313030",
+                        "surface-bright": "#fcf9f8",
+                        "surface-container-high": "#eae7e7",
+                        "on-primary": "#ffffff",
+                        "surface": "#fcf9f8",
+                        "surface-dim": "#dcd9d9",
+                        "secondary-fixed": "#dfe0ff",
+                        "on-primary-fixed": "#410008",
+                        "secondary-container": "#808fff",
+                        "on-surface-variant": "#554242",
+                        "on-background": "#1c1b1b",
+                        "tertiary-container": "#44b185",
+                        "on-primary-container": "#66191e",
+                        "tertiary-fixed-dim": "#70daab",
+                        "inverse-primary": "#ffb3b1",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-on-surface": "#f3f0ef",
+                        "error": "#ba1a1a",
+                        "background": "#fcf9f8",
+                        "surface-tint": "#9b4243",
+                        "on-tertiary": "#ffffff",
+                        "surface-variant": "#e5e2e1",
+                        "on-surface": "#1c1b1b",
+                        "on-error": "#ffffff",
+                        "primary-fixed": "#ffdad8",
+                        "primary-container": "#ea7f7f",
+                        "on-tertiary-container": "#003e2a",
+                        "on-secondary-fixed": "#000c61",
+                        "on-tertiary-fixed": "#002114",
+                        "outline": "#887271",
+                        "on-secondary-container": "#0a1e91",
+                        "tertiary-fixed": "#8cf7c6",
+                        "surface-container": "#f0eded",
+                        "surface-container-highest": "#e5e2e1",
+                        "surface-container-low": "#f6f3f2",
+                        "secondary-fixed-dim": "#bcc2ff",
+                        "on-error-container": "#93000a"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "0.75rem",
+                        "xl": "1rem",
+                        "full": "9999px"
+                    },
+                    fontFamily: {
+                        "headline": ["Space Grotesk", "sans-serif"],
+                        "body": ["Inter", "sans-serif"],
+                        "label": ["Inter", "sans-serif"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, h4, h5, h6, .font-headline { font-family: 'Space Grotesk', sans-serif; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface antialiased min-h-screen pb-24 md:pb-0">
+<!-- TopAppBar (Suppressed navigation, but keeping brand header for context) -->
+<header class="bg-[#fcf9f8]/70 backdrop-blur-xl fixed top-0 w-full z-50 bg-gradient-to-b from-stone-200/20 to-transparent flex justify-between items-center px-6 py-4 max-w-7xl mx-auto">
+<div class="flex items-center gap-4">
+<button class="text-[#9b4243] hover:bg-stone-200/50 transition-colors p-2 rounded-full flex items-center justify-center h-10 w-10">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<span class="font-['Space_Grotesk'] text-xl font-bold text-[#9b4243] tracking-tighter">The Curated Commons</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#9b4243] text-sm" data-icon="lock">lock</span>
+<span class="font-label text-xs text-[#9b4243] font-medium tracking-wider uppercase">Secure Checkout</span>
+</div>
+</header>
+<main class="pt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+<div class="mb-10 text-center md:text-left">
+<h1 class="font-headline text-4xl md:text-5xl font-bold text-on-surface tracking-tight mb-2">Complete Booking</h1>
+<p class="font-body text-on-surface-variant text-lg">Secure your items with peace of mind.</p>
+</div>
+<div class="flex flex-col lg:flex-row gap-8 lg:gap-12">
+<!-- Left Column: Payment & Details -->
+<div class="flex-1 space-y-8">
+<!-- Payment Method Section -->
+<section class="bg-surface-container-lowest rounded-xl p-6 md:p-8 relative">
+<h2 class="font-headline text-2xl font-bold text-on-surface mb-6">Payment Method</h2>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+<!-- Credit Card Option (Active) -->
+<label class="relative cursor-pointer">
+<input checked="" class="peer sr-only" name="payment_method" type="radio" value="card"/>
+<div class="bg-surface-container-low rounded-xl p-4 flex items-center gap-4 border border-transparent peer-checked:border-primary/40 peer-checked:bg-surface-container-lowest transition-all hover:bg-surface-container">
+<div class="bg-primary-container/20 p-3 rounded-full text-primary">
+<span class="material-symbols-outlined" data-icon="credit_card">credit_card</span>
+</div>
+<div>
+<div class="font-label font-semibold text-on-surface">Credit Card</div>
+<div class="font-body text-xs text-on-surface-variant">Visa, Master, Amex</div>
+</div>
+<div class="ml-auto w-5 h-5 rounded-full border-2 border-outline flex items-center justify-center peer-checked:border-primary peer-checked:bg-primary">
+<div class="w-2.5 h-2.5 rounded-full bg-white opacity-0 peer-checked:opacity-100 transition-opacity"></div>
+</div>
+</div>
+</label>
+<!-- Cash Option -->
+<label class="relative cursor-pointer">
+<input class="peer sr-only" name="payment_method" type="radio" value="cash"/>
+<div class="bg-surface-container-low rounded-xl p-4 flex items-center gap-4 border border-transparent peer-checked:border-primary/40 peer-checked:bg-surface-container-lowest transition-all hover:bg-surface-container">
+<div class="bg-secondary-container/20 p-3 rounded-full text-secondary">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+</div>
+<div>
+<div class="font-label font-semibold text-on-surface">Cash on Hand</div>
+<div class="font-body text-xs text-on-surface-variant">Pay at pickup</div>
+</div>
+<div class="ml-auto w-5 h-5 rounded-full border-2 border-outline flex items-center justify-center peer-checked:border-primary peer-checked:bg-primary">
+<div class="w-2.5 h-2.5 rounded-full bg-white opacity-0 peer-checked:opacity-100 transition-opacity"></div>
+</div>
+</div>
+</label>
+</div>
+<!-- Card Details Form -->
+<div class="space-y-6">
+<div>
+<label class="block font-label text-sm font-medium text-on-surface mb-2">Cardholder Name</label>
+<input class="w-full bg-surface-container-low border-transparent focus:border-primary/40 focus:bg-surface-container-lowest focus:ring-0 rounded-DEFAULT px-4 py-3 text-on-surface font-body transition-all" placeholder="Alex Morgan" type="text"/>
+</div>
+<div>
+<label class="block font-label text-sm font-medium text-on-surface mb-2">Card Number</label>
+<div class="relative">
+<input class="w-full bg-surface-container-low border-transparent focus:border-primary/40 focus:bg-surface-container-lowest focus:ring-0 rounded-DEFAULT pl-12 pr-4 py-3 text-on-surface font-body transition-all" placeholder="0000 0000 0000 0000" type="text"/>
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant" data-icon="credit_card">credit_card</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div>
+<label class="block font-label text-sm font-medium text-on-surface mb-2">Expiry Date</label>
+<input class="w-full bg-surface-container-low border-transparent focus:border-primary/40 focus:bg-surface-container-lowest focus:ring-0 rounded-DEFAULT px-4 py-3 text-on-surface font-body transition-all" placeholder="MM/YY" type="text"/>
+</div>
+<div>
+<label class="block font-label text-sm font-medium text-on-surface mb-2">CVC</label>
+<div class="relative">
+<input class="w-full bg-surface-container-low border-transparent focus:border-primary/40 focus:bg-surface-container-lowest focus:ring-0 rounded-DEFAULT px-4 py-3 text-on-surface font-body transition-all pr-10" placeholder="123" type="text"/>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm cursor-help" data-icon="help">help</span>
+</div>
+</div>
+</div>
+<div class="pt-2">
+<label class="flex items-center gap-3 cursor-pointer">
+<input class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary/50 focus:ring-offset-0 bg-surface-container-low" type="checkbox"/>
+<span class="font-body text-sm text-on-surface-variant">Save card for future payments</span>
+</label>
+</div>
+</div>
+</section>
+<!-- Billing Address Section -->
+<section class="bg-surface-container-lowest rounded-xl p-6 md:p-8">
+<div class="flex items-center justify-between mb-6">
+<h2 class="font-headline text-2xl font-bold text-on-surface">Billing Address</h2>
+<button class="font-label text-sm text-secondary font-medium hover:underline">Edit</button>
+</div>
+<div class="bg-surface-container-low rounded-xl p-4 flex gap-4 items-start">
+<span class="material-symbols-outlined text-on-surface-variant mt-1" data-icon="location_on">location_on</span>
+<div>
+<p class="font-label font-semibold text-on-surface">Alex Morgan</p>
+<p class="font-body text-sm text-on-surface-variant mt-1">123 University Ave, Suite 400<br/>Campus Commons, CA 90210</p>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Column: Order Summary (Sticky) -->
+<div class="lg:w-[400px]">
+<div class="sticky top-24">
+<section class="bg-surface-container-lowest rounded-xl p-6 shadow-[0_8px_32px_rgba(155,66,67,0.04)]">
+<h2 class="font-headline text-2xl font-bold text-on-surface mb-6">Order Summary</h2>
+<!-- Items -->
+<div class="space-y-4 mb-6">
+<div class="flex gap-4 items-center">
+<div class="w-16 h-16 rounded-lg bg-surface-container-high overflow-hidden shrink-0">
+<img alt="Vintage Typewriter" class="w-full h-full object-cover" data-alt="vintage manual typewriter in pristine condition resting on a dark wooden academic desk with soft warm lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD0nzp-zJEgxT4Kedd9ZoPIwOQ08oCk-OcBR3Xc0XYTN_ghEm5c46KgdgxRUvfx7LlaqgM1u1r9DdcC69ZudgEDRJ59GMOUZW9YenjN52ZQ8JE93bT9y-zAePBpff29uhsFv1-74ysJP3z2yLyqcv5Rz9OgqjSHtcdbLs8ARMnpmcsUSPbPGd94NFUFyoiUVSN8a0o-D4NAUC2Rm3gB3H4ig7IGIr1mzn0_4VoxLzfF_U1z8pgo9nMzubJ5IpKRwjZiB48B36w8itA"/>
+</div>
+<div class="flex-1">
+<h3 class="font-label font-semibold text-on-surface text-sm">Vintage Typewriter Rental</h3>
+<p class="font-body text-xs text-on-surface-variant">1 Week</p>
+</div>
+<div class="font-label font-semibold text-on-surface">$120.00</div>
+</div>
+<div class="flex gap-4 items-center">
+<div class="w-16 h-16 rounded-lg bg-surface-container-high overflow-hidden shrink-0 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined" data-icon="verified_user">verified_user</span>
+</div>
+<div class="flex-1">
+<h3 class="font-label font-semibold text-on-surface text-sm">Commons Protection</h3>
+<p class="font-body text-xs text-on-surface-variant">Standard coverage</p>
+</div>
+<div class="font-label font-semibold text-on-surface">$15.00</div>
+</div>
+</div>
+<!-- Cost Breakdown -->
+<div class="bg-surface-container-low rounded-xl p-4 mb-6 space-y-3">
+<div class="flex justify-between font-body text-sm text-on-surface-variant">
+<span>Subtotal</span>
+<span>$135.00</span>
+</div>
+<div class="flex justify-between font-body text-sm text-on-surface-variant">
+<span>Service Fee</span>
+<span>$15.00</span>
+</div>
+<div class="h-px w-full bg-surface-container-highest my-2"></div>
+<div class="flex justify-between items-end pt-2">
+<span class="font-label font-semibold text-on-surface">Total</span>
+<span class="font-headline text-3xl font-bold text-primary-container tracking-tighter leading-none">$150.00</span>
+</div>
+</div>
+<!-- CTA -->
+<button class="w-full bg-gradient-to-r from-primary to-primary-container text-white font-label font-semibold text-lg py-4 rounded-xl hover:opacity-90 transition-opacity flex items-center justify-center gap-2 mb-4">
+<span>Confirm Booking</span>
+<span class="material-symbols-outlined text-lg" data-icon="arrow_forward">arrow_forward</span>
+</button>
+<div class="flex items-center justify-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-sm" data-icon="lock">lock</span>
+<span class="font-body text-xs">Secure Checkout provided by Stripe</span>
+</div>
+</section>
+</div>
+</div>
+</div>
+</main>
+</body></html>

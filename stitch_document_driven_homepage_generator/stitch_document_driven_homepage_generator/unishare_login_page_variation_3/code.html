@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>UniShare - Login</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "tertiary": "#006c4b",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-container": "#66191e",
+                        "on-tertiary-fixed-variant": "#005138",
+                        "on-primary": "#ffffff",
+                        "secondary-fixed": "#dfe0ff",
+                        "inverse-on-surface": "#f3f0ef",
+                        "error-container": "#ffdad6",
+                        "secondary": "#4453bf",
+                        "primary": "#9b4243",
+                        "tertiary-container": "#44b185",
+                        "primary-container": "#ea7f7f",
+                        "on-secondary-container": "#0a1e91",
+                        "error": "#ba1a1a",
+                        "on-secondary-fixed": "#000c61",
+                        "on-background": "#1c1b1b",
+                        "surface": "#fcf9f8",
+                        "on-surface": "#1c1b1b",
+                        "on-primary-fixed-variant": "#7d2b2e",
+                        "surface-dim": "#dcd9d9",
+                        "secondary-container": "#808fff",
+                        "surface-bright": "#fcf9f8",
+                        "on-tertiary": "#ffffff",
+                        "surface-variant": "#e5e2e1",
+                        "inverse-surface": "#313030",
+                        "tertiary-fixed": "#8cf7c6",
+                        "on-primary-fixed": "#410008",
+                        "primary-fixed": "#ffdad8",
+                        "on-tertiary-container": "#003e2a",
+                        "background": "#fcf9f8",
+                        "on-error": "#ffffff",
+                        "surface-container-low": "#f6f3f2",
+                        "surface-container-high": "#eae7e7",
+                        "outline-variant": "#dbc0bf",
+                        "surface-container-highest": "#e5e2e1",
+                        "primary-fixed-dim": "#ffb3b1",
+                        "outline": "#887271",
+                        "tertiary-fixed-dim": "#70daab",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-fixed": "#002114",
+                        "on-surface-variant": "#554242",
+                        "on-secondary-fixed-variant": "#2a3aa6",
+                        "surface-tint": "#9b4243",
+                        "on-secondary": "#ffffff",
+                        "secondary-fixed-dim": "#bcc2ff",
+                        "inverse-primary": "#ffb3b1",
+                        "surface-container": "#f0eded"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    fontFamily: {
+                        "headline": ["Space Grotesk", "sans-serif"],
+                        "body": ["Inter", "sans-serif"],
+                        "label": ["Inter", "sans-serif"]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-surface text-on-surface font-body h-screen w-full flex antialiased">
+<!-- Left Panel: Coral Branding -->
+<div class="hidden lg:flex flex-col w-[40%] bg-primary-container relative overflow-hidden p-12 justify-between">
+<!-- Background graphic/illustration element -->
+<div class="absolute inset-0 z-0 opacity-20 pointer-events-none" data-alt="A candid photo of university students collaborating on a campus lawn, soft warm sunlight, editorial aesthetic" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC4u-r0-odeX9W1uIy5yytFnj_Oh9PCTYX7MILAFvVvzmr_F1NpDyzdtQSJkGEq_TM7IY68LvUiTFh26lTEi3HxnfABGp9qOrEGTEkYhFcy5tWrKr26e4QlQZKpxj_p8Y9a7DTHzMFig-b-M2f_8t15MJCwag90wPxIv4_wttB66dDdk2WcwljPrTcxGUAHZi3xZ6UWnlekk6nRWT0YRuEg-ftE8BuLTDQ5u6OwgJajEyraS5b6IRZr9j6dNrMUCRBP24oXKiw1Dm8'); background-size: cover; background-position: center; mix-blend-mode: overlay;"></div>
+<div class="z-10 flex items-center gap-3">
+<span class="material-symbols-outlined text-4xl text-on-primary" style="font-variation-settings: 'FILL' 1;">
+                school
+            </span>
+<span class="font-headline font-bold tracking-tighter text-3xl text-on-primary">The Commons</span>
+</div>
+<div class="z-10 mt-auto mb-32 max-w-md">
+<h1 class="font-headline font-extrabold text-5xl leading-tight text-on-primary tracking-tight mb-6" style="letter-spacing: -0.02em;">
+                Curate your <br/>campus life.
+            </h1>
+<p class="font-body text-lg text-on-primary/90 font-medium">
+                Join the verified marketplace for students. Discover textbooks, tech, and housing—all within your university community.
+            </p>
+</div>
+<div class="z-10 flex gap-4 text-sm text-on-primary/80 font-medium">
+<span>Verified Students Only</span>
+<span>•</span>
+<span>Secure Exchange</span>
+</div>
+</div>
+<!-- Right Panel: Login Card -->
+<div class="w-full lg:w-[60%] flex items-center justify-center p-6 sm:p-12 relative">
+<!-- Top Nav element (Mobile Only) -->
+<div class="lg:hidden absolute top-0 left-0 w-full p-6 flex justify-center">
+<span class="font-headline font-bold tracking-tighter text-2xl text-primary">The Commons</span>
+</div>
+<!-- Login Card Container -->
+<div class="w-full max-w-md bg-surface-container-lowest rounded-xl p-8 sm:p-10 shadow-[0_32px_64px_-12px_rgba(155,66,67,0.04)] border-none">
+<div class="mb-10 text-center">
+<h2 class="font-headline text-3xl font-bold text-on-surface mb-3 tracking-tight">Welcome back</h2>
+<p class="font-body text-on-surface-variant text-base">Enter your university credentials to continue.</p>
+</div>
+<form class="space-y-6">
+<!-- Email Field -->
+<div class="space-y-2">
+<label class="block font-label text-sm font-semibold text-on-surface" for="email">University Email</label>
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-outline group-focus-within:text-primary transition-colors">mail</span>
+</div>
+<input class="block w-full pl-11 pr-4 py-3 bg-surface-container-low border-none rounded focus:ring-1 focus:ring-primary/40 focus:bg-surface-container-lowest transition-all font-body text-on-surface" id="email" name="email" placeholder="you@university.edu" required="" type="email" value="student@university.edu"/>
+</div>
+</div>
+<!-- Password Field -->
+<div class="space-y-2">
+<div class="flex justify-between items-center">
+<label class="block font-label text-sm font-semibold text-on-surface" for="password">Password</label>
+<a class="font-label text-sm font-medium text-primary hover:text-primary-container transition-colors" href="#">Forgot password?</a>
+</div>
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-outline group-focus-within:text-primary transition-colors">lock</span>
+</div>
+<input class="block w-full pl-11 pr-11 py-3 bg-surface-container-low border-none rounded focus:ring-1 focus:ring-primary/40 focus:bg-surface-container-lowest transition-all font-body text-on-surface" id="password" name="password" placeholder="••••••••" required="" type="password" value="••••••••"/>
+<button class="absolute inset-y-0 right-0 pr-4 flex items-center text-outline hover:text-on-surface-variant transition-colors" type="button">
+<span class="material-symbols-outlined text-lg">visibility</span>
+</button>
+</div>
+</div>
+<!-- Submit Button (Loading State) -->
+<button class="w-full mt-8 py-3.5 px-4 border border-transparent rounded bg-gradient-to-r from-primary to-primary-container text-on-primary font-label text-sm font-bold tracking-wide shadow-sm flex justify-center items-center gap-2 opacity-80 cursor-not-allowed" disabled="" type="button">
+<svg class="animate-spin h-5 w-5 text-white" fill="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+<path class="opacity-75" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" fill="currentColor"></path>
+</svg>
+                    Signing In...
+                </button>
+</form>
+<div class="mt-8 text-center">
+<p class="font-body text-sm text-on-surface-variant">
+                    Don't have an account? 
+                    <a class="font-bold text-primary hover:text-primary-container transition-colors" href="#">Register</a>
+</p>
+</div>
+<div class="mt-12 pt-6 border-t border-surface-container-high/50 flex justify-center">
+<span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container font-label text-xs font-semibold uppercase tracking-wider">
+<span class="material-symbols-outlined text-[14px]">verified_user</span>
+                    Verified Network
+                </span>
+</div>
+</div>
+</div>
+</body></html>

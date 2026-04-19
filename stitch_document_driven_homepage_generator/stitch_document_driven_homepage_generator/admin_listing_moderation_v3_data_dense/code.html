@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Curated Commons - Listings Moderation</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "background": "#fcf9f8",
+                        "on-tertiary-fixed": "#002114",
+                        "error-container": "#ffdad6",
+                        "inverse-surface": "#313030",
+                        "secondary-fixed-dim": "#bcc2ff",
+                        "outline-variant": "#dbc0bf",
+                        "on-surface-variant": "#554242",
+                        "surface-variant": "#e5e2e1",
+                        "on-secondary": "#ffffff",
+                        "surface-container-highest": "#e5e2e1",
+                        "error": "#ba1a1a",
+                        "surface": "#fcf9f8",
+                        "tertiary": "#006c4b",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "secondary-container": "#808fff",
+                        "on-error": "#ffffff",
+                        "on-tertiary-container": "#003e2a",
+                        "outline": "#887271",
+                        "on-background": "#1c1b1b",
+                        "primary": "#9b4243",
+                        "surface-dim": "#dcd9d9",
+                        "on-primary-container": "#66191e",
+                        "primary-fixed": "#ffdad8",
+                        "on-surface": "#1c1b1b",
+                        "secondary-fixed": "#dfe0ff",
+                        "tertiary-fixed-dim": "#70daab",
+                        "inverse-on-surface": "#f3f0ef",
+                        "on-error-container": "#93000a",
+                        "surface-tint": "#9b4243",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-high": "#eae7e7",
+                        "on-secondary-fixed": "#000c61",
+                        "primary-fixed-dim": "#ffb3b1",
+                        "primary-container": "#ea7f7f",
+                        "on-secondary-container": "#0a1e91",
+                        "surface-container": "#f0eded",
+                        "surface-container-low": "#f6f3f2",
+                        "secondary": "#4453bf",
+                        "on-primary-fixed-variant": "#7d2b2e",
+                        "inverse-primary": "#ffb3b1",
+                        "tertiary-fixed": "#8cf7c6",
+                        "tertiary-container": "#44b185",
+                        "surface-bright": "#fcf9f8",
+                        "on-primary-fixed": "#410008",
+                        "on-tertiary-fixed-variant": "#005138",
+                        "on-secondary-fixed-variant": "#2a3aa6"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {},
+                    "fontFamily": {
+                        "headline": ["Space Grotesk", "sans-serif"],
+                        "body": ["Inter", "sans-serif"],
+                        "label": ["Inter", "sans-serif"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: theme('colors.surface'); color: theme('colors.on-surface'); }
+        h1, h2, h3, h4, h5, h6, .font-headline { font-family: 'Space Grotesk', sans-serif; }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden">
+<!-- SideNavBar -->
+<nav class="bg-surface h-screen w-64 fixed left-0 top-0 z-50 border-r-0 shadow-[1px_0_0_0_theme(colors.surface-container-highest)] hidden md:flex flex-col py-6 px-4">
+<div class="mb-8 px-4">
+<h1 class="text-xl font-bold text-primary font-headline tracking-tight">Curated Commons</h1>
+<p class="text-xs text-on-surface-variant mt-1 font-body">Admin Console</p>
+</div>
+<div class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface transition-all rounded-lg font-body font-medium" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                Dashboard
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface transition-all rounded-lg font-body font-medium" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+                Users
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 bg-primary-fixed/20 text-primary font-bold rounded-lg font-body transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="list_alt">list_alt</span>
+                Listings
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface transition-all rounded-lg font-body font-medium" href="#">
+<span class="material-symbols-outlined" data-icon="event_available">event_available</span>
+                Bookings
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface transition-all rounded-lg font-body font-medium" href="#">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+                Payments
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface transition-all rounded-lg font-body font-medium" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+                Settings
+            </a>
+</div>
+<div class="mt-auto px-4 py-3 flex items-center gap-3 rounded-lg hover:bg-surface-container-highest cursor-pointer transition-all">
+<img alt="Admin Avatar" class="w-8 h-8 rounded-full object-cover ring-2 ring-surface-container-highest" data-alt="professional portrait of admin user in soft lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuALSXYwAlheBWOfEH-wP2iQQWDuOnSAk5MzcFRGZ4lqT_9nh42mhUmixt4PYGoFjGZfuQ7RkuZN70n8_dx1Czh9Yun0X4F1p7hlpSDsI3fhb_zGtDUhR2ak6qy4E_z_H-75FqJ77rHSfYIAJv2zrpPsznq7cRdoi2nA2dxi-k7TiQ3XdCKaTc7OJ4tr6Df-GluZPANcO7FfAgZZhpKrOvWEWxvGc0G9y71lqN9SEZo67m2BCerr3LxMHGlnYL3gYmdmj0F-pnzZGzg"/>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-medium text-on-surface truncate">Admin Workspace</p>
+<p class="text-xs text-on-surface-variant truncate">jane.doe@uni.edu</p>
+</div>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 ml-0 md:ml-64 flex flex-col h-full bg-surface-container-low overflow-hidden">
+<!-- TopNavBar -->
+<header class="sticky top-0 w-full z-40 bg-surface/80 backdrop-blur-xl border-b border-surface-container-highest px-8 py-4 flex items-center justify-between">
+<div class="flex items-center gap-4 flex-1">
+<h2 class="font-headline font-bold text-lg text-on-surface">Moderation Portal</h2>
+</div>
+<div class="flex items-center gap-6 flex-1 justify-center max-w-xl hidden lg:flex">
+<div class="relative w-full group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary transition-colors">search</span>
+<input class="w-full bg-surface-container-highest text-on-surface placeholder-outline-variant text-sm rounded-full pl-10 pr-4 py-2 focus:outline-none focus:ring-1 focus:ring-primary/40 focus:bg-surface-container-lowest transition-all" placeholder="Search listings..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4 flex-1 justify-end text-on-surface-variant">
+<button class="p-2 rounded-full hover:bg-surface-container-highest hover:text-primary transition-colors relative">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<button class="p-2 rounded-full hover:bg-surface-container-highest hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+</button>
+</div>
+</header>
+<!-- Scrollable Content -->
+<div class="flex-1 overflow-y-auto p-8">
+<div class="max-w-7xl mx-auto space-y-8">
+<!-- Header & Actions -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div>
+<h1 class="text-3xl font-headline font-bold text-on-surface tracking-tight mb-2">Review Listings</h1>
+<p class="text-on-surface-variant font-body">Manage and moderate active listings across the platform.</p>
+</div>
+<div class="flex gap-3">
+<button class="flex items-center gap-2 px-4 py-2 bg-surface-container-lowest text-on-surface rounded-lg font-medium text-sm hover:bg-surface-container-highest transition-colors shadow-sm">
+<span class="material-symbols-outlined text-sm">filter_list</span>
+                            Filter
+                        </button>
+<button class="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary to-primary-container text-on-primary rounded-lg font-medium text-sm hover:opacity-90 transition-opacity shadow-sm shadow-primary/20">
+<span class="material-symbols-outlined text-sm">add</span>
+                            New Listing
+                        </button>
+</div>
+</div>
+<!-- Category Pills -->
+<div class="flex flex-wrap gap-2 pb-4 border-b border-surface-container-highest">
+<button class="px-4 py-1.5 rounded-full bg-primary-container/20 text-on-primary-container font-medium text-sm border border-primary-container/30">All Listings</button>
+<button class="px-4 py-1.5 rounded-full bg-surface-container-lowest text-on-surface-variant font-medium text-sm hover:bg-surface-container-highest transition-colors border border-transparent">Textbooks</button>
+<button class="px-4 py-1.5 rounded-full bg-surface-container-lowest text-on-surface-variant font-medium text-sm hover:bg-surface-container-highest transition-colors border border-transparent">Electronics</button>
+<button class="px-4 py-1.5 rounded-full bg-surface-container-lowest text-on-surface-variant font-medium text-sm hover:bg-surface-container-highest transition-colors border border-transparent">Furniture</button>
+<button class="px-4 py-1.5 rounded-full bg-surface-container-lowest text-on-surface-variant font-medium text-sm hover:bg-surface-container-highest transition-colors border border-transparent">Services</button>
+<button class="px-4 py-1.5 rounded-full bg-surface-container-lowest text-on-error font-medium text-sm hover:bg-error-container/50 hover:text-error transition-colors ml-auto flex items-center gap-1 border border-transparent">
+<span class="material-symbols-outlined text-[16px]">report</span> Needs Review
+                    </button>
+</div>
+<!-- Dense Table Container -->
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left text-sm whitespace-nowrap font-body">
+<thead class="bg-surface-container-low/50 text-on-surface-variant border-b border-surface-container-highest">
+<tr>
+<th class="px-6 py-3 font-medium w-12">
+<input class="rounded text-primary focus:ring-primary/40 bg-surface-container border-outline-variant" type="checkbox"/>
+</th>
+<th class="px-6 py-3 font-medium">Item Title</th>
+<th class="px-6 py-3 font-medium">Seller</th>
+<th class="px-6 py-3 font-medium">Category</th>
+<th class="px-6 py-3 font-medium">Price</th>
+<th class="px-6 py-3 font-medium">Status</th>
+<th class="px-6 py-3 font-medium">Posted</th>
+<th class="px-6 py-3 font-medium text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container-highest text-on-surface">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-highest/30 transition-colors group">
+<td class="px-6 py-2.5">
+<input class="rounded text-primary focus:ring-primary/40 bg-surface border-outline-variant" type="checkbox"/>
+</td>
+<td class="px-6 py-2.5">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-surface-container overflow-hidden flex-shrink-0">
+<img alt="Book" class="w-full h-full object-cover" data-alt="stack of hardcover college textbooks" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDR5oDOlM0mdB3GVwtX1DGMK9SXZ1rM-o_lLQMjShbFA7zP_aNezyop-FLQ5EXJJhzEdSlzczkwvfN5-Nq0ZCAP8w1kmx_Qs7Kk4QESQC6L8xStvH5lRQllX7fM6MvwJ5PM9VXRKY-uopDJ4SA2-yVZJ5NKNjev5AgKbInOIjVZWzfCRtP3jK6tA4ahoivl2mN6dR0Fcl1Qi3OeqvtDdodB3H2FYBL7NiMbCTfWc7oaLHy20kCvOpYV_a5CnKzmdoqRiHkaYCX9n2E"/>
+</div>
+<span class="font-medium text-primary hover:underline cursor-pointer truncate max-w-[200px]">Advanced Calculus 4th Ed</span>
+</div>
+</td>
+<td class="px-6 py-2.5 text-on-surface-variant">David Chen</td>
+<td class="px-6 py-2.5 text-on-surface-variant">Textbooks</td>
+<td class="px-6 py-2.5 font-medium">$45.00</td>
+<td class="px-6 py-2.5">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span class="text-tertiary text-xs font-medium">Active</span>
+</div>
+</td>
+<td class="px-6 py-2.5 text-on-surface-variant text-xs">2 hours ago</td>
+<td class="px-6 py-2.5 text-right">
+<div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1 text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[20px]">edit</span></button>
+<button class="p-1 text-on-surface-variant hover:text-error transition-colors"><span class="material-symbols-outlined text-[20px]">delete</span></button>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-highest/30 transition-colors group">
+<td class="px-6 py-2.5">
+<input class="rounded text-primary focus:ring-primary/40 bg-surface border-outline-variant" type="checkbox"/>
+</td>
+<td class="px-6 py-2.5">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-surface-container overflow-hidden flex-shrink-0 flex items-center justify-center text-outline-variant">
+<span class="material-symbols-outlined text-[20px]">image</span>
+</div>
+<span class="font-medium text-primary hover:underline cursor-pointer truncate max-w-[200px]">Sony WH-1000XM4</span>
+</div>
+</td>
+<td class="px-6 py-2.5 text-on-surface-variant">Sarah Jenkins</td>
+<td class="px-6 py-2.5 text-on-surface-variant">Electronics</td>
+<td class="px-6 py-2.5 font-medium">$180.00</td>
+<td class="px-6 py-2.5">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-primary-container"></span>
+<span class="text-primary-container text-xs font-medium">Pending Review</span>
+</div>
+</td>
+<td class="px-6 py-2.5 text-on-surface-variant text-xs">5 hours ago</td>
+<td class="px-6 py-2.5 text-right">
+<div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1 text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[20px]">check_circle</span></button>
+<button class="p-1 text-on-surface-variant hover:text-error transition-colors"><span class="material-symbols-outlined text-[20px]">block</span></button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="px-6 py-3 border-t border-surface-container-highest flex items-center justify-between bg-surface-container-low/30">
+<p class="text-xs text-on-surface-variant">Showing 1 to 10 of 240 entries</p>
+<div class="flex gap-1">
+<button class="p-1 text-outline hover:text-primary transition-colors disabled:opacity-50"><span class="material-symbols-outlined text-sm">chevron_left</span></button>
+<button class="p-1 text-outline hover:text-primary transition-colors"><span class="material-symbols-outlined text-sm">chevron_right</span></button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

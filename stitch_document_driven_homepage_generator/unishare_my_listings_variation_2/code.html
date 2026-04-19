@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>UniShare - My Listings</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400..700&amp;family=Inter:wght@400..700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "tertiary": "#006c4b",
+                      "on-secondary-container": "#0a1e91",
+                      "on-primary": "#ffffff",
+                      "surface-container": "#f0eded",
+                      "on-primary-fixed": "#410008",
+                      "secondary-fixed-dim": "#bcc2ff",
+                      "error-container": "#ffdad6",
+                      "tertiary-fixed-dim": "#70daab",
+                      "on-surface": "#1c1b1b",
+                      "outline": "#887271",
+                      "surface-container-highest": "#e5e2e1",
+                      "on-surface-variant": "#554242",
+                      "on-primary-fixed-variant": "#7d2b2e",
+                      "secondary": "#4453bf",
+                      "surface": "#fcf9f8",
+                      "on-tertiary-fixed": "#002114",
+                      "on-error-container": "#93000a",
+                      "surface-variant": "#e5e2e1",
+                      "inverse-surface": "#313030",
+                      "on-tertiary": "#ffffff",
+                      "primary": "#9b4243",
+                      "surface-container-lowest": "#ffffff",
+                      "primary-fixed-dim": "#ffb3b1",
+                      "primary-container": "#ea7f7f",
+                      "on-secondary-fixed-variant": "#2a3aa6",
+                      "outline-variant": "#dbc0bf",
+                      "tertiary-fixed": "#8cf7c6",
+                      "on-error": "#ffffff",
+                      "tertiary-container": "#44b185",
+                      "on-secondary-fixed": "#000c61",
+                      "on-secondary": "#ffffff",
+                      "inverse-primary": "#ffb3b1",
+                      "surface-container-high": "#eae7e7",
+                      "error": "#ba1a1a",
+                      "secondary-container": "#808fff",
+                      "on-tertiary-fixed-variant": "#005138",
+                      "on-primary-container": "#66191e",
+                      "on-tertiary-container": "#003e2a",
+                      "background": "#fcf9f8",
+                      "surface-tint": "#9b4243",
+                      "inverse-on-surface": "#f3f0ef",
+                      "surface-bright": "#fcf9f8",
+                      "surface-dim": "#dcd9d9",
+                      "primary-fixed": "#ffdad8",
+                      "on-background": "#1c1b1b",
+                      "secondary-fixed": "#dfe0ff",
+                      "surface-container-low": "#f6f3f2"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {},
+              "fontFamily": {
+                      "headline": [
+                              "Space Grotesk"
+                      ],
+                      "body": [
+                              "Inter"
+                      ],
+                      "label": [
+                              "Inter"
+                      ]
+              }
+      },
+          },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, h4, h5, h6, .font-headline { font-family: 'Space Grotesk', sans-serif; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface antialiased min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<header class="bg-[#fcf9f8]/80 dark:bg-stone-950/80 backdrop-blur-xl text-[#9b4243] dark:text-[#ea7f7f] font-['Space_Grotesk'] font-bold tracking-tight fixed top-0 w-full z-50 bg-stone-100/50 dark:bg-stone-800/50 shadow-sm dark:shadow-none">
+<div class="max-w-7xl mx-auto flex justify-between items-center px-8 py-5">
+<div class="text-2xl font-bold tracking-tighter text-[#9b4243] dark:text-[#ea7f7f]">UniShare</div>
+<nav class="hidden md:flex gap-8">
+<a class="text-stone-500 dark:text-stone-400 font-medium pb-1 hover:text-[#9b4243] dark:hover:text-[#ea7f7f] transition-all duration-300 active:scale-95 transition-transform" href="#">Browse</a>
+<a class="text-stone-500 dark:text-stone-400 font-medium pb-1 hover:text-[#9b4243] dark:hover:text-[#ea7f7f] transition-all duration-300 active:scale-95 transition-transform" href="#">Post a Listing</a>
+<a class="text-[#9b4243] dark:text-[#ea7f7f] font-bold border-b-2 border-[#9b4243] dark:border-[#ea7f7f] pb-1 hover:text-[#9b4243] dark:hover:text-[#ea7f7f] transition-all duration-300 active:scale-95 transition-transform" href="#">My Listings</a>
+</nav>
+<div class="flex items-center gap-4">
+<button aria-label="Notifications" class="text-stone-500 dark:text-stone-400 hover:text-[#9b4243] dark:hover:text-[#ea7f7f] transition-all duration-300 active:scale-95 transition-transform">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<div class="w-10 h-10 rounded-full overflow-hidden bg-surface-container-highest border border-outline-variant/20">
+<img alt="Authenticated student profile" class="w-full h-full object-cover" data-alt="close up portrait of a smiling college student wearing a casual sweater in soft natural light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuATfDvRDlsWxPwq4JL_RyR9v9IGIeZpv9fXocbTcI0V1W5mK6uUMDpGn-7IGPfW4q0WyeRjEuVcLWtiu3QOa85PzW4Uutg1qZNsQ10rwJdxYyPw7jQv173lnPcDseDMGCp4VKdLAgxDxOLrPAyOy0nEa2eBLj_zwvXTwinn04FxY36tG9WoTttOAclhohCaEF9kD5HNCmS-x3LLwRb_FBmqLvqI-Z9hARWelFfjpjxBPZ7r4FjyhCWHT6urVpbSjauaOM1smu0DrtA"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow pt-32 pb-24 px-8 max-w-7xl mx-auto w-full">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-6">
+<div>
+<h1 class="font-headline text-4xl md:text-5xl font-bold tracking-tight text-on-surface mb-2">My Listings</h1>
+<p class="font-body text-on-surface-variant text-lg">Manage your inventory and track performance.</p>
+</div>
+<button class="bg-gradient-to-r from-primary to-primary-container text-on-primary font-label text-sm font-semibold py-3 px-6 rounded-DEFAULT shadow-[0_8px_32px_-8px_rgba(155,66,67,0.4)] hover:shadow-[0_12px_40px_-8px_rgba(155,66,67,0.5)] transition-all duration-300 flex items-center gap-2">
+<span class="material-symbols-outlined" data-icon="add" data-weight="fill" style="font-variation-settings: 'FILL' 1;">add</span>
+                Post a New Listing
+            </button>
+</div>
+<!-- Dashboard Stats Overview (Bento Grid Style) -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+<!-- Stat Card 1 -->
+<div class="bg-surface-container-lowest p-6 rounded-DEFAULT shadow-[0_8px_32px_-12px_rgba(155,66,67,0.04)] border border-outline-variant/20 flex flex-col relative overflow-hidden">
+<div class="absolute -right-4 -top-4 w-24 h-24 bg-primary-fixed-dim/20 rounded-full blur-2xl"></div>
+<div class="flex items-center gap-3 mb-4 text-primary">
+<span class="material-symbols-outlined text-2xl" data-icon="visibility">visibility</span>
+<span class="font-label text-sm font-medium text-on-surface-variant uppercase tracking-wider">Total Views</span>
+</div>
+<div class="font-headline text-4xl font-bold text-on-surface">1,248</div>
+<div class="mt-2 text-sm text-tertiary-container font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="trending_up">trending_up</span>
+                    +12% this week
+                </div>
+</div>
+<!-- Stat Card 2 -->
+<div class="bg-surface-container-lowest p-6 rounded-DEFAULT shadow-[0_8px_32px_-12px_rgba(155,66,67,0.04)] border border-outline-variant/20 flex flex-col relative overflow-hidden">
+<div class="absolute -right-4 -top-4 w-24 h-24 bg-secondary-fixed-dim/20 rounded-full blur-2xl"></div>
+<div class="flex items-center gap-3 mb-4 text-secondary">
+<span class="material-symbols-outlined text-2xl" data-icon="calendar_month">calendar_month</span>
+<span class="font-label text-sm font-medium text-on-surface-variant uppercase tracking-wider">Active Bookings</span>
+</div>
+<div class="font-headline text-4xl font-bold text-on-surface">5</div>
+<div class="mt-2 text-sm text-on-surface-variant font-medium">Across 3 items</div>
+</div>
+<!-- Stat Card 3 -->
+<div class="bg-surface-container-lowest p-6 rounded-DEFAULT shadow-[0_8px_32px_-12px_rgba(155,66,67,0.04)] border border-outline-variant/20 flex flex-col relative overflow-hidden">
+<div class="absolute -right-4 -top-4 w-24 h-24 bg-tertiary-fixed-dim/20 rounded-full blur-2xl"></div>
+<div class="flex items-center gap-3 mb-4 text-tertiary">
+<span class="material-symbols-outlined text-2xl" data-icon="star">star</span>
+<span class="font-label text-sm font-medium text-on-surface-variant uppercase tracking-wider">Avg. Rating</span>
+</div>
+<div class="font-headline text-4xl font-bold text-on-surface">4.9</div>
+<div class="mt-2 text-sm text-on-surface-variant font-medium">From 42 reviews</div>
+</div>
+</div>
+<!-- Filters/Tabs -->
+<div class="flex gap-4 mb-8 border-b border-surface-container-highest pb-4">
+<button class="font-label text-sm font-bold text-primary border-b-2 border-primary pb-4 -mb-[18px]">Active (4)</button>
+<button class="font-label text-sm font-medium text-on-surface-variant hover:text-primary transition-colors pb-4 -mb-[18px]">Drafts (1)</button>
+<button class="font-label text-sm font-medium text-on-surface-variant hover:text-primary transition-colors pb-4 -mb-[18px]">Archived (2)</button>
+</div>
+<!-- Listings Grid (Mini-Dashboards) -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+<!-- Listing Card 1 -->
+<div class="bg-surface-container-lowest rounded-DEFAULT overflow-hidden shadow-[0_12px_40px_-16px_rgba(155,66,67,0.06)] border border-outline-variant/20 group hover:shadow-[0_16px_50px_-16px_rgba(155,66,67,0.1)] transition-all duration-300">
+<div class="p-6">
+<div class="flex gap-6 mb-6">
+<div class="w-32 h-32 rounded-DEFAULT overflow-hidden bg-surface-container-highest flex-shrink-0">
+<img alt="Canon DSLR Camera" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="professional canon dslr camera sitting on a clean white desk with soft window lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAGuPihn1ri67Qj_cxpcOvdc8J2dW3k7ATsRqcgk_V17LGzKDzHcLmhkWVSnfzrmZjmWVSXPsveYf5fohJpEWsLN1pFJGenOzaMRcLnvfzspH6HwDYUkJZYfjWwKvqoLi3zh8G9sy9HbJkdIWX9pQZqnU594SvP4nrbTcPv_YMwfSkAmm8ry0ecUU1hwuFeXiYSvnx3XwJnXYK4ZwGPpPRJww98LuKRFICvYd47ITlA5-mC2EeVADa8kvzkW5jPlHpdt3oC0x7NGQU"/>
+</div>
+<div class="flex-grow flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start mb-1">
+<h3 class="font-headline text-xl font-bold text-on-surface">Canon EOS 5D Mark IV</h3>
+<div class="bg-surface-container-high text-on-surface font-label text-xs font-semibold px-2 py-1 rounded-full">Electronics</div>
+</div>
+<p class="text-on-surface-variant text-sm font-body mb-3">$45 / day</p>
+<div class="flex gap-2">
+<span class="inline-flex items-center gap-1 bg-tertiary-container/10 text-tertiary font-label text-xs font-semibold px-2 py-1 rounded-full">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span> Active
+                                    </span>
+</div>
+</div>
+<div class="flex gap-3 mt-4">
+<button class="flex-1 bg-surface-container-low text-on-surface font-label text-sm font-medium py-2 rounded-DEFAULT hover:bg-surface-container-highest transition-colors">Edit</button>
+<button class="flex-1 bg-surface-container-low text-on-surface font-label text-sm font-medium py-2 rounded-DEFAULT hover:bg-surface-container-highest transition-colors">Pause</button>
+</div>
+</div>
+</div>
+<!-- Highlighted Performance Mini-Dashboard -->
+<div class="bg-surface-container-low rounded-DEFAULT p-4 grid grid-cols-3 gap-4 border border-outline-variant/10">
+<div class="flex flex-col items-center justify-center p-2 bg-surface-container-lowest rounded-DEFAULT">
+<span class="material-symbols-outlined text-primary mb-1 text-xl" data-icon="visibility">visibility</span>
+<span class="font-headline font-bold text-lg text-on-surface">342</span>
+<span class="font-label text-xs text-on-surface-variant">Views</span>
+</div>
+<div class="flex flex-col items-center justify-center p-2 bg-surface-container-lowest rounded-DEFAULT border-b-2 border-secondary">
+<span class="material-symbols-outlined text-secondary mb-1 text-xl" data-icon="book_online">book_online</span>
+<span class="font-headline font-bold text-lg text-on-surface">8</span>
+<span class="font-label text-xs text-on-surface-variant">Bookings</span>
+</div>
+<div class="flex flex-col items-center justify-center p-2 bg-surface-container-lowest rounded-DEFAULT">
+<span class="material-symbols-outlined text-tertiary mb-1 text-xl" data-icon="star_rate">star_rate</span>
+<span class="font-headline font-bold text-lg text-on-surface">5.0</span>
+<span class="font-label text-xs text-on-surface-variant">Rating</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Listing Card 2 -->
+<div class="bg-surface-container-lowest rounded-DEFAULT overflow-hidden shadow-[0_12px_40px_-16px_rgba(155,66,67,0.06)] border border-outline-variant/20 group hover:shadow-[0_16px_50px_-16px_rgba(155,66,67,0.1)] transition-all duration-300">
+<div class="p-6">
+<div class="flex gap-6 mb-6">
+<div class="w-32 h-32 rounded-DEFAULT overflow-hidden bg-surface-container-highest flex-shrink-0">
+<img alt="Scientific Calculator" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="ti-84 graphing calculator on a notebook with academic aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMLgl9fPW4RqRw9_32fY1mpbvWxn-5G6q677Uiko2Rd3SA6akl5RIYV3-i8nhS6OM3FihHQbStQ-9DhbJI_BfwheL3ULt1zJTyZm8Uc1_8WWmGFtffRVsZgEW_pNbYOSFOrSGm72D-b16R0NRA6x9iEBbReN8C3BKvc4ywNupMOIN4K65P-B9SrvtNB2Z0nsasV1vHlwaNfBzpO6uioCa0nbR9GxpbK3D-2wSXGy1huz6uuxNzUO76znnqxGanznwnTBcnR4xh4Mg"/>
+</div>
+<div class="flex-grow flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start mb-1">
+<h3 class="font-headline text-xl font-bold text-on-surface">TI-84 Plus CE</h3>
+<div class="bg-surface-container-high text-on-surface font-label text-xs font-semibold px-2 py-1 rounded-full">Academic</div>
+</div>
+<p class="text-on-surface-variant text-sm font-body mb-3">$5 / day</p>
+<div class="flex gap-2">
+<span class="inline-flex items-center gap-1 bg-tertiary-container/10 text-tertiary font-label text-xs font-semibold px-2 py-1 rounded-full">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span> Active
+                                    </span>
+</div>
+</div>
+<div class="flex gap-3 mt-4">
+<button class="flex-1 bg-surface-container-low text-on-surface font-label text-sm font-medium py-2 rounded-DEFAULT hover:bg-surface-container-highest transition-colors">Edit</button>
+<button class="flex-1 bg-surface-container-low text-on-surface font-label text-sm font-medium py-2 rounded-DEFAULT hover:bg-surface-container-highest transition-colors">Pause</button>
+</div>
+</div>
+</div>
+<!-- Highlighted Performance Mini-Dashboard -->
+<div class="bg-surface-container-low rounded-DEFAULT p-4 grid grid-cols-3 gap-4 border border-outline-variant/10">
+<div class="flex flex-col items-center justify-center p-2 bg-surface-container-lowest rounded-DEFAULT">
+<span class="material-symbols-outlined text-primary mb-1 text-xl" data-icon="visibility">visibility</span>
+<span class="font-headline font-bold text-lg text-on-surface">856</span>
+<span class="font-label text-xs text-on-surface-variant">Views</span>
+</div>
+<div class="flex flex-col items-center justify-center p-2 bg-surface-container-lowest rounded-DEFAULT border-b-2 border-secondary">
+<span class="material-symbols-outlined text-secondary mb-1 text-xl" data-icon="book_online">book_online</span>
+<span class="font-headline font-bold text-lg text-on-surface">24</span>
+<span class="font-label text-xs text-on-surface-variant">Bookings</span>
+</div>
+<div class="flex flex-col items-center justify-center p-2 bg-surface-container-lowest rounded-DEFAULT">
+<span class="material-symbols-outlined text-tertiary mb-1 text-xl" data-icon="star_rate">star_rate</span>
+<span class="font-headline font-bold text-lg text-on-surface">4.8</span>
+<span class="font-label text-xs text-on-surface-variant">Rating</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-[#fcf9f8] dark:bg-stone-950 text-[#9b4243] dark:text-[#ea7f7f] font-['Inter'] text-sm text-stone-500 dark:text-stone-400 w-full border-t border-stone-200/30 dark:border-stone-800/30">
+<div class="max-w-7xl mx-auto px-8 py-16 flex flex-col md:flex-row justify-between items-center gap-6">
+<div class="text-lg font-bold text-stone-900 dark:text-stone-100">UniShare</div>
+<div class="flex gap-6">
+<a class="text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 transition-colors" href="#">Safety</a>
+<a class="text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 transition-colors" href="#">Support</a>
+<a class="text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 transition-colors" href="#">Terms</a>
+</div>
+<div>© 2024 UniShare. The Curated Commons.</div>
+</div>
+</footer>
+</body></html>
