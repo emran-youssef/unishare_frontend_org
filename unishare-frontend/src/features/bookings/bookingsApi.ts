@@ -7,13 +7,13 @@ export const bookingsApi = createApi({
   baseQuery: baseQueryWithReauth,
   tagTypes: ['Booking'],
   endpoints: (builder) => ({
-    // Create new booking
+    // Create new booking — backend endpoint is /bookings/create
     createBooking: builder.mutation<BookingDto, CreateBookingRequest>({
-      query: (body) => ({ url: '/bookings', method: 'POST', body }),
+      query: (body) => ({ url: '/bookings/create', method: 'POST', body }),
       invalidatesTags: ['Booking'],
     }),
 
-    // Get own bookings (as renter + as owner)
+    // Get own bookings (as renter)
     getMyBookings: builder.query<BookingDto[], void>({
       query: () => '/bookings/my',
       providesTags: ['Booking'],

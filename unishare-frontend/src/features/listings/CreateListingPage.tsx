@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import toast from 'react-hot-toast';
-import { useCreateListingMutation, useUploadListingImagesMutation } from './listingsApi';
+import { useCreateListingMutation } from './listingsApi';
 import { createListingSchema, type CreateListingFormData } from '../../utils/validators';
 import { FieldError } from '../../components/ui/ErrorMessage';
 import { Button } from '../../components/ui/Button';
@@ -11,18 +11,18 @@ import { formatCurrency } from '../../utils/formatters';
 import type { ListingCategory, ItemCondition } from '../../types/api.types';
 
 const CATEGORIES: { value: ListingCategory; label: string }[] = [
-  { value: 'TEXTBOOKS',   label: 'Textbooks' },
+  { value: 'TEXTBOOKS', label: 'Textbooks' },
   { value: 'ELECTRONICS', label: 'Electronics' },
-  { value: 'FURNITURE',   label: 'Furniture' },
-  { value: 'CLOTHING',    label: 'Clothing' },
-  { value: 'OTHER',       label: 'Other' },
+  { value: 'FURNITURE', label: 'Furniture' },
+  { value: 'CLOTHING', label: 'Clothing' },
+  { value: 'OTHER', label: 'Other' },
 ];
 
 const CONDITIONS: { value: ItemCondition; label: string }[] = [
-  { value: 'NEW',       label: 'New' },
-  { value: 'LIKE_NEW',  label: 'Like New' },
-  { value: 'GOOD',      label: 'Good' },
-  { value: 'FAIR',      label: 'Fair' },
+  { value: 'NEW', label: 'New' },
+  { value: 'LIKE_NEW', label: 'Like New' },
+  { value: 'GOOD', label: 'Good' },
+  { value: 'FAIR', label: 'Fair' },
 ];
 
 export function CreateListingPage() {
@@ -30,10 +30,8 @@ export function CreateListingPage() {
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [images, setImages] = useState<File[]>([]);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
-  const [createdListingId, setCreatedListingId] = useState<number | null>(null);
 
   const [createListing, { isLoading: isCreating }] = useCreateListingMutation();
-  const [uploadImages, { isLoading: isUploading }] = useUploadListingImagesMutation();
 
   const { register, handleSubmit, watch, formState: { errors } } = useForm<CreateListingFormData>({
     resolver: zodResolver(createListingSchema),
@@ -57,17 +55,9 @@ export function CreateListingPage() {
     if (step === 1) { setStep(2); return; }
     if (step === 2) { setStep(3); return; }
 
-    // Step 3 — publish
+    // Step 3 — publish (image upload not yet supported by backend)
     try {
       const listing = await createListing(data).unwrap();
-      setCreatedListingId(listing.id);
-
-      if (images.length > 0) {
-        const formData = new FormData();
-        images.forEach((img) => formData.append('images', img));
-        await uploadImages({ id: listing.id, formData }).unwrap();
-      }
-
       toast.success('Listing published successfully!');
       navigate(`/listings/${listing.id}`);
     } catch (err: unknown) {
@@ -158,7 +148,6 @@ export function CreateListingPage() {
                             <option key={value} value={value}>{label}</option>
                           ))}
                         </select>
-                        <span className="material-symbols-outlined absolute right-3 top-3 text-on-surface-variant pointer-events-none">expand_more</span>
                       </div>
                     </div>
                   </div>
@@ -188,7 +177,10 @@ export function CreateListingPage() {
                 <div className="space-y-6">
                   <div>
                     <h2 className="font-headline text-2xl font-bold text-on-surface mb-1">Photos</h2>
-                    <p className="text-on-surface-variant text-sm">Upload up to 5 clear photos of your item.</p>
+                    <p className="text-on-surface-variant text-sm">
+                      Upload up to 5 clear photos of your item.{' '}
+                      <span className="text-primary font-medium">(Image upload coming soon)</span>
+                    </p>
                   </div>
 
                   {/* Upload zone */}
@@ -196,7 +188,7 @@ export function CreateListingPage() {
                     <div className="w-16 h-16 rounded-full bg-primary-container/20 flex items-center justify-center text-primary mb-4 group-hover:scale-110 transition-transform">
                       <span className="material-symbols-outlined text-3xl">add_photo_alternate</span>
                     </div>
-                    <p className="font-semibold text-on-surface mb-1">Click to upload or drag & drop</p>
+                    <p className="font-semibold text-on-surface mb-1">Click to select photos (preview only)</p>
                     <p className="text-sm text-on-surface-variant">PNG, JPG, WEBP (max 5 images)</p>
                     <input type="file" accept="image/*" multiple onChange={handleImageSelect} className="hidden" />
                   </label>
@@ -231,7 +223,7 @@ export function CreateListingPage() {
                       { label: 'Category', value: watchedValues.category },
                       { label: 'Condition', value: watchedValues.condition },
                       { label: 'Price', value: watchedValues.pricePerDay ? `${formatCurrency(watchedValues.pricePerDay)} / day` : '—' },
-                      { label: 'Photos', value: `${imagePreviews.length} selected` },
+                      { label: 'Photos', value: `${imagePreviews.length} selected (upload pending backend)` },
                     ].map(({ label, value }) => (
                       <div key={label} className="flex justify-between py-3 border-b border-surface-container-highest last:border-0">
                         <span className="text-sm font-semibold text-on-surface-variant">{label}</span>
@@ -255,7 +247,7 @@ export function CreateListingPage() {
                       {step === 1 ? 'Continue to Photos' : 'Continue to Review'}
                     </Button>
                   ) : (
-                    <Button type="submit" loading={isCreating || isUploading} rightIcon="publish">
+                    <Button type="submit" loading={isCreating} rightIcon="publish">
                       Publish Listing
                     </Button>
                   )}

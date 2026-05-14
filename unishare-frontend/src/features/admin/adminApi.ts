@@ -1,48 +1,40 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQueryWithReauth } from '../../app/baseQuery';
-import type { AdminStatsDto, UserDto, ListingDto, Page } from '../../types/api.types';
+import type { UserDto, Page } from '../../types/api.types';
 
 export const adminApi = createApi({
   reducerPath: 'adminApi',
   baseQuery: baseQueryWithReauth,
-  tagTypes: ['AdminUsers', 'AdminListings', 'AdminStats'],
+  tagTypes: ['AdminUsers'],
   endpoints: (builder) => ({
-    // Dashboard statistics
-    getAdminStats: builder.query<AdminStatsDto, void>({
-      query: () => '/admin/stats',
-      providesTags: ['AdminStats'],
-    }),
-
-    // List all users (paginated)
-    getAdminUsers: builder.query<Page<UserDto>, { page?: number; size?: number; search?: string }>({
-      query: (params) => ({ url: '/admin/users', params }),
+    // List all users — correct endpoint is GET /users/all (requires ADMIN role)
+    getAdminUsers: builder.query<Page<UserDto>, { page?: number; size?: number }>({
+      query: (params) => ({ url: '/users/all', params }),
       providesTags: ['AdminUsers'],
     }),
 
-    // Deactivate a user
-    deactivateUser: builder.mutation<void, number>({
-      query: (id) => ({ url: `/admin/users/${id}/deactivate`, method: 'PUT' }),
-      invalidatesTags: ['AdminUsers'],
-    }),
+    // NOTE: The following endpoints are NOT yet implemented on the backend.
+    // They are commented out to prevent 404 errors.
+    // Uncomment each one when the backend team confirms it is ready.
 
-    // List all listings (paginated)
-    getAdminListings: builder.query<Page<ListingDto>, { page?: number; size?: number; search?: string }>({
-      query: (params) => ({ url: '/admin/listings', params }),
-      providesTags: ['AdminListings'],
-    }),
+    // getAdminStats: builder.query<AdminStatsDto, void>({
+    //   query: () => '/admin/stats',   // NOT BUILT YET
+    // }),
 
-    // Deactivate a listing
-    deactivateListing: builder.mutation<void, number>({
-      query: (id) => ({ url: `/admin/listings/${id}/deactivate`, method: 'PUT' }),
-      invalidatesTags: ['AdminListings'],
-    }),
+    // deactivateUser: builder.mutation<void, number>({
+    //   query: (id) => ({ url: `/admin/users/${id}/deactivate`, method: 'PUT' }), // NOT BUILT YET
+    // }),
+
+    // getAdminListings: builder.query<Page<ListingDto>, { page?: number; size?: number }>({
+    //   query: (params) => ({ url: '/admin/listings', params }),  // NOT BUILT YET
+    // }),
+
+    // deactivateListing: builder.mutation<void, number>({
+    //   query: (id) => ({ url: `/admin/listings/${id}/deactivate`, method: 'PUT' }), // NOT BUILT YET
+    // }),
   }),
 });
 
 export const {
-  useGetAdminStatsQuery,
   useGetAdminUsersQuery,
-  useDeactivateUserMutation,
-  useGetAdminListingsQuery,
-  useDeactivateListingMutation,
 } = adminApi;

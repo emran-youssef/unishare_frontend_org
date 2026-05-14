@@ -1,11 +1,9 @@
 import { useState } from 'react';
-import toast from 'react-hot-toast';
-import { useGetAdminUsersQuery, useDeactivateUserMutation } from './adminApi';
+import { useGetAdminUsersQuery } from './adminApi';
 import { AdminSidebar } from './components/AdminSidebar';
 import { PageSpinner } from '../../components/ui/Spinner';
 import { ErrorMessage } from '../../components/ui/ErrorMessage';
 import { EmptyState } from '../../components/ui/EmptyState';
-import { Button } from '../../components/ui/Button';
 import { RoleBadge, VerifiedBadge } from '../../components/ui/Badge';
 import { formatDate, getInitials } from '../../utils/formatters';
 import { useDebounce } from '../../hooks/useDebounce';
@@ -15,18 +13,10 @@ export function AdminUsersPage() {
   const [page, setPage] = useState(0);
   const debouncedSearch = useDebounce(search, 350);
 
-  const { data, isLoading, isError, refetch } = useGetAdminUsersQuery({ page, size: 15, search: debouncedSearch || undefined });
-  const [deactivateUser, { isLoading: isDeactivating }] = useDeactivateUserMutation();
-
-  const handleDeactivate = async (id: number, name: string) => {
-    if (!confirm(`Deactivate ${name}'s account? They will no longer be able to log in.`)) return;
-    try {
-      await deactivateUser(id).unwrap();
-      toast.success(`${name}'s account has been deactivated.`);
-    } catch {
-      toast.error('Could not deactivate user. Please try again.');
-    }
-  };
+  const { data, isLoading, isError, refetch } = useGetAdminUsersQuery({
+    page,
+    size: 15,
+  });
 
   return (
     <div className="flex min-h-[calc(100vh-72px)]">
@@ -67,7 +57,7 @@ export function AdminUsersPage() {
                     <th className="text-left px-6 py-4 text-xs font-bold uppercase tracking-wider text-on-surface-variant hidden md:table-cell">University Email</th>
                     <th className="text-left px-6 py-4 text-xs font-bold uppercase tracking-wider text-on-surface-variant hidden lg:table-cell">Joined</th>
                     <th className="text-left px-6 py-4 text-xs font-bold uppercase tracking-wider text-on-surface-variant">Role</th>
-                    <th className="text-right px-6 py-4 text-xs font-bold uppercase tracking-wider text-on-surface-variant">Actions</th>
+                    {/* Deactivate action is pending backend implementation */}
                   </tr>
                 </thead>
                 <tbody>
@@ -95,18 +85,6 @@ export function AdminUsersPage() {
                       </td>
                       <td className="px-6 py-4">
                         <RoleBadge role={user.role} />
-                      </td>
-                      <td className="px-6 py-4 text-right">
-                        {user.role !== 'ADMIN' && (
-                          <Button
-                            variant="danger"
-                            size="sm"
-                            loading={isDeactivating}
-                            onClick={() => handleDeactivate(user.id, user.fullName)}
-                          >
-                            Deactivate
-                          </Button>
-                        )}
                       </td>
                     </tr>
                   ))}

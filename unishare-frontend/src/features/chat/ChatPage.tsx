@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -11,34 +11,54 @@ import { sendMessageSchema, type SendMessageFormData } from '../../utils/validat
 import { formatRelativeTime, getInitials } from '../../utils/formatters';
 
 export function ChatPage() {
-  const { userId } = useParams<{ userId?: string }>();
+  // Route: /chat/:listingId/:userId
+  const { listingId, userId } = useParams<{ listingId?: string; userId?: string }>();
   const { user } = useAuth();
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  const listingIdNum = listingId ? Number(listingId) : undefined;
+  const userIdNum    = userId    ? Number(userId)    : undefined;
+
+  // Backend returns List<ListingDto> — each item is a listing with an active conversation
   const { data: conversations = [], isLoading: convLoading } = useGetConversationsQuery();
-  const { data: messages = [], isLoading: msgLoading } = useGetMessagesQuery(Number(userId), { skip: !userId });
+
+  // Fetch messages only when both listingId and userId are present
+  const { data: messages = [], isLoading: msgLoading } = useGetMessagesQuery(
+    { listingId: listingIdNum!, userId: userIdNum! },
+    { skip: !listingIdNum || !userIdNum },
+  );
+
   const [sendMessage, { isLoading: isSending }] = useSendMessageMutation();
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm<SendMessageFormData>({
     resolver: zodResolver(sendMessageSchema),
   });
 
-  // Auto-scroll to bottom
+  // Auto-scroll to latest message
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
   const onSend = async (data: SendMessageFormData) => {
-    if (!userId) return;
+    if (!listingIdNum || !userIdNum) return;
     try {
-      await sendMessage({ userId: Number(userId), body: { content: data.content } }).unwrap();
+      await sendMessage({
+        listingId: listingIdNum,
+        receiverId: userIdNum,
+        body: { content: data.content },
+      }).unwrap();
       reset();
     } catch {
       toast.error('Failed to send message. Please try again.');
     }
   };
 
-  const activeConversation = conversations.find((c) => c.otherUser.id === Number(userId));
+  // Find the active conversation listing
+  const activeListing = conversations.find((c) => c.id === listingIdNum);
+
+  // The other person: if I'm the owner → it's someone else; use userId from route
+  // We show the listing title in the thread header
+  const otherPersonId = userIdNum;
 
   return (
     <div className="h-[calc(100vh-72px)] flex bg-surface">
@@ -54,58 +74,55 @@ export function ChatPage() {
           ) : conversations.length === 0 ? (
             <EmptyState icon="chat_bubble" title="No conversations" description="Start chatting from a listing page." />
           ) : (
-            conversations.map((conv) => (
-              <Link
-                key={conv.otherUser.id}
-                to={`/chat/${conv.otherUser.id}`}
-                className={`flex items-center gap-3 px-5 py-4 hover:bg-surface-container-low transition-colors border-b border-surface-container-highest
-                  ${conv.otherUser.id === Number(userId) ? 'bg-surface-container-low' : ''}`}
-              >
-                {/* Avatar */}
-                <div className="relative shrink-0">
-                  <div className="w-11 h-11 rounded-full bg-primary-container flex items-center justify-center font-bold text-on-primary-container font-headline">
-                    {getInitials(conv.otherUser.fullName)}
-                  </div>
-                  {conv.unreadCount > 0 && (
-                    <span className="absolute -top-1 -right-1 w-5 h-5 bg-primary text-on-primary text-[10px] font-bold rounded-full flex items-center justify-center">
-                      {conv.unreadCount > 9 ? '9+' : conv.unreadCount}
-                    </span>
-                  )}
-                </div>
+            conversations.map((listing) => {
+              // Navigate to /chat/{listingId}/{ownerId}
+              const targetUserId = listing.owner.id === user?.id
+                ? otherPersonId  // I'm the owner — use route param
+                : listing.owner.id; // I'm the renter — other person is the owner
 
-                {/* Content */}
-                <div className="flex-grow min-w-0">
-                  <div className="flex justify-between items-start">
-                    <p className="font-semibold text-on-surface text-sm">{conv.otherUser.fullName}</p>
-                    <p className="text-xs text-on-surface-variant shrink-0 ml-2">
-                      {formatRelativeTime(conv.lastMessage.createdAt)}
+              return (
+                <Link
+                  key={listing.id}
+                  to={`/chat/${listing.id}/${targetUserId ?? listing.owner.id}`}
+                  className={`flex items-center gap-3 px-5 py-4 hover:bg-surface-container-low transition-colors border-b border-surface-container-highest
+                    ${listing.id === listingIdNum ? 'bg-surface-container-low' : ''}`}
+                >
+                  {/* Avatar */}
+                  <div className="w-11 h-11 rounded-full bg-primary-container flex items-center justify-center font-bold text-on-primary-container font-headline shrink-0">
+                    {getInitials(listing.owner.fullName)}
+                  </div>
+
+                  {/* Content */}
+                  <div className="flex-grow min-w-0">
+                    <p className="font-semibold text-on-surface text-sm truncate">{listing.title}</p>
+                    <p className="text-xs text-on-surface-variant truncate mt-0.5">
+                      with {listing.owner.fullName}
                     </p>
                   </div>
-                  <p className="text-xs text-on-surface-variant truncate mt-0.5">{conv.lastMessage.content}</p>
-                </div>
-              </Link>
-            ))
+                </Link>
+              );
+            })
           )}
         </div>
       </div>
 
       {/* CENTER — message thread */}
       <div className="flex-grow flex flex-col min-w-0">
-        {!userId ? (
+        {!listingIdNum || !userIdNum ? (
           <div className="flex items-center justify-center h-full">
             <EmptyState icon="forum" title="Select a conversation" description="Choose a conversation from the left to start messaging." />
           </div>
         ) : (
           <>
             {/* Thread header */}
-            {activeConversation && (
+            {activeListing && (
               <div className="p-5 border-b border-surface-container-highest flex items-center gap-3 bg-surface-container-lowest">
                 <div className="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center font-bold text-on-primary-container font-headline text-sm">
-                  {getInitials(activeConversation.otherUser.fullName)}
+                  {getInitials(activeListing.title)}
                 </div>
                 <div>
-                  <p className="font-semibold text-on-surface">{activeConversation.otherUser.fullName}</p>
-                  <p className="text-xs text-on-surface-variant">{activeConversation.otherUser.universityEmail}</p>
+                  <p className="font-semibold text-on-surface">{activeListing.title}</p>
+                  <p className="text-xs text-on-surface-variant">with {activeListing.owner.fullName}</p>
                 </div>
               </div>
             )}

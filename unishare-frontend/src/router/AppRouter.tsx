@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ProtectedRoute } from '../guards/ProtectedRoute';
 import { RoleGuard } from '../guards/RoleGuard';
 import { AppLayout } from '../components/layout/AppLayout';
@@ -48,13 +48,16 @@ export function AppRouter() {
 
           {/* Protected student routes */}
           <Route element={<ProtectedRoute />}>
-            <Route path="/listings/create" element={<CreateListingPage />} />
-            <Route path="/my-listings"     element={<MyListingsPage />} />
-            <Route path="/bookings"        element={<MyBookingsPage />} />
-            <Route path="/checkout/:bookingId" element={<CheckoutPage />} />
-            <Route path="/chat"            element={<ChatPage />} />
-            <Route path="/chat/:userId"    element={<ChatPage />} />
-            <Route path="/profile"         element={<ProfilePage />} />
+            <Route path="/listings/create"        element={<CreateListingPage />} />
+            <Route path="/my-listings"            element={<MyListingsPage />} />
+            <Route path="/bookings"               element={<MyBookingsPage />} />
+            <Route path="/checkout/:bookingId"    element={<CheckoutPage />} />
+
+            {/* Chat: /chat (inbox) and /chat/:listingId/:userId (thread) */}
+            <Route path="/chat"                          element={<ChatPage />} />
+            <Route path="/chat/:listingId/:userId"       element={<ChatPage />} />
+
+            <Route path="/profile" element={<ProfilePage />} />
           </Route>
 
           {/* Admin-only routes */}

@@ -1,33 +1,40 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQueryWithReauth } from '../../app/baseQuery';
-import type { ChatMessageDto, ConversationDto, SendMessageRequest } from '../../types/api.types';
+import type { ChatMessageDto, ListingDto, SendMessageRequest } from '../../types/api.types';
 
 export const chatApi = createApi({
   reducerPath: 'chatApi',
   baseQuery: baseQueryWithReauth,
   tagTypes: ['Chat', 'Conversation'],
   endpoints: (builder) => ({
-    // Get all conversations for current user
-    getConversations: builder.query<ConversationDto[], void>({
+    // Get all conversations — backend returns List<ListingDto>
+    // Each item is a listing where the user has an active conversation
+    getConversations: builder.query<ListingDto[], void>({
       query: () => '/chat/conversations',
       providesTags: ['Conversation'],
     }),
 
-    // Get messages with a specific user
-    getMessages: builder.query<ChatMessageDto[], number>({
-      query: (userId) => `/chat/${userId}`,
-      providesTags: (_result, _err, userId) => [{ type: 'Chat', id: userId }],
+    // Get messages for a specific listing conversation
+    // userId = the OTHER person in the conversation (not the caller)
+    getMessages: builder.query<ChatMessageDto[], { listingId: number; userId: number }>({
+      query: ({ listingId, userId }) => `/chat/${listingId}/${userId}`,
+      providesTags: (_result, _err, { listingId, userId }) => [
+        { type: 'Chat', id: `${listingId}-${userId}` },
+      ],
     }),
 
-    // Send a message to a specific user
-    sendMessage: builder.mutation<ChatMessageDto, { userId: number; body: SendMessageRequest }>({
-      query: ({ userId, body }) => ({
-        url: `/chat/${userId}`,
+    // Send a message in a listing conversation
+    sendMessage: builder.mutation<
+      ChatMessageDto,
+      { listingId: number; receiverId: number; body: SendMessageRequest }
+    >({
+      query: ({ listingId, receiverId, body }) => ({
+        url: `/chat/${listingId}/${receiverId}`,
         method: 'POST',
         body,
       }),
-      invalidatesTags: (_result, _err, { userId }) => [
-        { type: 'Chat', id: userId },
+      invalidatesTags: (_result, _err, { listingId, userId }) => [
+        { type: 'Chat', id: `${listingId}-${userId}` },
         'Conversation',
       ],
     }),
