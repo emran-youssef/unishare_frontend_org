@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import type { ListingDto } from '../../../types/api.types';
-import { formatCurrency, CATEGORY_LABELS, CONDITION_LABELS, getInitials } from '../../../utils/formatters';
+import { formatCurrency, CATEGORY_LABELS, CONDITION_LABELS, getInitials, getImageUrl } from '../../../utils/formatters';
 import { ListingStatusBadge } from '../../../components/ui/Badge';
 
 interface ListingCardProps {
@@ -9,7 +9,7 @@ interface ListingCardProps {
 }
 
 export function ListingCard({ listing, showStatus = false }: ListingCardProps) {
-  const mainImage = listing.images?.[0];
+  const mainImage = getImageUrl(listing.images?.[0]);
 
   return (
     <Link

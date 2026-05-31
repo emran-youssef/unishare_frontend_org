@@ -57,6 +57,14 @@ export function truncate(text: string, maxLength: number): string {
   return text.slice(0, maxLength).trim() + '…';
 }
 
+// Resolve image URL — prepend backend base URL for server-uploaded paths
+const API_BASE = 'http://localhost:8080';
+export function getImageUrl(path: string | undefined | null): string | undefined {
+  if (!path) return undefined;
+  if (path.startsWith('/uploads/')) return `${API_BASE}${path}`;
+  return path;
+}
+
 // Get initials from full name
 export function getInitials(fullName: string): string {
   return fullName

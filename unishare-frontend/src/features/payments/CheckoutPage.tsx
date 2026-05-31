@@ -1,6 +1,4 @@
-import { useParams, useNavigate, Link } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { useParams, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { useGetBookingByIdQuery } from '../bookings/bookingsApi';
 import { useProcessPaymentMutation } from './paymentsApi';
@@ -8,132 +6,288 @@ import { PageSpinner } from '../../components/ui/Spinner';
 import { ErrorMessage, FieldError } from '../../components/ui/ErrorMessage';
 import { Button } from '../../components/ui/Button';
 import { BookingStatusBadge } from '../../components/ui/Badge';
-import { paymentSchema, type PaymentFormData } from '../../utils/validators';
 import { formatDate, formatCurrency, calcRentalDays } from '../../utils/formatters';
 import { useState } from 'react';
+import type { ApiError } from '../../types/api.types';
+
+type PaymentMethod = 'ONLINE' | 'CASH';
+
+interface FieldErrors {
+  cardNumber?: string;
+  cvv?: string;
+}
 
 export function CheckoutPage() {
   const { bookingId } = useParams<{ bookingId: string }>();
   const navigate = useNavigate();
-  const [paymentMethod, setPaymentMethod] = useState<'CARD' | 'CASH'>('CARD');
 
+  // ── Payment method selection (undefined = nothing chosen yet) ──────────────
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod | undefined>(undefined);
+
+  // ── Card fields (ONLINE only — never persisted beyond component state) ─────
+  const [cardNumber, setCardNumber] = useState('');
+  const [cvv, setCvv] = useState('');
+
+  // ── Client-side field errors ───────────────────────────────────────────────
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
+
+  // ── Success state ──────────────────────────────────────────────────────────
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
+  // ── API hooks ──────────────────────────────────────────────────────────────
   const { data: booking, isLoading, isError } = useGetBookingByIdQuery(Number(bookingId));
   const [processPayment, { isLoading: isPaying }] = useProcessPaymentMutation();
 
-  const { register, handleSubmit, formState: { errors } } = useForm<PaymentFormData>({
-    resolver: zodResolver(paymentSchema),
-    defaultValues: { paymentMethod: 'CARD' },
-  });
+  // ── Validate card fields client-side before submitting ────────────────────
+  const validate = (): boolean => {
+    if (paymentMethod !== 'ONLINE') return true;
+    const errs: FieldErrors = {};
+    if (!/^\d{16}$/.test(cardNumber)) errs.cardNumber = 'Card number must be exactly 16 digits';
+    if (!/^\d{3}$/.test(cvv)) errs.cvv = 'CVV must be exactly 3 digits';
+    setFieldErrors(errs);
+    return Object.keys(errs).length === 0;
+  };
 
-  const onSubmit = async (data: PaymentFormData) => {
+  // ── Submit handler ─────────────────────────────────────────────────────────
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!paymentMethod) return;
+    if (!validate()) return;
+
+    const body =
+      paymentMethod === 'ONLINE'
+        ? { paymentMethod: 'ONLINE' as const, cardNumber, cvv }
+        : { paymentMethod: 'CASH' as const };
+
     try {
-      await processPayment({
+      const result = await processPayment({
         bookingId: Number(bookingId),
-        body: data,
+        body,
       }).unwrap();
-      toast.success('Payment successful! Booking confirmed.');
-      navigate('/bookings');
+
+      // Clear sensitive card data immediately after success
+      setCardNumber('');
+      setCvv('');
+
+      if (paymentMethod === 'CASH' || result.status === 'PENDING') {
+        setSuccessMessage('Booking complete. Pay in cash at meetup location.');
+      } else {
+        setSuccessMessage('Payment successful! Booking is now complete.');
+      }
     } catch (err: unknown) {
-      const apiErr = err as { data?: { message?: string } };
-      toast.error(apiErr?.data?.message ?? 'Payment failed. Please try again.');
+      const apiErr = err as { status?: number; data?: ApiError };
+      const status = apiErr?.status;
+      const data = apiErr?.data;
+
+      if (status === 409) {
+        // Two distinct 409 cases from the backend
+        toast.error(data?.message ?? 'Conflict: cannot process payment right now.');
+      } else if (status === 403) {
+        toast.error('You are not authorized to pay for this booking.');
+      } else if (status === 400 && data?.fieldErrors) {
+        // Surface field-level errors returned by the backend
+        setFieldErrors({
+          cardNumber: data.fieldErrors['cardNumber'],
+          cvv: data.fieldErrors['cvv'],
+        });
+        toast.error('Please fix the highlighted fields and try again.');
+      } else {
+        toast.error(data?.message ?? 'Payment failed. Please try again.');
+      }
     }
   };
 
+  // ── Loading / error states ─────────────────────────────────────────────────
   if (isLoading) return <PageSpinner />;
   if (isError || !booking) return <ErrorMessage error={null} />;
 
   const days = calcRentalDays(booking.startDate, booking.endDate);
 
+  // ── Success screen ─────────────────────────────────────────────────────────
+  if (successMessage) {
+    const isCash = paymentMethod === 'CASH';
+    return (
+      <div className="max-w-screen-sm mx-auto px-6 py-20 flex flex-col items-center text-center gap-6">
+        <span
+          className={`material-symbols-outlined text-6xl ${isCash ? 'text-tertiary' : 'text-primary'}`}
+        >
+          {isCash ? 'handshake' : 'check_circle'}
+        </span>
+        <h1 className="font-headline text-3xl font-bold text-on-surface">{successMessage}</h1>
+        <p className="text-on-surface-variant font-body">
+          {isCash
+            ? `Bring ${formatCurrency(booking.totalPrice)} in cash to ${booking.meetupLocation.name}.`
+            : `Your payment of ${formatCurrency(booking.totalPrice)} has been processed.`}
+        </p>
+        <Button
+          leftIcon="list_alt"
+          size="lg"
+          onClick={() => navigate('/bookings')}
+        >
+          View My Bookings
+        </Button>
+      </div>
+    );
+  }
+
+  // ── Payment form ───────────────────────────────────────────────────────────
   return (
     <div className="max-w-screen-lg mx-auto px-6 py-12">
       <div className="mb-10">
         <h1 className="font-headline text-4xl font-bold text-on-surface mb-2">Checkout</h1>
-        <p className="text-on-surface-variant font-body">Complete your booking by providing payment details.</p>
+        <p className="text-on-surface-variant font-body">
+          Your booking is confirmed — choose how you'd like to pay.
+        </p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-10">
         {/* LEFT — payment form */}
         <div>
-          <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-6">
-            {/* Payment method selection */}
+          <form onSubmit={handleSubmit} noValidate className="space-y-6">
+
+            {/* ── Payment method cards ─────────────────────────────────────── */}
             <div className="bg-surface-container-lowest rounded-xl p-6 shadow-card">
-              <h2 className="font-headline text-xl font-bold text-on-surface mb-5">Payment Method</h2>
+              <h2 className="font-headline text-xl font-bold text-on-surface mb-5">
+                Payment Method
+              </h2>
               <div className="grid grid-cols-2 gap-4">
-                {(['CARD', 'CASH'] as const).map((method) => (
-                  <button
-                    key={method}
-                    type="button"
-                    onClick={() => setPaymentMethod(method)}
-                    className={`flex items-center gap-3 p-4 rounded-xl border-2 transition-all text-left
-                      ${paymentMethod === method
-                        ? 'border-primary bg-primary/5'
-                        : 'border-surface-container-highest hover:border-outline-variant'}`}
+
+                {/* Cash card */}
+                <button
+                  id="method-cash"
+                  type="button"
+                  onClick={() => setPaymentMethod('CASH')}
+                  className={`flex items-center gap-3 p-4 rounded-xl border-2 transition-all text-left
+                    ${paymentMethod === 'CASH'
+                      ? 'border-primary bg-primary/5'
+                      : 'border-surface-container-highest hover:border-outline-variant'
+                    }`}
+                >
+                  <span
+                    className={`material-symbols-outlined ${paymentMethod === 'CASH' ? 'text-primary' : 'text-on-surface-variant'}`}
                   >
-                    <span className={`material-symbols-outlined ${paymentMethod === method ? 'text-primary' : 'text-on-surface-variant'}`}>
-                      {method === 'CARD' ? 'credit_card' : 'payments'}
-                    </span>
-                    <div>
-                      <p className={`font-semibold text-sm ${paymentMethod === method ? 'text-primary' : 'text-on-surface'}`}>
-                        {method === 'CARD' ? 'Credit/Debit Card' : 'Cash on Handoff'}
-                      </p>
-                      <p className="text-xs text-on-surface-variant">{method === 'CARD' ? 'Pay securely online' : 'Pay when you meet'}</p>
-                    </div>
-                  </button>
-                ))}
+                    payments
+                  </span>
+                  <div>
+                    <p className={`font-semibold text-sm ${paymentMethod === 'CASH' ? 'text-primary' : 'text-on-surface'}`}>
+                      Pay in Cash
+                    </p>
+                    <p className="text-xs text-on-surface-variant">Pay when you meet</p>
+                  </div>
+                </button>
+
+                {/* Online card */}
+                <button
+                  id="method-online"
+                  type="button"
+                  onClick={() => { setPaymentMethod('ONLINE'); setFieldErrors({}); }}
+                  className={`flex items-center gap-3 p-4 rounded-xl border-2 transition-all text-left
+                    ${paymentMethod === 'ONLINE'
+                      ? 'border-primary bg-primary/5'
+                      : 'border-surface-container-highest hover:border-outline-variant'
+                    }`}
+                >
+                  <span
+                    className={`material-symbols-outlined ${paymentMethod === 'ONLINE' ? 'text-primary' : 'text-on-surface-variant'}`}
+                  >
+                    credit_card
+                  </span>
+                  <div>
+                    <p className={`font-semibold text-sm ${paymentMethod === 'ONLINE' ? 'text-primary' : 'text-on-surface'}`}>
+                      Pay with Credit Card
+                    </p>
+                    <p className="text-xs text-on-surface-variant">Pay securely online</p>
+                  </div>
+                </button>
+
               </div>
-              {/* Hidden field for payment method */}
-              <input type="hidden" {...register('paymentMethod')} value={paymentMethod} />
             </div>
 
-            {/* Card details */}
-            {paymentMethod === 'CARD' && (
-              <div className="bg-surface-container-lowest rounded-xl p-6 shadow-card space-y-5">
-                <h2 className="font-headline text-xl font-bold text-on-surface">Card Details</h2>
-
-                <div>
-                  <label className="block text-sm font-semibold text-on-surface mb-2">Card Holder Name</label>
-                  <input {...register('cardHolderName')} type="text" className="us-input" placeholder="Ahmed Khalil" />
-                  <FieldError message={(errors as Record<string, { message?: string }>).cardHolderName?.message} />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-semibold text-on-surface mb-2">Card Number</label>
-                  <input {...register('cardNumber')} type="text" maxLength={16} className="us-input" placeholder="0000 0000 0000 0000" />
-                  <FieldError message={(errors as Record<string, { message?: string }>).cardNumber?.message} />
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-semibold text-on-surface mb-2">Expiry Date</label>
-                    <input {...register('expiryDate')} type="text" placeholder="MM/YY" maxLength={5} className="us-input" />
-                    <FieldError message={(errors as Record<string, { message?: string }>).expiryDate?.message} />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-semibold text-on-surface mb-2">CVC</label>
-                    <input {...register('cvc')} type="text" maxLength={4} placeholder="123" className="us-input" />
-                    <FieldError message={(errors as Record<string, { message?: string }>).cvc?.message} />
-                  </div>
-                </div>
-              </div>
-            )}
-
+            {/* ── Cash info banner ─────────────────────────────────────────── */}
             {paymentMethod === 'CASH' && (
               <div className="bg-surface-container rounded-xl p-5 flex items-start gap-3">
                 <span className="material-symbols-outlined text-tertiary text-[20px] mt-0.5">info</span>
                 <p className="text-sm text-on-surface-variant leading-relaxed">
-                  You'll pay <strong className="text-on-surface">{formatCurrency(booking.totalPrice)}</strong> in cash when you meet the owner at{' '}
+                  You'll pay{' '}
+                  <strong className="text-on-surface">{formatCurrency(booking.totalPrice)}</strong>{' '}
+                  in cash when you meet the owner at{' '}
                   <strong className="text-on-surface">{booking.meetupLocation.name}</strong>.
                 </p>
               </div>
             )}
 
-            <Button type="submit" loading={isPaying} className="w-full justify-center" size="lg"
-              leftIcon={paymentMethod === 'CARD' ? 'lock' : 'handshake'}>
-              {paymentMethod === 'CARD' ? `Pay ${formatCurrency(booking.totalPrice)}` : 'Confirm Cash Booking'}
+            {/* ── Online card fields (only shown when ONLINE selected) ──────── */}
+            {paymentMethod === 'ONLINE' && (
+              <div className="bg-surface-container-lowest rounded-xl p-6 shadow-card space-y-5">
+                <h2 className="font-headline text-xl font-bold text-on-surface">Card Details</h2>
+
+                {/* Card number */}
+                <div>
+                  <label htmlFor="cardNumber" className="block text-sm font-semibold text-on-surface mb-2">
+                    Card Number
+                  </label>
+                  <input
+                    id="cardNumber"
+                    type="text"
+                    inputMode="numeric"
+                    autoComplete="off"
+                    maxLength={16}
+                    placeholder="1234 5678 9012 3456"
+                    className="us-input"
+                    value={cardNumber}
+                    onChange={(e) => {
+                      setCardNumber(e.target.value.replace(/\D/g, ''));
+                      if (fieldErrors.cardNumber) setFieldErrors((f) => ({ ...f, cardNumber: undefined }));
+                    }}
+                  />
+                  <FieldError message={fieldErrors.cardNumber} />
+                </div>
+
+                {/* CVV */}
+                <div className="max-w-[160px]">
+                  <label htmlFor="cvv" className="block text-sm font-semibold text-on-surface mb-2">
+                    CVV
+                  </label>
+                  <input
+                    id="cvv"
+                    type="password"
+                    inputMode="numeric"
+                    autoComplete="off"
+                    maxLength={3}
+                    placeholder="•••"
+                    className="us-input"
+                    value={cvv}
+                    onChange={(e) => {
+                      setCvv(e.target.value.replace(/\D/g, ''));
+                      if (fieldErrors.cvv) setFieldErrors((f) => ({ ...f, cvv: undefined }));
+                    }}
+                  />
+                  <FieldError message={fieldErrors.cvv} />
+                </div>
+              </div>
+            )}
+
+            {/* ── Submit button ────────────────────────────────────────────── */}
+            <Button
+              id="confirm-payment-btn"
+              type="submit"
+              loading={isPaying}
+              disabled={!paymentMethod || isPaying}
+              className="w-full justify-center"
+              size="lg"
+              leftIcon={paymentMethod === 'ONLINE' ? 'lock' : paymentMethod === 'CASH' ? 'handshake' : 'payments'}
+            >
+              {!paymentMethod
+                ? 'Select a payment method'
+                : paymentMethod === 'ONLINE'
+                ? `Pay ${formatCurrency(booking.totalPrice)}`
+                : 'Confirm Payment'}
             </Button>
 
             <p className="text-xs text-center text-on-surface-variant">
-              Your booking will be confirmed immediately after payment.
+              {paymentMethod === 'ONLINE'
+                ? 'Card details are never stored and are used for this transaction only.'
+                : 'You can confirm your booking and pay in cash at the meetup.'}
             </p>
           </form>
         </div>
@@ -147,7 +301,11 @@ export function CheckoutPage() {
             <div className="flex gap-4 mb-6 pb-6 border-b border-surface-container-highest">
               <div className="w-20 h-20 rounded-lg overflow-hidden bg-surface-container shrink-0">
                 {booking.listing.images?.[0] ? (
-                  <img src={booking.listing.images[0]} alt={booking.listing.title} className="w-full h-full object-cover" />
+                  <img
+                    src={booking.listing.images[0]}
+                    alt={booking.listing.title}
+                    className="w-full h-full object-cover"
+                  />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center">
                     <span className="material-symbols-outlined text-3xl text-on-surface-variant/30">image</span>
@@ -156,7 +314,9 @@ export function CheckoutPage() {
               </div>
               <div>
                 <h3 className="font-semibold text-on-surface mb-1">{booking.listing.title}</h3>
-                <p className="text-xs text-on-surface-variant mb-2">Owner: {booking.listing.owner.fullName}</p>
+                <p className="text-xs text-on-surface-variant mb-2">
+                  Owner: {booking.listing.owner.fullName}
+                </p>
                 <BookingStatusBadge status={booking.status} />
               </div>
             </div>
@@ -164,10 +324,10 @@ export function CheckoutPage() {
             {/* Details */}
             <div className="space-y-3 text-sm mb-6">
               {[
-                { label: 'Check-in', value: formatDate(booking.startDate) },
+                { label: 'Check-in',  value: formatDate(booking.startDate) },
                 { label: 'Check-out', value: formatDate(booking.endDate) },
-                { label: 'Duration', value: `${days} day${days !== 1 ? 's' : ''}` },
-                { label: 'Meetup', value: booking.meetupLocation.name },
+                { label: 'Duration',  value: `${days} day${days !== 1 ? 's' : ''}` },
+                { label: 'Meetup',    value: booking.meetupLocation.name },
               ].map(({ label, value }) => (
                 <div key={label} className="flex justify-between">
                   <span className="text-on-surface-variant">{label}</span>
@@ -179,7 +339,9 @@ export function CheckoutPage() {
             {/* Price breakdown */}
             <div className="border-t border-surface-container-highest pt-4 space-y-2 text-sm">
               <div className="flex justify-between text-on-surface-variant">
-                <span>{formatCurrency(booking.listing.pricePerDay)} × {days} day{days !== 1 ? 's' : ''}</span>
+                <span>
+                  {formatCurrency(booking.listing.pricePerDay)} × {days} day{days !== 1 ? 's' : ''}
+                </span>
                 <span>{formatCurrency(booking.totalPrice)}</span>
               </div>
               <div className="flex justify-between font-bold text-base border-t border-surface-container-highest pt-3">

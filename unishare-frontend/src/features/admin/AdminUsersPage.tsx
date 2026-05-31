@@ -6,12 +6,11 @@ import { ErrorMessage } from '../../components/ui/ErrorMessage';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { RoleBadge, VerifiedBadge } from '../../components/ui/Badge';
 import { formatDate, getInitials } from '../../utils/formatters';
-import { useDebounce } from '../../hooks/useDebounce';
+
 
 export function AdminUsersPage() {
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
-  const debouncedSearch = useDebounce(search, 350);
 
   const { data, isLoading, isError, refetch } = useGetAdminUsersQuery({
     page,

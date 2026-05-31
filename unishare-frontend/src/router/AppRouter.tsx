@@ -4,8 +4,9 @@ import { RoleGuard } from '../guards/RoleGuard';
 import { AppLayout } from '../components/layout/AppLayout';
 
 // Auth
-import { LoginPage }    from '../features/auth/LoginPage';
-import { RegisterPage } from '../features/auth/RegisterPage';
+import { LoginPage }          from '../features/auth/LoginPage';
+import { RegisterPage }       from '../features/auth/RegisterPage';
+import { ForgotPasswordPage } from '../features/auth/ForgotPasswordPage';
 
 // Listings
 import { ListingsPage }      from '../features/listings/ListingsPage';
@@ -43,8 +44,9 @@ export function AppRouter() {
           <Route path="/listings/:id" element={<ListingDetailPage />} />
 
           {/* Auth — redirect if already logged in handled inside the pages */}
-          <Route path="/login"    element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/login"            element={<LoginPage />} />
+          <Route path="/register"         element={<RegisterPage />} />
+          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
 
           {/* Protected student routes */}
           <Route element={<ProtectedRoute />}>

@@ -33,8 +33,8 @@ export const chatApi = createApi({
         method: 'POST',
         body,
       }),
-      invalidatesTags: (_result, _err, { listingId, userId }) => [
-        { type: 'Chat', id: `${listingId}-${userId}` },
+      invalidatesTags: (_result, _err, { listingId, receiverId }) => [
+        { type: 'Chat', id: `${listingId}-${receiverId}` },
         'Conversation',
       ],
     }),

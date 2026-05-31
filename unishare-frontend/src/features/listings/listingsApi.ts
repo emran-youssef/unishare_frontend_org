@@ -43,6 +43,16 @@ export const listingsApi = createApi({
       invalidatesTags: (_result, _err, { id }) => [{ type: 'Listing', id }, 'MyListings'],
     }),
 
+    // STUDENT (owner): upload listing images
+    uploadListingImages: builder.mutation<ListingDto, { listingId: number; formData: FormData }>({
+      query: ({ listingId, formData }) => ({
+        url: `/listings/${listingId}/images`,
+        method: 'POST',
+        body: formData,
+      }),
+      invalidatesTags: (_result, _err, { listingId }) => [{ type: 'Listing', id: listingId }, 'MyListings'],
+    }),
+
     // STUDENT (owner): delete listing
     deleteListing: builder.mutation<void, number>({
       query: (id) => ({ url: `/listing/${id}`, method: 'DELETE' }),
@@ -58,4 +68,5 @@ export const {
   useCreateListingMutation,
   useUpdateListingMutation,
   useDeleteListingMutation,
+  useUploadListingImagesMutation,
 } = listingsApi;

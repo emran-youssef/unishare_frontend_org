@@ -7,22 +7,27 @@ export const paymentsApi = createApi({
   baseQuery: baseQueryWithReauth,
   tagTypes: ['Payment'],
   endpoints: (builder) => ({
-    // STUDENT (renter): process payment for a booking
+    // STUDENT (renter): process payment for a confirmed booking
+    // POST /api/payments/{bookingId}
     processPayment: builder.mutation<PaymentDto, { bookingId: number; body: ProcessPaymentRequest }>({
       query: ({ bookingId, body }) => ({
         url: `/payments/${bookingId}`,
         method: 'POST',
         body,
       }),
-      invalidatesTags: ['Payment'],
+      invalidatesTags: (_result, _err, { bookingId }) => [
+        'Payment',
+        { type: 'Payment', id: bookingId },
+      ],
     }),
 
-    // Get payment status for a booking
-    getPaymentStatus: builder.query<PaymentDto, number>({
+    // Get payment details for a booking
+    // GET /api/payments/{bookingId}
+    getPayment: builder.query<PaymentDto, number>({
       query: (bookingId) => `/payments/${bookingId}`,
       providesTags: (_result, _err, bookingId) => [{ type: 'Payment', id: bookingId }],
     }),
   }),
 });
 
-export const { useProcessPaymentMutation, useGetPaymentStatusQuery } = paymentsApi;
+export const { useProcessPaymentMutation, useGetPaymentQuery } = paymentsApi;

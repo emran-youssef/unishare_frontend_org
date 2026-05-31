@@ -12,7 +12,7 @@ import { PageSpinner } from '../../components/ui/Spinner';
 import { ErrorMessage } from '../../components/ui/ErrorMessage';
 import { FieldError } from '../../components/ui/ErrorMessage';
 import { Button } from '../../components/ui/Button';
-import { getInitials, formatDate, formatCurrency, calcRentalDays, CATEGORY_LABELS, CONDITION_LABELS } from '../../utils/formatters';
+import { getInitials, formatDate, formatCurrency, calcRentalDays, CATEGORY_LABELS, CONDITION_LABELS, getImageUrl } from '../../utils/formatters';
 import { createBookingSchema, type CreateBookingFormData } from '../../utils/validators';
 
 function StarRating({ rating }: { rating: number }) {
@@ -87,7 +87,7 @@ export function ListingDetailPage() {
           {/* Main image */}
           <div className="aspect-[16/9] bg-surface-container rounded-2xl overflow-hidden mb-3 relative">
             {listing.images?.[activeImage] ? (
-              <img src={listing.images[activeImage]} alt={listing.title} className="w-full h-full object-cover" />
+              <img src={getImageUrl(listing.images[activeImage])} alt={listing.title} className="w-full h-full object-cover" />
             ) : (
               <div className="w-full h-full flex items-center justify-center">
                 <span className="material-symbols-outlined text-6xl text-on-surface-variant/30">image</span>
@@ -112,7 +112,7 @@ export function ListingDetailPage() {
                   onClick={() => setActiveImage(i)}
                   className={`w-20 h-20 rounded-lg overflow-hidden shrink-0 border-2 transition-all ${i === activeImage ? 'border-primary' : 'border-transparent'}`}
                 >
-                  <img src={img} alt={`View ${i + 1}`} className="w-full h-full object-cover" />
+                  <img src={getImageUrl(img)} alt={`View ${i + 1}`} className="w-full h-full object-cover" />
                 </button>
               ))}
             </div>

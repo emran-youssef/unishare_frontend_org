@@ -5,8 +5,8 @@ import { z } from 'zod';
 export const eduEmailSchema = z
   .string()
   .email('Must be a valid email address')
-  .refine((val) => val.toLowerCase().endsWith('@zuj.edu.jo'), {
-    message: 'Must be a valid @zuj.edu.jo email address',
+  .refine((val) => val.toLowerCase().split('@')[1]?.endsWith('.edu'), {
+    message: 'Must be a valid university .edu email address',
   });
 
 export const passwordSchema = z
@@ -43,7 +43,7 @@ export type RegisterFormData = z.infer<typeof registerSchema>;
 export const createListingSchema = z.object({
   title:       z.string().min(3, 'Title must be at least 3 characters').max(200),
   description: z.string().min(10, 'Description must be at least 10 characters'),
-  pricePerDay: z.number({ invalid_type_error: 'Enter a valid price' }).positive('Price must be greater than 0'),
+  pricePerDay: z.number({ message: 'Enter a valid price' }).positive('Price must be greater than 0'),
   category:    z.enum(['TEXTBOOKS', 'ELECTRONICS', 'FURNITURE', 'CLOTHING', 'OTHER']),
   condition:   z.enum(['NEW', 'LIKE_NEW', 'GOOD', 'FAIR']),
 });
@@ -55,7 +55,7 @@ export const createBookingSchema = z
   .object({
     startDate:        z.string().min(1, 'Select a start date'),
     endDate:          z.string().min(1, 'Select an end date'),
-    meetupLocationId: z.number({ invalid_type_error: 'Select a meetup location' }).positive(),
+    meetupLocationId: z.number({ message: 'Select a meetup location' }).positive(),
   })
   .refine(
     (data) => new Date(data.endDate) > new Date(data.startDate),
@@ -69,12 +69,10 @@ export type CreateBookingFormData = z.infer<typeof createBookingSchema>;
 
 // ─── Payment schemas ───────────────────────────────────────────────────────
 
-export const cardPaymentSchema = z.object({
-  paymentMethod:  z.literal('CARD'),
-  cardHolderName: z.string().min(2, 'Enter card holder name'),
-  cardNumber:     z.string().regex(/^\d{16}$/, 'Card number must be 16 digits'),
-  expiryDate:     z.string().regex(/^(0[1-9]|1[0-2])\/\d{2}$/, 'Use MM/YY format'),
-  cvc:            z.string().regex(/^\d{3,4}$/, 'CVC must be 3 or 4 digits'),
+export const onlinePaymentSchema = z.object({
+  paymentMethod: z.literal('ONLINE'),
+  cardNumber:    z.string().regex(/^\d{16}$/, 'Card number must be exactly 16 digits'),
+  cvv:           z.string().regex(/^\d{3}$/, 'CVV must be exactly 3 digits'),
 });
 
 export const cashPaymentSchema = z.object({
@@ -82,7 +80,7 @@ export const cashPaymentSchema = z.object({
 });
 
 export const paymentSchema = z.discriminatedUnion('paymentMethod', [
-  cardPaymentSchema,
+  onlinePaymentSchema,
   cashPaymentSchema,
 ]);
 export type PaymentFormData = z.infer<typeof paymentSchema>;

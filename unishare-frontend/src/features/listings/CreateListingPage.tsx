@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import toast from 'react-hot-toast';
-import { useCreateListingMutation } from './listingsApi';
+import { useCreateListingMutation, useUploadListingImagesMutation } from './listingsApi';
 import { createListingSchema, type CreateListingFormData } from '../../utils/validators';
 import { FieldError } from '../../components/ui/ErrorMessage';
 import { Button } from '../../components/ui/Button';
@@ -32,6 +32,7 @@ export function CreateListingPage() {
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
 
   const [createListing, { isLoading: isCreating }] = useCreateListingMutation();
+  const [uploadImages, { isLoading: isUploading }] = useUploadListingImagesMutation();
 
   const { register, handleSubmit, watch, formState: { errors } } = useForm<CreateListingFormData>({
     resolver: zodResolver(createListingSchema),
@@ -55,9 +56,18 @@ export function CreateListingPage() {
     if (step === 1) { setStep(2); return; }
     if (step === 2) { setStep(3); return; }
 
-    // Step 3 — publish (image upload not yet supported by backend)
+    // Step 3 — publish
     try {
       const listing = await createListing(data).unwrap();
+
+      if (images.length > 0) {
+        const formData = new FormData();
+        images.forEach((file) => {
+          formData.append('images', file);
+        });
+        await uploadImages({ listingId: listing.id, formData }).unwrap();
+      }
+
       toast.success('Listing published successfully!');
       navigate(`/listings/${listing.id}`);
     } catch (err: unknown) {
@@ -178,8 +188,7 @@ export function CreateListingPage() {
                   <div>
                     <h2 className="font-headline text-2xl font-bold text-on-surface mb-1">Photos</h2>
                     <p className="text-on-surface-variant text-sm">
-                      Upload up to 5 clear photos of your item.{' '}
-                      <span className="text-primary font-medium">(Image upload coming soon)</span>
+                      Upload up to 5 clear photos of your item.
                     </p>
                   </div>
 
@@ -223,7 +232,7 @@ export function CreateListingPage() {
                       { label: 'Category', value: watchedValues.category },
                       { label: 'Condition', value: watchedValues.condition },
                       { label: 'Price', value: watchedValues.pricePerDay ? `${formatCurrency(watchedValues.pricePerDay)} / day` : '—' },
-                      { label: 'Photos', value: `${imagePreviews.length} selected (upload pending backend)` },
+                      { label: 'Photos', value: `${imagePreviews.length} selected` },
                     ].map(({ label, value }) => (
                       <div key={label} className="flex justify-between py-3 border-b border-surface-container-highest last:border-0">
                         <span className="text-sm font-semibold text-on-surface-variant">{label}</span>
@@ -247,8 +256,8 @@ export function CreateListingPage() {
                       {step === 1 ? 'Continue to Photos' : 'Continue to Review'}
                     </Button>
                   ) : (
-                    <Button type="submit" loading={isCreating} rightIcon="publish">
-                      Publish Listing
+                    <Button type="submit" loading={isCreating || isUploading} rightIcon="publish">
+                      {isUploading ? 'Uploading Photos...' : 'Publish Listing'}
                     </Button>
                   )}
                 </div>

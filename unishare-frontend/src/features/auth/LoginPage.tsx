@@ -116,6 +116,14 @@ export function LoginPage() {
                 placeholder="••••••••"
               />
               <FieldError message={errors.password?.message} />
+              <div className="flex justify-end mt-1">
+                <Link
+                  to="/forgot-password"
+                  className="text-xs text-primary font-semibold hover:underline"
+                >
+                  Forgot Password?
+                </Link>
+              </div>
             </div>
 
             <Button type="submit" loading={isLoading} className="w-full justify-center" size="lg">

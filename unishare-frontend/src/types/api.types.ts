@@ -5,7 +5,7 @@ export type ItemCondition = 'NEW' | 'LIKE_NEW' | 'GOOD' | 'FAIR';
 export type ListingStatus = 'AVAILABLE' | 'RENTED' | 'INACTIVE';
 export type BookingStatus = 'PENDING' | 'CONFIRMED' | 'CANCELLED' | 'COMPLETED';
 export type PaymentStatus = 'PENDING' | 'PAID' | 'REFUNDED';
-export type PaymentMethod = 'CARD' | 'CASH';
+export type PaymentMethod = 'ONLINE' | 'CASH';
 export type ReviewType = 'OWNER_TO_RENTER' | 'RENTER_TO_OWNER';
 
 // ─── Auth DTOs ─────────────────────────────────────────────────────────────
@@ -47,6 +47,12 @@ export interface UpdateProfileRequest {
 
 export interface ChangePasswordRequest {
   currentPassword: string;
+  newPassword: string;
+}
+
+export interface ResetPasswordRequest {
+  universityEmail: string;
+  otp: string;
   newPassword: string;
 }
 
@@ -118,10 +124,9 @@ export interface CreateBookingRequest {
 export interface PaymentDto {
   id: number;
   bookingId: number;
-  amount: number;
+  paymentMethod: PaymentMethod;
   status: PaymentStatus;
-  paymentMethod: string;
-  transactionRef?: string;
+  amount: number;
   paidAt?: string;
   createdAt: string;
 }
@@ -129,9 +134,7 @@ export interface PaymentDto {
 export interface ProcessPaymentRequest {
   paymentMethod: PaymentMethod;
   cardNumber?: string;
-  cardHolderName?: string;
-  expiryDate?: string;
-  cvc?: string;
+  cvv?: string;
 }
 
 // ─── Review DTOs ───────────────────────────────────────────────────────────
