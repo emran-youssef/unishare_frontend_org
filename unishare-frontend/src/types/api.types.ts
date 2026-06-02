@@ -11,8 +11,7 @@ export type ReviewType = 'OWNER_TO_RENTER' | 'RENTER_TO_OWNER';
 // ─── Auth DTOs ─────────────────────────────────────────────────────────────
 export interface RegisterRequest {
   fullName: string;
-  email: string;
-  universityEmail: string; // must end in .edu
+  universityEmail: string;
   password: string;
   phone?: string;
 }

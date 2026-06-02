@@ -7,7 +7,11 @@ export const authApi = createApi({
   baseQuery: baseQueryWithReauth,
   endpoints: (builder) => ({
     login: builder.mutation<JwtResponse, LoginRequest>({
-      query: (body) => ({ url: '/auth/login', method: 'POST', body }),
+      query: (body) => ({
+        url: '/auth/login',
+        method: 'POST',
+        body: { universityEmail: body.email, password: body.password },
+      }),
     }),
     register: builder.mutation<void, RegisterRequest>({
       query: (body) => ({ url: '/auth/register', method: 'POST', body }),

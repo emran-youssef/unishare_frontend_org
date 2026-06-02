@@ -5,6 +5,7 @@ import toast from 'react-hot-toast';
 import { useLoginMutation } from './authApi';
 import { useAppDispatch } from '../../app/hooks';
 import { setCredentials } from './authSlice';
+import { userApi } from '../user/userApi';
 import { loginSchema, type LoginFormData } from '../../utils/validators';
 import { useAuth } from '../../hooks/useAuth';
 import { useEffect } from 'react';
@@ -28,9 +29,15 @@ export function LoginPage() {
   const onSubmit = async (data: LoginFormData) => {
     try {
       const result = await login(data).unwrap();
+      // Store token first so the /users/me request is authenticated
       dispatch(setCredentials({ user: result.user, token: result.token }));
-      toast.success(`Welcome back, ${result.user.fullName.split(' ')[0]}!`);
-      navigate(result.user.role === 'ADMIN' ? '/admin' : '/');
+      // Fetch full profile from /users/me to get authoritative user data
+      const profile = await dispatch(
+        userApi.endpoints.getProfile.initiate(undefined, { forceRefetch: true })
+      ).unwrap();
+      dispatch(setCredentials({ user: profile, token: result.token }));
+      toast.success(`Welcome back, ${profile.fullName.split(' ')[0]}!`);
+      navigate(profile.role === 'ADMIN' ? '/admin' : '/');
     } catch (err: unknown) {
       const apiErr = err as { data?: { message?: string; fieldErrors?: Record<string, string> } };
       if (apiErr?.data?.fieldErrors) {

@@ -53,7 +53,6 @@ export function RegisterPage() {
     try {
       await register({
         fullName:        data.fullName,
-        email:           data.email,
         universityEmail: data.universityEmail,
         password:        data.password,
         phone:           data.phone,
@@ -130,21 +129,14 @@ export function RegisterPage() {
               <FieldError message={errors.fullName?.message} />
             </div>
 
-            {/* Personal Email + University Email */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-semibold text-on-surface mb-2">Personal Email</label>
-                <input {...rhfReg('email')} type="email" className="us-input" placeholder="you@gmail.com" />
-                <FieldError message={errors.email?.message} />
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-on-surface mb-2">
-                  University Email
-                  <span className="ml-1 text-secondary text-xs font-normal">@zuj.edu.jo required</span>
-                </label>
-                <input {...rhfReg('universityEmail')} type="email" className="us-input" placeholder="your@zuj.edu.jo" />
-                <FieldError message={errors.universityEmail?.message} />
-              </div>
+            {/* University Email */}
+            <div>
+              <label className="block text-sm font-semibold text-on-surface mb-2">
+                University Email
+                <span className="ml-1 text-secondary text-xs font-normal">.edu required</span>
+              </label>
+              <input {...rhfReg('universityEmail')} type="email" className="us-input" placeholder="your@zuj.edu.jo" />
+              <FieldError message={errors.universityEmail?.message} />
             </div>
 
             {/* Phone (optional) */}

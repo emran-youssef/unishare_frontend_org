@@ -21,7 +21,7 @@ export const reviewsApi = createApi({
 
     // STUDENT: create a review (COMPLETED bookings only)
     createReview: builder.mutation<ReviewDto, CreateReviewRequest>({
-      query: (body) => ({ url: '/reviews', method: 'POST', body }),
+      query: (body) => ({ url: '/reviews/create', method: 'POST', body }),
       invalidatesTags: ['Review'],
     }),
   }),

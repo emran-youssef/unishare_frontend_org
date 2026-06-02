@@ -7,9 +7,9 @@ export const adminApi = createApi({
   baseQuery: baseQueryWithReauth,
   tagTypes: ['AdminUsers'],
   endpoints: (builder) => ({
-    // List all users — correct endpoint is GET /users/all (requires ADMIN role)
+    // List all users — GET /admin/users (requires ADMIN role)
     getAdminUsers: builder.query<Page<UserDto>, { page?: number; size?: number }>({
-      query: (params) => ({ url: '/users/all', params }),
+      query: (params) => ({ url: '/admin/users', params }),
       providesTags: ['AdminUsers'],
     }),
 

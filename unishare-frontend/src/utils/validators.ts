@@ -26,7 +26,6 @@ export type LoginFormData = z.infer<typeof loginSchema>;
 export const registerSchema = z
   .object({
     fullName:        z.string().min(2, 'Full name must be at least 2 characters'),
-    email:           z.string().email('Enter a valid personal email'),
     universityEmail: eduEmailSchema,
     password:        passwordSchema,
     confirmPassword: z.string(),

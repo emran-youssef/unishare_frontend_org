@@ -63,7 +63,7 @@ export function CreateListingPage() {
       if (images.length > 0) {
         const formData = new FormData();
         images.forEach((file) => {
-          formData.append('images', file);
+          formData.append('files', file);
         });
         await uploadImages({ listingId: listing.id, formData }).unwrap();
       }
