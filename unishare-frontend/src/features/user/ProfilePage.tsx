@@ -36,7 +36,7 @@ export function ProfilePage() {
 
   useEffect(() => {
     if (profile) {
-      profileForm.reset({ fullName: profile.fullName, email: profile.email, phone: profile.phone });
+      profileForm.reset({ fullName: profile.fullName, phone: profile.phone });
     }
   }, [profile]);
 
@@ -84,7 +84,7 @@ export function ProfilePage() {
         <div className="relative z-10 mt-8 sm:mt-4 text-center sm:text-left">
           <h1 className="font-headline text-3xl font-bold text-on-surface mb-2">{profile.fullName}</h1>
           <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3">
-            <span className="text-on-surface-variant text-sm">{profile.email}</span>
+            <span className="text-on-surface-variant text-sm">{profile.universityEmail}</span>
             <VerifiedBadge />
             <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-surface-container-high text-on-surface text-[10px] font-bold uppercase tracking-wider">
               {profile.role}
@@ -110,12 +110,6 @@ export function ProfilePage() {
                   <label className="block text-sm font-semibold text-on-surface mb-2">Phone</label>
                   <input {...profileForm.register('phone')} type="tel" className="us-input" placeholder="+962 7X XXX XXXX" />
                 </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-on-surface mb-2">Personal Email</label>
-                <input {...profileForm.register('email')} type="email" className="us-input" />
-                <FieldError message={profileForm.formState.errors.email?.message} />
               </div>
 
               <div>

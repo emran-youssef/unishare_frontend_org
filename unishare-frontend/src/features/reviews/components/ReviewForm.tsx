@@ -36,7 +36,6 @@ export function ReviewForm({ booking, onClose }: ReviewFormProps) {
       await createReview({
         bookingId: booking.id,
         revieweeId: reviewee.id,
-        listingId: booking.listing.id,
         rating: data.rating,
         comment: data.comment,
         type: reviewType,

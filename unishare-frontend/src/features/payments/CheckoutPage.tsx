@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { useGetBookingByIdQuery } from '../bookings/bookingsApi';
-import { useProcessPaymentMutation } from './paymentsApi';
+import { useProcessPaymentMutation, useGetPaymentQuery } from './paymentsApi';
 import { PageSpinner } from '../../components/ui/Spinner';
 import { ErrorMessage, FieldError } from '../../components/ui/ErrorMessage';
 import { Button } from '../../components/ui/Button';
@@ -33,10 +33,17 @@ export function CheckoutPage() {
 
   // ── Success state ──────────────────────────────────────────────────────────
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [paidBookingId,  setPaidBookingId]  = useState<number | null>(null);
 
   // ── API hooks ──────────────────────────────────────────────────────────────
   const { data: booking, isLoading, isError } = useGetBookingByIdQuery(Number(bookingId));
   const [processPayment, { isLoading: isPaying }] = useProcessPaymentMutation();
+
+  // Fetch payment receipt once payment succeeds
+  const { data: receipt } = useGetPaymentQuery(
+    paidBookingId ?? Number(bookingId),
+    { skip: paidBookingId === null }
+  );
 
   // ── Validate card fields client-side before submitting ────────────────────
   const validate = (): boolean => {
@@ -74,6 +81,7 @@ export function CheckoutPage() {
       } else {
         setSuccessMessage('Payment successful! Booking is now complete.');
       }
+      setPaidBookingId(Number(bookingId));
     } catch (err: unknown) {
       const apiErr = err as { status?: number; data?: ApiError };
       const status = apiErr?.status;
@@ -107,23 +115,42 @@ export function CheckoutPage() {
   if (successMessage) {
     const isCash = paymentMethod === 'CASH';
     return (
-      <div className="max-w-screen-sm mx-auto px-6 py-20 flex flex-col items-center text-center gap-6">
-        <span
-          className={`material-symbols-outlined text-6xl ${isCash ? 'text-tertiary' : 'text-primary'}`}
-        >
+      <div className="max-w-screen-sm mx-auto px-6 py-16 flex flex-col items-center text-center gap-6">
+        <span className={`material-symbols-outlined text-6xl ${isCash ? 'text-tertiary' : 'text-primary'}`}>
           {isCash ? 'handshake' : 'check_circle'}
         </span>
         <h1 className="font-headline text-3xl font-bold text-on-surface">{successMessage}</h1>
         <p className="text-on-surface-variant font-body">
           {isCash
-            ? `Bring ${formatCurrency(booking.totalPrice)} in cash to ${booking.meetupLocation.name}.`
+            ? `Bring ${formatCurrency(booking.totalPrice)} in cash to ${booking.meetupLocation?.name ?? "the agreed meetup location"}.`
             : `Your payment of ${formatCurrency(booking.totalPrice)} has been processed.`}
         </p>
-        <Button
-          leftIcon="list_alt"
-          size="lg"
-          onClick={() => navigate('/bookings')}
-        >
+
+        {/* Payment receipt */}
+        {receipt && (
+          <div className="w-full bg-surface-container-lowest rounded-2xl shadow-card p-6 text-left border border-surface-container-highest">
+            <div className="flex items-center gap-2 mb-4">
+              <span className="material-symbols-outlined text-primary text-[20px]" style={{ fontVariationSettings: "'FILL' 1" }}>receipt_long</span>
+              <h2 className="font-headline font-bold text-on-surface">Payment Receipt</h2>
+            </div>
+            <div className="space-y-2 text-sm">
+              {[
+                { label: 'Receipt #',    value: `#${receipt.id}` },
+                { label: 'Amount',       value: formatCurrency(receipt.amount) },
+                { label: 'Method',       value: receipt.paymentMethod },
+                { label: 'Status',       value: receipt.status },
+                { label: 'Date',         value: receipt.paidAt ? new Date(receipt.paidAt).toLocaleString() : '—' },
+              ].map(({ label, value }) => (
+                <div key={label} className="flex justify-between py-1.5 border-b border-surface-container-highest last:border-0">
+                  <span className="text-on-surface-variant">{label}</span>
+                  <span className="font-semibold text-on-surface">{value}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <Button leftIcon="list_alt" size="lg" onClick={() => navigate('/bookings')}>
           View My Bookings
         </Button>
       </div>
@@ -211,7 +238,7 @@ export function CheckoutPage() {
                   You'll pay{' '}
                   <strong className="text-on-surface">{formatCurrency(booking.totalPrice)}</strong>{' '}
                   in cash when you meet the owner at{' '}
-                  <strong className="text-on-surface">{booking.meetupLocation.name}</strong>.
+                  <strong className="text-on-surface">{booking.meetupLocation?.name ?? "the agreed meetup location"}</strong>.
                 </p>
               </div>
             )}
@@ -327,7 +354,7 @@ export function CheckoutPage() {
                 { label: 'Check-in',  value: formatDate(booking.startDate) },
                 { label: 'Check-out', value: formatDate(booking.endDate) },
                 { label: 'Duration',  value: `${days} day${days !== 1 ? 's' : ''}` },
-                { label: 'Meetup',    value: booking.meetupLocation.name },
+                { label: 'Meetup',    value: booking.meetupLocation?.name ?? 'To be arranged' },
               ].map(({ label, value }) => (
                 <div key={label} className="flex justify-between">
                   <span className="text-on-surface-variant">{label}</span>

@@ -3,7 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import toast from 'react-hot-toast';
-import { useGetListingByIdQuery } from './listingsApi';
+import { useGetListingByIdQuery, useGetListingImagesQuery } from './listingsApi';
 import { useGetListingReviewsQuery } from '../reviews/reviewsApi';
 import { useCreateBookingMutation } from '../bookings/bookingsApi';
 import { useGetMeetupLocationsQuery } from '../user/userApi';
@@ -35,6 +35,10 @@ export function ListingDetailPage() {
   const [activeImage, setActiveImage] = useState(0);
 
   const { data: listing, isLoading, isError, refetch } = useGetListingByIdQuery(Number(id));
+  const { data: listingImages = [] } = useGetListingImagesQuery(Number(id));
+  const imageUrls = [...listingImages]
+    .sort((a, b) => a.displayOrder - b.displayOrder)
+    .map((img) => img.imageUrl);
   const { data: reviews } = useGetListingReviewsQuery(Number(id));
   const { data: meetupLocations } = useGetMeetupLocationsQuery(undefined, { skip: !isAuthenticated });
   const [createBooking, { isLoading: isBooking }] = useCreateBookingMutation();
@@ -54,7 +58,6 @@ export function ListingDetailPage() {
         listingId: Number(id),
         startDate: data.startDate,
         endDate: data.endDate,
-        meetupLocationId: data.meetupLocationId,
       }).unwrap();
       toast.success('Booking created! Proceed to checkout.');
       navigate(`/checkout/${booking.id}`);
@@ -86,8 +89,8 @@ export function ListingDetailPage() {
         <div>
           {/* Main image */}
           <div className="aspect-[16/9] bg-surface-container rounded-2xl overflow-hidden mb-3 relative">
-            {listing.images?.[activeImage] ? (
-              <img src={getImageUrl(listing.images[activeImage])} alt={listing.title} className="w-full h-full object-cover" />
+            {imageUrls[activeImage] ? (
+              <img src={getImageUrl(imageUrls[activeImage])} alt={listing.title} className="w-full h-full object-cover" />
             ) : (
               <div className="w-full h-full flex items-center justify-center">
                 <span className="material-symbols-outlined text-6xl text-on-surface-variant/30">image</span>
@@ -104,9 +107,9 @@ export function ListingDetailPage() {
           </div>
 
           {/* Thumbnails */}
-          {listing.images?.length > 1 && (
+          {(imageUrls.length ?? 0) > 1 && (
             <div className="flex gap-3 overflow-x-auto pb-2 mb-6">
-              {listing.images.map((img, i) => (
+              {imageUrls?.map((img, i) => (
                 <button
                   key={i}
                   onClick={() => setActiveImage(i)}
@@ -128,7 +131,7 @@ export function ListingDetailPage() {
           </div>
 
           {/* Owner card */}
-          <div className="flex items-center gap-4 p-4 bg-surface-container rounded-xl mb-6">
+          <Link to={`/users/${listing.owner.id}`} className="flex items-center gap-4 p-4 bg-surface-container rounded-xl mb-6 hover:bg-surface-container-high transition-colors group">
             {listing.owner.profilePicture ? (
               <img src={listing.owner.profilePicture} alt={listing.owner.fullName} className="w-12 h-12 rounded-full object-cover" />
             ) : (
@@ -137,7 +140,7 @@ export function ListingDetailPage() {
               </div>
             )}
             <div>
-              <p className="font-semibold text-on-surface">{listing.owner.fullName}</p>
+              <p className="font-semibold text-on-surface group-hover:text-primary transition-colors">{listing.owner.fullName}</p>
               <p className="text-xs text-on-surface-variant">{listing.owner.universityEmail}</p>
             </div>
             {listing.averageRating != null && (
@@ -147,7 +150,8 @@ export function ListingDetailPage() {
                 {listing.totalReviews != null && <span className="text-xs text-on-surface-variant">({listing.totalReviews})</span>}
               </div>
             )}
-          </div>
+            <span className="material-symbols-outlined text-[18px] text-on-surface-variant group-hover:text-primary transition-colors ml-auto">chevron_right</span>
+          </Link>
 
           {/* Description */}
           <div className="mb-8">
@@ -165,13 +169,15 @@ export function ListingDetailPage() {
                 {reviews.map((review) => (
                   <div key={review.id} className="bg-surface-container-low p-5 rounded-xl">
                     <div className="flex items-center gap-3 mb-3">
-                      <div className="w-9 h-9 rounded-full bg-primary-container flex items-center justify-center text-xs font-bold text-on-primary-container">
-                        {getInitials(review.reviewer.fullName)}
-                      </div>
-                      <div>
-                        <p className="font-semibold text-on-surface text-sm">{review.reviewer.fullName}</p>
-                        <p className="text-xs text-on-surface-variant">{formatDate(review.createdAt)}</p>
-                      </div>
+                      <Link to={`/users/${review.reviewer.id}`} className="flex items-center gap-3 hover:opacity-75 transition-opacity">
+                        <div className="w-9 h-9 rounded-full bg-primary-container flex items-center justify-center text-xs font-bold text-on-primary-container">
+                          {getInitials(review.reviewer.fullName)}
+                        </div>
+                        <div>
+                          <p className="font-semibold text-on-surface text-sm">{review.reviewer.fullName}</p>
+                          <p className="text-xs text-on-surface-variant">{formatDate(review.createdAt)}</p>
+                        </div>
+                      </Link>
                       <div className="ml-auto">
                         <StarRating rating={review.rating} />
                       </div>
@@ -216,15 +222,17 @@ export function ListingDetailPage() {
                   <FieldError message={errors.endDate?.message} />
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold text-on-surface mb-2">Meetup Location</label>
+                  <label className="block text-sm font-semibold text-on-surface mb-2">
+                    Meetup Location <span className="text-on-surface-variant font-normal text-xs">optional</span>
+                  </label>
                   <div className="relative">
                     <select
                       {...register('meetupLocationId', { valueAsNumber: true })}
                       className="us-input appearance-none pr-10"
                     >
                       <option value="">Select a campus meetup spot…</option>
-                      {meetupLocations?.map((loc) => (
-                        <option key={loc.id} value={loc.id}>{loc.name}</option>
+                      {meetupLocations?.map((loc, i) => (
+                        <option key={i} value={i}>{loc.name}</option>
                       ))}
                     </select>
                     <span className="material-symbols-outlined absolute right-3 top-3 text-on-surface-variant pointer-events-none">expand_more</span>

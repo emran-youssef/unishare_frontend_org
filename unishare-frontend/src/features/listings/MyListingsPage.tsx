@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import { useGetListingsQuery, useDeleteListingMutation, useUpdateListingMutation } from './listingsApi';
+import { useGetMyListingsQuery, useDeleteListingMutation, useUpdateListingMutation } from './listingsApi';
 import { useAuth } from '../../hooks/useAuth';
 import { ListingCardSkeleton } from './components/ListingCard';
 import { EmptyState } from '../../components/ui/EmptyState';
@@ -16,8 +16,8 @@ export function MyListingsPage() {
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState<Tab>('AVAILABLE');
 
-  const { data, isLoading, isError, refetch } = useGetListingsQuery(
-    { ownerId: user?.id },
+  const { data, isLoading, isError, refetch } = useGetMyListingsQuery(
+    { userId: user?.id ?? 0 },
     { skip: !user }
   );
 

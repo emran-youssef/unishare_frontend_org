@@ -19,6 +19,12 @@ export const bookingsApi = createApi({
       providesTags: ['Booking'],
     }),
 
+    // Get incoming bookings (as listing owner)
+    getIncomingBookings: builder.query<BookingDto[], void>({
+      query: () => '/bookings/incoming',
+      providesTags: ['Booking'],
+    }),
+
     // Get single booking by ID
     getBookingById: builder.query<BookingDto, number>({
       query: (id) => `/bookings/${id}`,
@@ -42,14 +48,26 @@ export const bookingsApi = createApi({
       query: (id) => ({ url: `/bookings/${id}/complete`, method: 'PUT' }),
       invalidatesTags: ['Booking'],
     }),
+
+    // Attach a campus meetup location to a booking
+    // PUT /api/bookings/{id}/meetup?locationId={locationId}
+    attachMeetupLocation: builder.mutation<BookingDto, { id: number; locationId: number }>({
+      query: ({ id, locationId }) => ({
+        url: `/bookings/${id}/meetup?locationId=${locationId}`,
+        method: 'PUT',
+      }),
+      invalidatesTags: ['Booking'],
+    }),
   }),
 });
 
 export const {
   useCreateBookingMutation,
   useGetMyBookingsQuery,
+  useGetIncomingBookingsQuery,
   useGetBookingByIdQuery,
   useCancelBookingMutation,
   useConfirmBookingMutation,
   useCompleteBookingMutation,
+  useAttachMeetupLocationMutation,
 } = bookingsApi;

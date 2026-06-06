@@ -2,6 +2,7 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQueryWithReauth } from '../../app/baseQuery';
 import type {
   UserDto,
+  PublicUserDto,
   UpdateProfileRequest,
   ChangePasswordRequest,
   MeetupLocationDto,
@@ -29,6 +30,12 @@ export const userApi = createApi({
       query: (body) => ({ url: '/users/me/password', method: 'PUT', body }),
     }),
 
+    // Get a user's public profile (anyone can view)
+    getPublicProfile: builder.query<PublicUserDto, number>({
+      query: (id) => `/users/${id}`,
+      providesTags: ['Profile'],
+    }),
+
     // Get all active meetup locations (authenticated)
     getMeetupLocations: builder.query<MeetupLocationDto[], void>({
       query: () => '/meetup-locations',
@@ -39,6 +46,7 @@ export const userApi = createApi({
 
 export const {
   useGetProfileQuery,
+  useGetPublicProfileQuery,
   useUpdateProfileMutation,
   useChangePasswordMutation,
   useGetMeetupLocationsQuery,

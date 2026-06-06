@@ -1,6 +1,24 @@
 import { AdminSidebar } from './components/AdminSidebar';
+import { useGetStatsQuery } from './adminApi';
+import { PageSpinner } from '../../components/ui/Spinner';
+import { ErrorMessage } from '../../components/ui/ErrorMessage';
+import { formatCurrency } from '../../utils/formatters';
 
 export function AdminDashboardPage() {
+  const { data: stats, isLoading, isError, refetch } = useGetStatsQuery();
+
+  const cards = stats
+    ? [
+        { label: 'Total Users',        value: stats.totalUsers.toLocaleString(),        icon: 'group',          color: 'text-primary' },
+        { label: 'Total Listings',     value: stats.totalListing.toLocaleString(),      icon: 'sell',           color: 'text-secondary' },
+        { label: 'Active Listings',    value: stats.activeListings.toLocaleString(),    icon: 'check_circle',   color: 'text-tertiary' },
+        { label: 'Total Bookings',     value: stats.totalBookings.toLocaleString(),     icon: 'event',          color: 'text-primary' },
+        { label: 'Pending Bookings',   value: stats.pendingBookings.toLocaleString(),   icon: 'hourglass_top',  color: 'text-amber-500' },
+        { label: 'Completed Bookings', value: stats.completedBookings.toLocaleString(), icon: 'task_alt',       color: 'text-tertiary' },
+        { label: 'Total Revenue',      value: formatCurrency(stats.totalRevenue),       icon: 'payments',       color: 'text-primary' },
+      ]
+    : [];
+
   return (
     <div className="flex min-h-[calc(100vh-72px)]">
       <AdminSidebar />
@@ -10,15 +28,25 @@ export function AdminDashboardPage() {
           <p className="text-on-surface-variant font-body">Platform health and key metrics.</p>
         </div>
 
-        {/* Stats dashboard is pending backend implementation */}
-        <div className="us-card p-12 text-center">
-          <span className="material-symbols-outlined text-5xl text-on-surface-variant mb-4 block">construction</span>
-          <h2 className="font-headline text-xl font-bold text-on-surface mb-2">Stats Coming Soon</h2>
-          <p className="text-on-surface-variant font-body max-w-md mx-auto">
-            The dashboard statistics endpoint (<code className="text-primary">/admin/stats</code>) is not yet implemented on the backend.
-            This page will be activated once the backend team completes it.
-          </p>
-        </div>
+        {isLoading ? (
+          <PageSpinner />
+        ) : isError ? (
+          <ErrorMessage error={null} onRetry={refetch} />
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+            {cards.map(({ label, value, icon, color }) => (
+              <div key={label} className="us-card p-6 flex items-center gap-5">
+                <div className={`w-14 h-14 rounded-2xl bg-surface-container flex items-center justify-center ${color}`}>
+                  <span className="material-symbols-outlined text-3xl" style={{ fontVariationSettings: "'FILL' 1" }}>{icon}</span>
+                </div>
+                <div>
+                  <div className="font-headline text-3xl font-bold text-on-surface leading-none mb-1">{value}</div>
+                  <div className="text-xs text-on-surface-variant uppercase tracking-wider font-label">{label}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </main>
     </div>
   );

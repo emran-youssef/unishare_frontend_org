@@ -66,7 +66,11 @@ export function ListingCard({ listing, showStatus = false }: ListingCardProps) {
 
         {/* Owner + rating */}
         <div className="flex items-center justify-between pt-3 border-t border-surface-container-highest">
-          <div className="flex items-center gap-2">
+          <Link
+            to={`/users/${listing.owner.id}`}
+            onClick={(e) => e.stopPropagation()}
+            className="flex items-center gap-2 hover:opacity-75 transition-opacity"
+          >
             {listing.owner.profilePicture ? (
               <img src={listing.owner.profilePicture} alt={listing.owner.fullName} className="w-6 h-6 rounded-full object-cover" />
             ) : (
@@ -75,7 +79,7 @@ export function ListingCard({ listing, showStatus = false }: ListingCardProps) {
               </div>
             )}
             <span className="text-xs font-medium text-on-surface">{listing.owner.fullName.split(' ')[0]}</span>
-          </div>
+          </Link>
 
           {listing.averageRating != null && (
             <div className="flex items-center gap-1">

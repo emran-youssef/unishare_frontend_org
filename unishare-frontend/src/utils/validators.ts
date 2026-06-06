@@ -9,11 +9,10 @@ export const eduEmailSchema = z
     message: 'Must be a valid university .edu email address',
   });
 
+// Backend only enforces a minimum length of 8 characters.
 export const passwordSchema = z
   .string()
-  .min(8, 'Password must be at least 8 characters')
-  .regex(/[A-Z]/, 'Must contain at least one uppercase letter')
-  .regex(/[0-9]/, 'Must contain at least one number');
+  .min(8, 'Password must be at least 8 characters');
 
 // ─── Auth schemas ──────────────────────────────────────────────────────────
 
@@ -54,7 +53,7 @@ export const createBookingSchema = z
   .object({
     startDate:        z.string().min(1, 'Select a start date'),
     endDate:          z.string().min(1, 'Select an end date'),
-    meetupLocationId: z.number({ message: 'Select a meetup location' }).positive(),
+    meetupLocationId: z.number().optional(),
   })
   .refine(
     (data) => new Date(data.endDate) > new Date(data.startDate),
@@ -88,7 +87,6 @@ export type PaymentFormData = z.infer<typeof paymentSchema>;
 
 export const updateProfileSchema = z.object({
   fullName: z.string().min(2, 'Full name must be at least 2 characters'),
-  email:    z.string().email('Enter a valid email'),
   phone:    z.string().optional(),
 });
 export type UpdateProfileFormData = z.infer<typeof updateProfileSchema>;

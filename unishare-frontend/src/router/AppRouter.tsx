@@ -30,6 +30,10 @@ import { ProfilePage } from '../features/user/ProfilePage';
 import { AdminDashboardPage } from '../features/admin/AdminDashboardPage';
 import { AdminUsersPage }     from '../features/admin/AdminUsersPage';
 import { AdminListingsPage }  from '../features/admin/AdminListingsPage';
+import { AdminBookingsPage }  from '../features/admin/AdminBookingsPage';
+
+// Public profile
+import { PublicProfilePage }  from '../features/user/PublicProfilePage';
 
 // 404
 import { NotFoundPage } from '../pages/NotFoundPage';
@@ -42,6 +46,7 @@ export function AppRouter() {
         <Route element={<AppLayout />}>
           <Route path="/"             element={<ListingsPage />} />
           <Route path="/listings/:id" element={<ListingDetailPage />} />
+          <Route path="/users/:id"    element={<PublicProfilePage />} />
 
           {/* Auth — redirect if already logged in handled inside the pages */}
           <Route path="/login"            element={<LoginPage />} />
@@ -67,6 +72,7 @@ export function AppRouter() {
             <Route path="/admin"          element={<AdminDashboardPage />} />
             <Route path="/admin/users"    element={<AdminUsersPage />} />
             <Route path="/admin/listings" element={<AdminListingsPage />} />
+            <Route path="/admin/bookings" element={<AdminBookingsPage />} />
           </Route>
         </Route>
 

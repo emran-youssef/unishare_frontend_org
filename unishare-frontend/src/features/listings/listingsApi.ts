@@ -2,6 +2,7 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQueryWithReauth } from '../../app/baseQuery';
 import type {
   ListingDto,
+  ListingImageDto,
   CreateListingRequest,
   UpdateListingRequest,
   ListingsQueryParams,
@@ -43,8 +44,14 @@ export const listingsApi = createApi({
       invalidatesTags: (_result, _err, { id }) => [{ type: 'Listing', id }, 'MyListings'],
     }),
 
-    // STUDENT (owner): upload listing images
-    uploadListingImages: builder.mutation<ListingDto, { listingId: number; formData: FormData }>({
+    // Public: list images for a listing — GET /api/listings/{id}/images
+    getListingImages: builder.query<ListingImageDto[], number>({
+      query: (listingId) => `/listings/${listingId}/images`,
+      providesTags: (_result, _err, listingId) => [{ type: 'Listing', id: listingId }],
+    }),
+
+    // STUDENT (owner): upload listing images — returns the created image rows
+    uploadListingImages: builder.mutation<ListingImageDto[], { listingId: number; formData: FormData }>({
       query: ({ listingId, formData }) => ({
         url: `/listings/${listingId}/images`,
         method: 'POST',
@@ -65,6 +72,7 @@ export const {
   useGetListingsQuery,
   useGetListingByIdQuery,
   useGetMyListingsQuery,
+  useGetListingImagesQuery,
   useCreateListingMutation,
   useUpdateListingMutation,
   useDeleteListingMutation,

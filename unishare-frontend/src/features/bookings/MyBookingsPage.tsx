@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import { useGetMyBookingsQuery, useCancelBookingMutation, useConfirmBookingMutation, useCompleteBookingMutation } from './bookingsApi';
+import { useGetMyBookingsQuery, useGetIncomingBookingsQuery, useCancelBookingMutation, useConfirmBookingMutation, useCompleteBookingMutation } from './bookingsApi';
 import { useAuth } from '../../hooks/useAuth';
 import { PageSpinner } from '../../components/ui/Spinner';
 import { EmptyState } from '../../components/ui/EmptyState';
@@ -23,12 +23,13 @@ export function MyBookingsPage() {
   const [reviewBooking, setReviewBooking] = useState<BookingDto | null>(null);
 
   const { data: bookings = [], isLoading, isError, refetch } = useGetMyBookingsQuery();
+  const { data: incoming = [], isLoading: incomingLoading } = useGetIncomingBookingsQuery();
   const [cancelBooking, { isLoading: isCancelling }] = useCancelBookingMutation();
   const [confirmBooking, { isLoading: isConfirming }] = useConfirmBookingMutation();
   const [completeBooking, { isLoading: isCompleting }] = useCompleteBookingMutation();
 
   const renterBookings = bookings.filter((b) => b.renter.id === user?.id);
-  const ownerBookings  = bookings.filter((b) => b.listing.owner.id === user?.id);
+  const ownerBookings  = incoming;
   const displayList = (tab === 'renter' ? renterBookings : ownerBookings)
     .filter((b) => statusFilter === 'ALL' || b.status === statusFilter);
 
@@ -42,7 +43,7 @@ export function MyBookingsPage() {
     }
   };
 
-  if (isLoading) return <PageSpinner />;
+  if (isLoading || incomingLoading) return <PageSpinner />;
   if (isError) return <ErrorMessage error={null} onRetry={refetch} />;
 
   return (
@@ -133,7 +134,7 @@ export function MyBookingsPage() {
                       </div>
                       <div>
                         <p className="text-on-surface-variant text-xs uppercase tracking-wider font-label mb-1">Meetup</p>
-                        <p className="text-on-surface">{booking.meetupLocation.name}</p>
+                        <p className="text-on-surface">{booking.meetupLocation?.name ?? "—"}</p>
                       </div>
                       <div>
                         <p className="text-on-surface-variant text-xs uppercase tracking-wider font-label mb-1">{isRenter ? 'Owner' : 'Renter'}</p>
@@ -178,7 +179,7 @@ export function MyBookingsPage() {
                           Leave a Review
                         </Button>
                       )}
-                      <Link to={`/chat/${otherUser.id}`} className="btn-surface text-sm px-4 py-2 rounded-lg flex items-center gap-2">
+                      <Link to={`/chat/${booking.listing.id}/${otherUser.id}`} className="btn-surface text-sm px-4 py-2 rounded-lg flex items-center gap-2">
                         <span className="material-symbols-outlined text-[16px]">chat</span>
                         Message
                       </Link>

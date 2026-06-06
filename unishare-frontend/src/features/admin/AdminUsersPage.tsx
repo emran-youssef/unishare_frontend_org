@@ -1,21 +1,52 @@
 import { useState } from 'react';
-import { useGetAdminUsersQuery } from './adminApi';
+import toast from 'react-hot-toast';
+import { useGetAdminUsersQuery, useChangeUserRoleMutation, useDeactivateUserMutation, useActivateUserMutation } from './adminApi';
 import { AdminSidebar } from './components/AdminSidebar';
 import { PageSpinner } from '../../components/ui/Spinner';
 import { ErrorMessage } from '../../components/ui/ErrorMessage';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { RoleBadge, VerifiedBadge } from '../../components/ui/Badge';
 import { formatDate, getInitials } from '../../utils/formatters';
+import type { Role } from '../../types/api.types';
 
 
 export function AdminUsersPage() {
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
 
-  const { data, isLoading, isError, refetch } = useGetAdminUsersQuery({
-    page,
-    size: 15,
-  });
+  const { data, isLoading, isError, refetch } = useGetAdminUsersQuery({ page, size: 15 });
+  const [changeRole,     { isLoading: isChangingRole }]   = useChangeUserRoleMutation();
+  const [deactivateUser, { isLoading: isDeactivating }]   = useDeactivateUserMutation();
+  const [activateUser,   { isLoading: isActivating }]     = useActivateUserMutation();
+  const busy = isChangingRole || isDeactivating || isActivating;
+
+  const handleRoleToggle = async (id: number, currentRole: Role) => {
+    const newRole: Role = currentRole === 'ADMIN' ? 'STUDENT' : 'ADMIN';
+    try {
+      await changeRole({ id, role: newRole }).unwrap();
+      toast.success(`Role changed to ${newRole}.`);
+    } catch {
+      toast.error('Could not change role. Please try again.');
+    }
+  };
+
+  const handleDeactivate = async (id: number) => {
+    try {
+      await deactivateUser(id).unwrap();
+      toast.success('User deactivated.');
+    } catch {
+      toast.error('Could not deactivate user.');
+    }
+  };
+
+  const handleActivate = async (id: number) => {
+    try {
+      await activateUser(id).unwrap();
+      toast.success('User activated.');
+    } catch {
+      toast.error('Could not activate user.');
+    }
+  };
 
   return (
     <div className="flex min-h-[calc(100vh-72px)]">
@@ -56,7 +87,7 @@ export function AdminUsersPage() {
                     <th className="text-left px-6 py-4 text-xs font-bold uppercase tracking-wider text-on-surface-variant hidden md:table-cell">University Email</th>
                     <th className="text-left px-6 py-4 text-xs font-bold uppercase tracking-wider text-on-surface-variant hidden lg:table-cell">Joined</th>
                     <th className="text-left px-6 py-4 text-xs font-bold uppercase tracking-wider text-on-surface-variant">Role</th>
-                    {/* Deactivate action is pending backend implementation */}
+                    <th className="text-right px-6 py-4 text-xs font-bold uppercase tracking-wider text-on-surface-variant">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -69,7 +100,7 @@ export function AdminUsersPage() {
                           </div>
                           <div>
                             <p className="font-semibold text-on-surface text-sm">{user.fullName}</p>
-                            <p className="text-xs text-on-surface-variant">{user.email}</p>
+                            <p className="text-xs text-on-surface-variant">ID #{user.id}</p>
                           </div>
                         </div>
                       </td>
@@ -84,6 +115,31 @@ export function AdminUsersPage() {
                       </td>
                       <td className="px-6 py-4">
                         <RoleBadge role={user.role} />
+                      </td>
+                      <td className="px-6 py-4 text-right">
+                        <div className="flex items-center justify-end gap-2">
+                          <button
+                            onClick={() => handleRoleToggle(user.id, user.role)}
+                            disabled={busy}
+                            className="text-xs font-semibold px-3 py-1.5 rounded-lg text-secondary hover:bg-secondary/10 transition-colors disabled:opacity-40"
+                          >
+                            {user.role === 'ADMIN' ? 'Make Student' : 'Make Admin'}
+                          </button>
+                          <button
+                            onClick={() => handleDeactivate(user.id)}
+                            disabled={busy}
+                            className="text-xs font-semibold px-3 py-1.5 rounded-lg text-error hover:bg-error-container/30 transition-colors disabled:opacity-40"
+                          >
+                            Deactivate
+                          </button>
+                          <button
+                            onClick={() => handleActivate(user.id)}
+                            disabled={busy}
+                            className="text-xs font-semibold px-3 py-1.5 rounded-lg text-tertiary hover:bg-tertiary-container/30 transition-colors disabled:opacity-40"
+                          >
+                            Activate
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))}

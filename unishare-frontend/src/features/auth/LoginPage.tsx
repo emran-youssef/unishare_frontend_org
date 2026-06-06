@@ -29,9 +29,19 @@ export function LoginPage() {
   const onSubmit = async (data: LoginFormData) => {
     try {
       const result = await login(data).unwrap();
-      // Store token first so the /users/me request is authenticated
-      dispatch(setCredentials({ user: result.user, token: result.token }));
-      // Fetch full profile from /users/me to get authoritative user data
+      // Backend returns a FLAT JwtResponse (token + userId + universityEmail + role).
+      // Store a minimal user first so the /users/me request is authenticated…
+      dispatch(setCredentials({
+        user: {
+          id: result.userId,
+          fullName: '',
+          universityEmail: result.universityEmail,
+          role: result.role,
+          createdAt: '',
+        },
+        token: result.token,
+      }));
+      // …then fetch the authoritative full profile and replace it.
       const profile = await dispatch(
         userApi.endpoints.getProfile.initiate(undefined, { forceRefetch: true })
       ).unwrap();

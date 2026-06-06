@@ -1,4 +1,4 @@
-// ─── Enums (mirrors backend enums exactly) ────────────────────────────────
+// ─── Enums (mirror backend enums exactly) ──────────────────────────────────
 export type Role = 'STUDENT' | 'ADMIN';
 export type ListingCategory = 'TEXTBOOKS' | 'ELECTRONICS' | 'FURNITURE' | 'CLOTHING' | 'OTHER';
 export type ItemCondition = 'NEW' | 'LIKE_NEW' | 'GOOD' | 'FAIR';
@@ -17,41 +17,55 @@ export interface RegisterRequest {
 }
 
 export interface LoginRequest {
-  email: string;
+  email: string;      // mapped to `universityEmail` before sending to backend
   password: string;
 }
 
+// Backend JwtResponse is FLAT — no nested user object
 export interface JwtResponse {
   token: string;
-  user: UserDto;
+  type?: string;            // "Bearer"
+  userId: number;
+  universityEmail: string;
+  role: Role;
+}
+
+export interface ResetPasswordRequest {
+  universityEmail: string;
+  otp: string;
+  newPassword: string;
 }
 
 // ─── User DTOs ─────────────────────────────────────────────────────────────
 export interface UserDto {
   id: number;
   fullName: string;
-  email: string;
   universityEmail: string;
   role: Role;
   profilePicture?: string;
   phone?: string;
   createdAt: string;
+  email?: string;           // kept optional for backwards-compat; backend does not send it
 }
 
-export interface UpdateProfileRequest {
+// Backend PublicUserDto (used inside chat + reviews)
+export interface PublicUserDto {
+  id: number;
   fullName: string;
-  email: string;
+  universityEmail: string;
+  role: Role;
+  profilePicture?: string;
+}
+
+// Backend UpdateProfileRequest = { fullName, profilePicture, phone }
+export interface UpdateProfileRequest {
+  fullName?: string;
+  profilePicture?: string;
   phone?: string;
 }
 
 export interface ChangePasswordRequest {
   currentPassword: string;
-  newPassword: string;
-}
-
-export interface ResetPasswordRequest {
-  universityEmail: string;
-  otp: string;
   newPassword: string;
 }
 
@@ -64,12 +78,20 @@ export interface ListingDto {
   category: ListingCategory;
   condition: ItemCondition;
   status: ListingStatus;
-  images: string[];
+  createdAt: string;
   owner: UserDto;
+  // Not part of backend ListingDto — populated separately or optional:
+  images?: string[];
   averageRating?: number;
   totalReviews?: number;
-  createdAt: string;
-  updatedAt: string;
+  updatedAt?: string;
+}
+
+// Backend ListingImageDto (returned by /api/listings/{id}/images)
+export interface ListingImageDto {
+  id: number;
+  imageUrl: string;
+  displayOrder: number;
 }
 
 export interface CreateListingRequest {
@@ -93,9 +115,11 @@ export interface ListingsQueryParams {
   page?: number;
   size?: number;
   category?: ListingCategory | '';
-  search?: string;
+  status?: ListingStatus;
+  minPrice?: number;
+  maxPrice?: number;
+  search?: string;     // client-side only; backend ignores unknown params
   sort?: string;
-  ownerId?: number;
 }
 
 // ─── Booking DTOs ──────────────────────────────────────────────────────────
@@ -103,29 +127,28 @@ export interface BookingDto {
   id: number;
   listing: ListingDto;
   renter: UserDto;
-  startDate: string; // ISO date 'YYYY-MM-DD'
+  startDate: string; // 'YYYY-MM-DD'
   endDate: string;
   totalPrice: number;
   status: BookingStatus;
-  meetupLocation: MeetupLocationDto;
+  meetupLocation: MeetupLocationDto | null;
   createdAt: string;
-  updatedAt: string;
 }
 
+// Backend CreateBookingRequest = { listingId, startDate, endDate }
 export interface CreateBookingRequest {
   listingId: number;
   startDate: string;
   endDate: string;
-  meetupLocationId: number;
 }
 
 // ─── Payment DTOs ──────────────────────────────────────────────────────────
 export interface PaymentDto {
   id: number;
   bookingId: number;
+  amount: number;
   paymentMethod: PaymentMethod;
   status: PaymentStatus;
-  amount: number;
   paidAt?: string;
   createdAt: string;
 }
@@ -140,19 +163,19 @@ export interface ProcessPaymentRequest {
 export interface ReviewDto {
   id: number;
   bookingId: number;
-  reviewer: UserDto;
-  reviewee: UserDto;
-  listing: ListingDto;
+  reviewer: PublicUserDto;
+  reviewee: PublicUserDto;
+  listingId: number;
   rating: number; // 1–5
   comment?: string;
   type: ReviewType;
   createdAt: string;
 }
 
+// Backend CreateReviewRequest = { bookingId, revieweeId, rating, comment, type }
 export interface CreateReviewRequest {
   bookingId: number;
   revieweeId: number;
-  listingId: number;
   rating: number;
   comment?: string;
   type: ReviewType;
@@ -161,49 +184,38 @@ export interface CreateReviewRequest {
 // ─── Chat DTOs ─────────────────────────────────────────────────────────────
 export interface ChatMessageDto {
   id: number;
-  sender: UserDto;
-  receiver: UserDto;
-  listing?: ListingDto;
   content: string;
   isRead: boolean;
   createdAt: string;
+  sender: PublicUserDto;
+  receiver: PublicUserDto;
+  listingId: number;
 }
 
+// Backend SendMessageRequest = { content } (listing + receiver are in the URL)
 export interface SendMessageRequest {
   content: string;
-  listingId?: number;
 }
 
-export interface ConversationDto {
-  otherUser: UserDto;
-  lastMessage: ChatMessageDto;
-  unreadCount: number;
-}
-
-// ─── Meetup Location DTOs ──────────────────────────────────────────────────
+// ─── Meetup Location DTO (backend = { name, description, address }) ─────────
 export interface MeetupLocationDto {
-  id: number;
   name: string;
   description?: string;
   address?: string;
-  isActive: boolean;
 }
 
-// ─── Admin DTOs ────────────────────────────────────────────────────────────
+// ─── Admin DTOs (match backend AdminStatsDto field names exactly) ──────────
 export interface AdminStatsDto {
   totalUsers: number;
-  totalListings: number;
-  activeListings: number;
+  totalListing: number;       // NOTE: singular, as on the backend
   totalBookings: number;
-  newBookings: number;
-  estimatedRevenue: number;
-  userGrowthPercent?: number;
-  listingGrowthPercent?: number;
-  bookingGrowthPercent?: number;
-  revenueGrowthPercent?: number;
+  activeListings: number;
+  pendingBookings: number;
+  completedBookings: number;
+  totalRevenue: number;
 }
 
-// ─── Pagination ────────────────────────────────────────────────────────────
+// ─── Pagination (Spring Page<T>) ───────────────────────────────────────────
 export interface Page<T> {
   content: T[];
   totalElements: number;
@@ -212,7 +224,7 @@ export interface Page<T> {
   size: number;
 }
 
-// ─── Error Response (matches backend GlobalExceptionHandler) ───────────────
+// ─── Error Response (backend GlobalExceptionHandler) ───────────────────────
 export interface ApiError {
   timestamp: string;
   status: number;

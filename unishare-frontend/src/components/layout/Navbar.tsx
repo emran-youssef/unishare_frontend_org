@@ -74,7 +74,7 @@ export function Navbar() {
                   <div className="absolute right-0 mt-2 w-52 bg-surface-container-lowest rounded-xl shadow-card-lg border border-outline-variant/20 py-2 z-50">
                     <div className="px-4 py-2 border-b border-surface-container-highest">
                       <p className="font-semibold text-on-surface text-sm">{user?.fullName}</p>
-                      <p className="text-xs text-on-surface-variant truncate">{user?.email}</p>
+                      <p className="text-xs text-on-surface-variant truncate">{user?.universityEmail}</p>
                     </div>
                     <Link
                       to="/profile"

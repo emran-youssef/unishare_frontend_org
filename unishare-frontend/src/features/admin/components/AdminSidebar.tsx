@@ -4,6 +4,7 @@ const NAV_ITEMS = [
   { to: '/admin',          label: 'Dashboard', icon: 'dashboard'          },
   { to: '/admin/users',    label: 'Users',     icon: 'group'              },
   { to: '/admin/listings', label: 'Listings',  icon: 'storefront'         },
+  { to: '/admin/bookings', label: 'Bookings',  icon: 'event_available'    },
 ];
 
 export function AdminSidebar() {
