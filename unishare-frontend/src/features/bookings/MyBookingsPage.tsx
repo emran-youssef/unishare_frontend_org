@@ -9,7 +9,7 @@ import { ErrorMessage } from '../../components/ui/ErrorMessage';
 import { BookingStatusBadge } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
 import { ReviewForm } from '../reviews/components/ReviewForm';
-import { formatDate, formatCurrency } from '../../utils/formatters';
+import { formatDate, formatCurrency, getImageUrl } from '../../utils/formatters';
 import type { BookingDto, BookingStatus } from '../../types/api.types';
 import { getInitials } from '../../utils/formatters';
 
@@ -29,7 +29,7 @@ export function MyBookingsPage() {
   const [completeBooking, { isLoading: isCompleting }] = useCompleteBookingMutation();
 
   const renterBookings = bookings.filter((b) => b.renter.id === user?.id);
-  const ownerBookings  = incoming;
+  const ownerBookings = incoming;
   const displayList = (tab === 'renter' ? renterBookings : ownerBookings)
     .filter((b) => statusFilter === 'ALL' || b.status === statusFilter);
 
@@ -97,7 +97,7 @@ export function MyBookingsPage() {
         <div className="space-y-4">
           {displayList.map((booking) => {
             const isRenter = booking.renter.id === user?.id;
-            const isOwner  = booking.listing.owner.id === user?.id;
+            const isOwner = booking.listing.owner.id === user?.id;
             const otherUser = isRenter ? booking.listing.owner : booking.renter;
 
             return (
@@ -106,7 +106,7 @@ export function MyBookingsPage() {
                   {/* Listing image */}
                   <div className="w-full md:w-32 h-32 rounded-xl overflow-hidden bg-surface-container shrink-0">
                     {booking.listing.images?.[0] ? (
-                      <img src={booking.listing.images[0]} alt={booking.listing.title} className="w-full h-full object-cover" />
+                      <img src={getImageUrl(booking.listing.images?.[0]?.imageUrl)} alt={booking.listing.title} className="w-full h-full object-cover" />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center">
                         <span className="material-symbols-outlined text-3xl text-on-surface-variant/30">image</span>

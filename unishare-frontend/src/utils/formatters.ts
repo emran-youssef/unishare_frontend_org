@@ -61,6 +61,7 @@ export function truncate(text: string, maxLength: number): string {
 const API_BASE = 'http://localhost:8080';
 export function getImageUrl(path: string | undefined | null): string | undefined {
   if (!path) return undefined;
+  if (typeof path !== 'string') return undefined;
   if (path.startsWith('/uploads/')) return `${API_BASE}${path}`;
   return path;
 }
@@ -77,24 +78,24 @@ export function getInitials(fullName: string): string {
 
 // Listing category display labels
 export const CATEGORY_LABELS: Record<string, string> = {
-  TEXTBOOKS:   'Textbooks',
+  TEXTBOOKS: 'Textbooks',
   ELECTRONICS: 'Electronics',
-  FURNITURE:   'Furniture',
-  CLOTHING:    'Clothing',
-  OTHER:       'Other',
+  FURNITURE: 'Furniture',
+  CLOTHING: 'Clothing',
+  OTHER: 'Other',
 };
 
 // Item condition display labels
 export const CONDITION_LABELS: Record<string, string> = {
-  NEW:       'New',
-  LIKE_NEW:  'Like New',
-  GOOD:      'Good',
-  FAIR:      'Fair',
+  NEW: 'New',
+  LIKE_NEW: 'Like New',
+  GOOD: 'Good',
+  FAIR: 'Fair',
 };
 
 // Booking status display labels & colors
 export const BOOKING_STATUS_STYLES: Record<string, { label: string; className: string }> = {
-  PENDING:   { label: 'Pending',   className: 'bg-surface-dim text-on-surface-variant' },
+  PENDING: { label: 'Pending', className: 'bg-surface-dim text-on-surface-variant' },
   CONFIRMED: { label: 'Confirmed', className: 'bg-secondary-fixed-dim/30 text-secondary' },
   COMPLETED: { label: 'Completed', className: 'bg-tertiary-fixed-dim/20 text-tertiary' },
   CANCELLED: { label: 'Cancelled', className: 'bg-error-container/50 text-error' },
@@ -103,6 +104,6 @@ export const BOOKING_STATUS_STYLES: Record<string, { label: string; className: s
 // Listing status styles
 export const LISTING_STATUS_STYLES: Record<string, { label: string; className: string }> = {
   AVAILABLE: { label: 'Available', className: 'bg-tertiary-container/10 text-tertiary' },
-  RENTED:    { label: 'Rented',    className: 'bg-secondary-fixed-dim/30 text-secondary' },
-  INACTIVE:  { label: 'Inactive',  className: 'bg-surface-dim text-on-surface-variant' },
+  RENTED: { label: 'Rented', className: 'bg-secondary-fixed-dim/30 text-secondary' },
+  INACTIVE: { label: 'Inactive', className: 'bg-surface-dim text-on-surface-variant' },
 };

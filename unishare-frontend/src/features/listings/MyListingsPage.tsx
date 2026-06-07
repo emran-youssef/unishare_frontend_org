@@ -7,8 +7,8 @@ import { ListingCardSkeleton } from './components/ListingCard';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { ErrorMessage } from '../../components/ui/ErrorMessage';
 import { ListingStatusBadge } from '../../components/ui/Badge';
-import { formatCurrency } from '../../utils/formatters';
 import type { ListingDto, ListingStatus } from '../../types/api.types';
+import { formatCurrency, getImageUrl } from '../../utils/formatters';
 
 type Tab = 'AVAILABLE' | 'RENTED' | 'INACTIVE';
 
@@ -124,7 +124,7 @@ export function MyListingsPage() {
                 {/* Thumbnail */}
                 <div className="w-28 h-28 rounded-lg overflow-hidden bg-surface-container shrink-0">
                   {listing.images?.[0] ? (
-                    <img src={listing.images[0]} alt={listing.title} className="w-full h-full object-cover" />
+                    <img src={getImageUrl(listing.images[0].imageUrl)} alt={listing.title} className="w-full h-full object-cover" />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
                       <span className="material-symbols-outlined text-3xl text-on-surface-variant/30">image</span>

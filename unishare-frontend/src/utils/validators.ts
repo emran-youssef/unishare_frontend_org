@@ -17,18 +17,18 @@ export const passwordSchema = z
 // ─── Auth schemas ──────────────────────────────────────────────────────────
 
 export const loginSchema = z.object({
-  email:    z.string().email('Enter a valid email'),
+  email: z.string().email('Enter a valid email'),
   password: z.string().min(1, 'Password is required'),
 });
 export type LoginFormData = z.infer<typeof loginSchema>;
 
 export const registerSchema = z
   .object({
-    fullName:        z.string().min(2, 'Full name must be at least 2 characters'),
+    fullName: z.string().min(2, 'Full name must be at least 2 characters'),
     universityEmail: eduEmailSchema,
-    password:        passwordSchema,
+    password: passwordSchema,
     confirmPassword: z.string(),
-    phone:           z.string().optional(),
+    phone: z.string().optional(),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: 'Passwords do not match',
@@ -39,11 +39,11 @@ export type RegisterFormData = z.infer<typeof registerSchema>;
 // ─── Listing schemas ───────────────────────────────────────────────────────
 
 export const createListingSchema = z.object({
-  title:       z.string().min(3, 'Title must be at least 3 characters').max(200),
+  title: z.string().min(3, 'Title must be at least 3 characters').max(200),
   description: z.string().min(10, 'Description must be at least 10 characters'),
   pricePerDay: z.number({ message: 'Enter a valid price' }).positive('Price must be greater than 0'),
-  category:    z.enum(['TEXTBOOKS', 'ELECTRONICS', 'FURNITURE', 'CLOTHING', 'OTHER']),
-  condition:   z.enum(['NEW', 'LIKE_NEW', 'GOOD', 'FAIR']),
+  category: z.enum(['TEXTBOOKS', 'ELECTRONICS', 'FURNITURE', 'CLOTHING', 'OTHER']),
+  condition: z.enum(['NEW', 'LIKE_NEW', 'GOOD', 'FAIR']),
 });
 export type CreateListingFormData = z.infer<typeof createListingSchema>;
 
@@ -51,8 +51,8 @@ export type CreateListingFormData = z.infer<typeof createListingSchema>;
 
 export const createBookingSchema = z
   .object({
-    startDate:        z.string().min(1, 'Select a start date'),
-    endDate:          z.string().min(1, 'Select an end date'),
+    startDate: z.string().min(1, 'Select a start date'),
+    endDate: z.string().min(1, 'Select an end date'),
     meetupLocationId: z.number().optional(),
   })
   .refine(
@@ -64,13 +64,12 @@ export const createBookingSchema = z
     { message: 'Start date cannot be in the past', path: ['startDate'] }
   );
 export type CreateBookingFormData = z.infer<typeof createBookingSchema>;
-
 // ─── Payment schemas ───────────────────────────────────────────────────────
 
 export const onlinePaymentSchema = z.object({
   paymentMethod: z.literal('ONLINE'),
-  cardNumber:    z.string().regex(/^\d{16}$/, 'Card number must be exactly 16 digits'),
-  cvv:           z.string().regex(/^\d{3}$/, 'CVV must be exactly 3 digits'),
+  cardNumber: z.string().regex(/^\d{16}$/, 'Card number must be exactly 16 digits'),
+  cvv: z.string().regex(/^\d{3}$/, 'CVV must be exactly 3 digits'),
 });
 
 export const cashPaymentSchema = z.object({
@@ -87,14 +86,14 @@ export type PaymentFormData = z.infer<typeof paymentSchema>;
 
 export const updateProfileSchema = z.object({
   fullName: z.string().min(2, 'Full name must be at least 2 characters'),
-  phone:    z.string().optional(),
+  phone: z.string().optional(),
 });
 export type UpdateProfileFormData = z.infer<typeof updateProfileSchema>;
 
 export const changePasswordSchema = z
   .object({
     currentPassword: z.string().min(1, 'Enter your current password'),
-    newPassword:     passwordSchema,
+    newPassword: passwordSchema,
     confirmPassword: z.string(),
   })
   .refine((data) => data.newPassword === data.confirmPassword, {
@@ -106,7 +105,7 @@ export type ChangePasswordFormData = z.infer<typeof changePasswordSchema>;
 // ─── Review schema ─────────────────────────────────────────────────────────
 
 export const reviewSchema = z.object({
-  rating:  z.number().min(1, 'Select a rating').max(5),
+  rating: z.number().min(1, 'Select a rating').max(5),
   comment: z.string().max(500).optional(),
 });
 export type ReviewFormData = z.infer<typeof reviewSchema>;

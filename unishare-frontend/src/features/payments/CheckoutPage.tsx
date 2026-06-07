@@ -6,7 +6,7 @@ import { PageSpinner } from '../../components/ui/Spinner';
 import { ErrorMessage, FieldError } from '../../components/ui/ErrorMessage';
 import { Button } from '../../components/ui/Button';
 import { BookingStatusBadge } from '../../components/ui/Badge';
-import { formatDate, formatCurrency, calcRentalDays } from '../../utils/formatters';
+import { formatDate, formatCurrency, calcRentalDays, getImageUrl } from '../../utils/formatters';
 import { useState } from 'react';
 import type { ApiError } from '../../types/api.types';
 
@@ -33,7 +33,7 @@ export function CheckoutPage() {
 
   // ── Success state ──────────────────────────────────────────────────────────
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [paidBookingId,  setPaidBookingId]  = useState<number | null>(null);
+  const [paidBookingId, setPaidBookingId] = useState<number | null>(null);
 
   // ── API hooks ──────────────────────────────────────────────────────────────
   const { data: booking, isLoading, isError } = useGetBookingByIdQuery(Number(bookingId));
@@ -135,11 +135,11 @@ export function CheckoutPage() {
             </div>
             <div className="space-y-2 text-sm">
               {[
-                { label: 'Receipt #',    value: `#${receipt.id}` },
-                { label: 'Amount',       value: formatCurrency(receipt.amount) },
-                { label: 'Method',       value: receipt.paymentMethod },
-                { label: 'Status',       value: receipt.status },
-                { label: 'Date',         value: receipt.paidAt ? new Date(receipt.paidAt).toLocaleString() : '—' },
+                { label: 'Receipt #', value: `#${receipt.id}` },
+                { label: 'Amount', value: formatCurrency(receipt.amount) },
+                { label: 'Method', value: receipt.paymentMethod },
+                { label: 'Status', value: receipt.status },
+                { label: 'Date', value: receipt.paidAt ? new Date(receipt.paidAt).toLocaleString() : '—' },
               ].map(({ label, value }) => (
                 <div key={label} className="flex justify-between py-1.5 border-b border-surface-container-highest last:border-0">
                   <span className="text-on-surface-variant">{label}</span>
@@ -307,8 +307,8 @@ export function CheckoutPage() {
               {!paymentMethod
                 ? 'Select a payment method'
                 : paymentMethod === 'ONLINE'
-                ? `Pay ${formatCurrency(booking.totalPrice)}`
-                : 'Confirm Payment'}
+                  ? `Pay ${formatCurrency(booking.totalPrice)}`
+                  : 'Confirm Payment'}
             </Button>
 
             <p className="text-xs text-center text-on-surface-variant">
@@ -329,7 +329,7 @@ export function CheckoutPage() {
               <div className="w-20 h-20 rounded-lg overflow-hidden bg-surface-container shrink-0">
                 {booking.listing.images?.[0] ? (
                   <img
-                    src={booking.listing.images[0]}
+                    src={getImageUrl(booking.listing.images?.[0]?.imageUrl)}
                     alt={booking.listing.title}
                     className="w-full h-full object-cover"
                   />
@@ -351,10 +351,10 @@ export function CheckoutPage() {
             {/* Details */}
             <div className="space-y-3 text-sm mb-6">
               {[
-                { label: 'Check-in',  value: formatDate(booking.startDate) },
+                { label: 'Check-in', value: formatDate(booking.startDate) },
                 { label: 'Check-out', value: formatDate(booking.endDate) },
-                { label: 'Duration',  value: `${days} day${days !== 1 ? 's' : ''}` },
-                { label: 'Meetup',    value: booking.meetupLocation?.name ?? 'To be arranged' },
+                { label: 'Duration', value: `${days} day${days !== 1 ? 's' : ''}` },
+                { label: 'Meetup', value: booking.meetupLocation?.name ?? 'To be arranged' },
               ].map(({ label, value }) => (
                 <div key={label} className="flex justify-between">
                   <span className="text-on-surface-variant">{label}</span>

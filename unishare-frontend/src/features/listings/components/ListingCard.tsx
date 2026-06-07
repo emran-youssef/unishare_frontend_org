@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import type { ListingDto } from '../../../types/api.types';
 import { formatCurrency, CATEGORY_LABELS, CONDITION_LABELS, getInitials, getImageUrl } from '../../../utils/formatters';
 import { ListingStatusBadge } from '../../../components/ui/Badge';
@@ -9,12 +9,13 @@ interface ListingCardProps {
 }
 
 export function ListingCard({ listing, showStatus = false }: ListingCardProps) {
-  const mainImage = getImageUrl(listing.images?.[0]);
+  const navigate = useNavigate();
+  const mainImage = getImageUrl(listing.images?.[0]?.imageUrl);
 
   return (
-    <Link
-      to={`/listings/${listing.id}`}
-      className="group bg-surface-container-lowest rounded-xl overflow-hidden shadow-card hover:shadow-card-lg transition-all duration-300 flex flex-col"
+    <div
+      onClick={() => navigate(`/listings/${listing.id}`)}
+      className="group bg-surface-container-lowest rounded-xl overflow-hidden shadow-card hover:shadow-card-lg transition-all duration-300 flex flex-col cursor-pointer"
     >
       {/* Image */}
       <div className="aspect-[4/3] bg-surface-container relative overflow-hidden">
@@ -66,10 +67,12 @@ export function ListingCard({ listing, showStatus = false }: ListingCardProps) {
 
         {/* Owner + rating */}
         <div className="flex items-center justify-between pt-3 border-t border-surface-container-highest">
-          <Link
-            to={`/users/${listing.owner.id}`}
-            onClick={(e) => e.stopPropagation()}
-            className="flex items-center gap-2 hover:opacity-75 transition-opacity"
+          <span
+            role="button"
+            tabIndex={0}
+            onClick={(e) => { e.stopPropagation(); navigate(`/users/${listing.owner.id}`); }}
+            onKeyDown={(e) => { if (e.key === 'Enter') { e.stopPropagation(); navigate(`/users/${listing.owner.id}`); } }}
+            className="flex items-center gap-2 hover:opacity-75 transition-opacity cursor-pointer"
           >
             {listing.owner.profilePicture ? (
               <img src={listing.owner.profilePicture} alt={listing.owner.fullName} className="w-6 h-6 rounded-full object-cover" />
@@ -79,7 +82,7 @@ export function ListingCard({ listing, showStatus = false }: ListingCardProps) {
               </div>
             )}
             <span className="text-xs font-medium text-on-surface">{listing.owner.fullName.split(' ')[0]}</span>
-          </Link>
+          </span>
 
           {listing.averageRating != null && (
             <div className="flex items-center gap-1">
@@ -92,11 +95,10 @@ export function ListingCard({ listing, showStatus = false }: ListingCardProps) {
           )}
         </div>
       </div>
-    </Link>
+    </div>
   );
 }
 
-// Skeleton card for loading state
 export function ListingCardSkeleton() {
   return (
     <div className="bg-surface-container-lowest rounded-xl overflow-hidden shadow-card animate-pulse">
