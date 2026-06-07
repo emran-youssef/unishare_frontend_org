@@ -17,7 +17,7 @@ export function ChatPage() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const listingIdNum = listingId ? Number(listingId) : undefined;
-  const userIdNum    = userId    ? Number(userId)    : undefined;
+  const userIdNum = userId ? Number(userId) : undefined;
 
   // Backend returns List<ListingDto> — each item is a listing with an active conversation
   const { data: conversations = [], isLoading: convLoading } = useGetConversationsQuery();
@@ -137,16 +137,16 @@ export function ChatPage() {
                 messages.map((msg) => {
                   const isMine = msg.sender.id === user?.id;
                   return (
-                    <div key={msg.id} className={`flex ${isMine ? 'justify-end' : 'justify-start'}`}>
-                      {!isMine && (
+                    <div key={msg.id} className={`flex ${isMine ? 'justify-start' : 'justify-end'}`}>
+                      {isMine && (
                         <div className="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-[10px] font-bold text-on-primary-container mr-2 shrink-0 self-end">
                           {getInitials(msg.sender.fullName)}
                         </div>
                       )}
                       <div className={`max-w-[70%] px-4 py-3 rounded-2xl text-sm font-body leading-relaxed
-                        ${isMine ? 'bg-primary text-on-primary rounded-br-sm' : 'bg-surface-container text-on-surface rounded-bl-sm'}`}>
+                        ${isMine ? 'bg-surface-container text-on-surface rounded-bl-sm' : 'bg-primary text-on-primary rounded-br-sm'}`}>
                         <p>{msg.content}</p>
-                        <p className={`text-[10px] mt-1 ${isMine ? 'text-on-primary/60' : 'text-on-surface-variant'}`}>
+                        <p className={`text-[10px] mt-1 ${isMine ? 'text-on-surface-variant' : 'text-on-primary/60'}`}>
                           {formatRelativeTime(msg.createdAt)}
                         </p>
                       </div>

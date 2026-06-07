@@ -34,7 +34,10 @@ export function ListingDetailPage() {
   const { isAuthenticated, user } = useAuth();
   const [activeImage, setActiveImage] = useState(0);
 
-  const { data: listing, isLoading, isError, refetch } = useGetListingByIdQuery(Number(id));
+  const { data: listing, isLoading, isError, refetch } = useGetListingByIdQuery(Number(id), {
+    refetchOnMountOrArgChange: true,
+  });
+
   const { data: listingImages = [] } = useGetListingImagesQuery(Number(id));
   const imageUrls = [...listingImages]
     .sort((a, b) => a.displayOrder - b.displayOrder)
@@ -54,13 +57,13 @@ export function ListingDetailPage() {
   const onBookingSubmit = async (data: CreateBookingFormData) => {
     if (!isAuthenticated) { navigate('/login'); return; }
     try {
-      const booking = await createBooking({
+      await createBooking({
         listingId: Number(id),
         startDate: data.startDate,
         endDate: data.endDate,
       }).unwrap();
-      toast.success('Booking created! Proceed to checkout.');
-      navigate(`/checkout/${booking.id}`);
+      toast.success('Booking request sent! You can pay once the owner confirms.');   //here
+      navigate('/bookings');
     } catch (err: unknown) {
       const apiErr = err as { data?: { message?: string } };
       toast.error(apiErr?.data?.message ?? 'Booking failed. Please try again.');
@@ -200,6 +203,24 @@ export function ListingDetailPage() {
                 <span className="material-symbols-outlined text-4xl text-on-surface-variant mb-2 block">info</span>
                 <p className="text-on-surface-variant text-sm">This is your listing. You cannot book your own item.</p>
                 <Link to={`/my-listings`} className="btn-surface mt-4 inline-block text-sm">Manage My Listings</Link>
+              </div>
+            ) : listing.status === 'RENTED' ? (
+              <div className="text-center py-6">
+                <span className="material-symbols-outlined text-4xl text-secondary mb-2 block">event_busy</span>
+                <p className="font-semibold text-on-surface mb-1">Currently Rented</p>
+                <p className="text-on-surface-variant text-sm">This item is currently rented out.</p>
+                {listing.availableFrom && (
+                  <div className="mt-4 px-4 py-3 bg-surface-container rounded-xl">
+                    <p className="text-sm text-on-surface-variant">Available from</p>
+                    <p className="font-bold text-primary text-lg">{formatDate(listing.availableFrom)}</p>
+                  </div>
+                )}
+              </div>
+            ) : listing.status === 'INACTIVE' ? (
+              <div className="text-center py-6">
+                <span className="material-symbols-outlined text-4xl text-on-surface-variant mb-2 block">block</span>
+                <p className="font-semibold text-on-surface mb-1">Unavailable</p>
+                <p className="text-on-surface-variant text-sm">This listing is not currently active.</p>
               </div>
             ) : !isAuthenticated ? (
               <div className="space-y-4">

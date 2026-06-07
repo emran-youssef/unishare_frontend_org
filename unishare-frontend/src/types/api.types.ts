@@ -81,6 +81,7 @@ export interface ListingDto {
   averageRating?: number;
   totalReviews?: number;
   updatedAt?: string;
+  availableFrom?: string;
 }
 
 export interface ListingImageDto {

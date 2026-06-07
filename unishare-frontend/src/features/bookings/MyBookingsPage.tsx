@@ -155,6 +155,13 @@ export function MyBookingsPage() {
                           Cancel Booking
                         </Button>
                       )}
+                      {booking.status === 'PENDING' && isRenter && (
+                        <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container text-on-surface-variant text-sm">
+                          <span className="material-symbols-outlined text-[16px]">hourglass_top</span>
+                          Waiting for owner approval
+                        </div>
+                      )}
+
                       {booking.status === 'PENDING' && isOwner && (
                         <Button size="sm" loading={isConfirming}
                           onClick={() => handleAction(() => confirmBooking(booking.id).unwrap(), 'Booking confirmed!')}>
