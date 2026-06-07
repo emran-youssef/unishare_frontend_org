@@ -9,14 +9,14 @@ export function AdminDashboardPage() {
 
   const cards = stats
     ? [
-        { label: 'Total Users',        value: stats.totalUsers.toLocaleString(),        icon: 'group',          color: 'text-primary' },
-        { label: 'Total Listings',     value: stats.totalListing.toLocaleString(),      icon: 'sell',           color: 'text-secondary' },
-        { label: 'Active Listings',    value: stats.activeListings.toLocaleString(),    icon: 'check_circle',   color: 'text-tertiary' },
-        { label: 'Total Bookings',     value: stats.totalBookings.toLocaleString(),     icon: 'event',          color: 'text-primary' },
-        { label: 'Pending Bookings',   value: stats.pendingBookings.toLocaleString(),   icon: 'hourglass_top',  color: 'text-amber-500' },
-        { label: 'Completed Bookings', value: stats.completedBookings.toLocaleString(), icon: 'task_alt',       color: 'text-tertiary' },
-        { label: 'Total Revenue',      value: formatCurrency(stats.totalRevenue),       icon: 'payments',       color: 'text-primary' },
-      ]
+      { label: 'Total Users', value: (stats.totalUsers ?? 0).toLocaleString(), icon: 'group', color: 'text-primary' },
+      { label: 'Total Listings', value: (stats.totalListing ?? 0).toLocaleString(), icon: 'sell', color: 'text-secondary' },
+      { label: 'Active Listings', value: (stats.activeListings ?? 0).toLocaleString(), icon: 'check_circle', color: 'text-tertiary' },
+      { label: 'Total Bookings', value: (stats.totalBookings ?? 0).toLocaleString(), icon: 'event', color: 'text-primary' },
+      { label: 'Pending Bookings', value: (stats.pendingBookings ?? 0).toLocaleString(), icon: 'hourglass_top', color: 'text-amber-500' },
+      { label: 'Completed Bookings', value: (stats.completedBookings ?? 0).toLocaleString(), icon: 'task_alt', color: 'text-tertiary' },
+      { label: 'Total Revenue', value: formatCurrency(stats.totalRevenue ?? 0), icon: 'payments', color: 'text-primary' },
+    ]
     : [];
 
   return (
