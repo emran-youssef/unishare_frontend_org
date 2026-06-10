@@ -1,5 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQueryWithReauth } from '../../app/baseQuery';
+import { bookingsApi } from '../bookings/bookingsApi';
 import type { PaymentDto, ProcessPaymentRequest } from '../../types/api.types';
 
 export const paymentsApi = createApi({
@@ -15,6 +16,19 @@ export const paymentsApi = createApi({
         method: 'POST',
         body,
       }),
+      async onQueryStarted({ bookingId }, { dispatch, queryFulfilled }) {
+        const { data } = await queryFulfilled;
+
+        dispatch(
+          paymentsApi.util.upsertQueryData('getPayment', bookingId, data)
+        );
+        dispatch(
+          bookingsApi.util.invalidateTags([
+            'Booking',
+            { type: 'Booking', id: bookingId },
+          ])
+        );
+      },
       invalidatesTags: (_result, _err, { bookingId }) => [
         'Payment',
         { type: 'Payment', id: bookingId },

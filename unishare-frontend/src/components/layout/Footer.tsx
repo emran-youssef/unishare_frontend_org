@@ -1,70 +1,71 @@
-import { Link } from 'react-router-dom';
-
 export function Footer() {
+  const team = ['Emran Atrooz', 'Abdulrahman Alamas', 'Abdulkareem Al-Baik', 'Abdulrahman AlQaisi'];
+
   return (
-    <footer className="bg-surface border-t border-surface-container-highest mt-auto">
+    <footer className="mt-auto border-t border-outline-variant/20 bg-surface-container-lowest">
       <div className="max-w-screen-2xl mx-auto px-6 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
-          {/* Brand */}
-          <div className="md:col-span-1">
-            <Link to="/" className="text-xl font-bold tracking-tighter text-primary font-headline flex items-center gap-2 mb-3">
-              <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>local_mall</span>
-              UniShare
-            </Link>
-            <p className="text-sm text-on-surface-variant font-body leading-relaxed mb-3">
-              The peer-to-peer rental platform built exclusively for Al-Zaytoonah University students.
+        <div className="grid grid-cols-1 lg:grid-cols-[1.15fr_0.95fr_1fr] gap-8">
+          <section className="rounded-2xl bg-primary text-on-primary p-7 shadow-primary">
+            <div className="flex items-center gap-4 mb-6">
+              <div className="w-16 h-16 rounded-2xl bg-white/15 border border-white/20 flex items-center justify-center shrink-0">
+                <span className="material-symbols-outlined text-4xl" style={{ fontVariationSettings: "'FILL' 1" }}>
+                  account_balance
+                </span>
+              </div>
+              <div>
+                <p className="text-xs font-label font-bold uppercase tracking-wider text-white/70">Al-Zaytoonah University of Jordan</p>
+                <h2 className="font-headline text-3xl font-bold tracking-tight">ZUJ</h2>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3 mb-3">
+              <span className="material-symbols-outlined text-[24px]" style={{ fontVariationSettings: "'FILL' 1" }}>local_mall</span>
+              <h3 className="font-headline text-2xl font-bold">UniShare</h3>
+            </div>
+            <p className="text-sm leading-relaxed text-white/85 max-w-md">
+              A peer-to-peer rental platform built exclusively for Al-Zaytoonah University students to share, rent, and reuse campus essentials.
             </p>
-            <p className="text-xs text-primary font-semibold">For ZUJ Students Only</p>
-          </div>
+            <p className="mt-5 inline-flex items-center rounded-full bg-white/15 px-3 py-1 text-xs font-label font-semibold text-white">
+              For ZUJ Students Only
+            </p>
+          </section>
 
-          {/* Platform */}
-          <div>
-            <h4 className="font-headline font-semibold text-on-surface text-sm uppercase tracking-wider mb-4">Platform</h4>
-            <ul className="space-y-2 text-sm text-on-surface-variant">
-              <li><Link to="/"               className="hover:text-primary transition-colors">Browse Listings</Link></li>
-              <li><Link to="/listings/create" className="hover:text-primary transition-colors">Post a Listing</Link></li>
-              <li><Link to="/bookings"        className="hover:text-primary transition-colors">My Bookings</Link></li>
-              <li><Link to="/chat"            className="hover:text-primary transition-colors">Messages</Link></li>
-            </ul>
-          </div>
-
-          {/* Account */}
-          <div>
-            <h4 className="font-headline font-semibold text-on-surface text-sm uppercase tracking-wider mb-4">Account</h4>
-            <ul className="space-y-2 text-sm text-on-surface-variant">
-              <li><Link to="/login"    className="hover:text-primary transition-colors">Sign In</Link></li>
-              <li><Link to="/register" className="hover:text-primary transition-colors">Register</Link></li>
-              <li><Link to="/profile"  className="hover:text-primary transition-colors">Profile Settings</Link></li>
-            </ul>
-          </div>
-
-          {/* Contact ZUJ */}
-          <div>
-            <h4 className="font-headline font-semibold text-on-surface text-sm uppercase tracking-wider mb-4">Contact Us</h4>
-            <ul className="space-y-3 text-sm text-on-surface-variant">
-              <li className="flex items-start gap-2">
-                <span className="material-symbols-outlined text-[16px] text-primary mt-0.5">phone</span>
-                <span>+962 6 429 1511</span>
+          <section className="lg:border-l lg:border-outline-variant/30 lg:pl-8">
+            <h4 className="font-headline text-lg font-bold text-on-surface mb-5">Contact Us</h4>
+            <ul className="space-y-4 text-sm text-on-surface-variant">
+              <li className="flex items-start gap-3">
+                <span className="material-symbols-outlined text-[20px] text-primary mt-0.5">phone</span>
+                <span className="font-medium text-on-surface">+962 6 429 1511</span>
               </li>
-              <li className="flex items-start gap-2">
-                <span className="material-symbols-outlined text-[16px] text-primary mt-0.5">mail</span>
-                <a href="mailto:pr13@zuj.edu.jo" className="hover:text-primary transition-colors">pr13@zuj.edu.jo</a>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="material-symbols-outlined text-[16px] text-primary mt-0.5">location_on</span>
+              <li className="flex items-start gap-3">
+                <span className="material-symbols-outlined text-[20px] text-primary mt-0.5">location_on</span>
                 <span>Queen Alia Airport St 594,<br />Amman, Jordan</span>
               </li>
-              <li className="flex items-start gap-2">
-                <span className="material-symbols-outlined text-[16px] text-primary mt-0.5">language</span>
-                <a href="https://www.zuj.edu.jo" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">zuj.edu.jo</a>
+              <li className="flex items-start gap-3">
+                <span className="material-symbols-outlined text-[20px] text-primary mt-0.5">language</span>
+                <a href="https://www.zuj.edu.jo" target="_blank" rel="noopener noreferrer" className="font-medium text-on-surface hover:text-primary transition-colors">
+                  zuj.edu.jo
+                </a>
               </li>
             </ul>
-          </div>
+          </section>
+
+          <section className="lg:border-l lg:border-outline-variant/30 lg:pl-8">
+            <h4 className="font-headline text-lg font-bold text-on-surface mb-5">Development Team</h4>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-3">
+              {team.map((member) => (
+                <div key={member} className="flex items-center gap-3 rounded-xl bg-surface-container-low px-4 py-3">
+                  <span className="material-symbols-outlined text-[20px] text-primary">person</span>
+                  <span className="text-sm font-medium text-on-surface">{member}</span>
+                </div>
+              ))}
+            </div>
+          </section>
         </div>
 
-        <div className="border-t border-surface-container-highest pt-6 flex flex-col md:flex-row justify-between items-center gap-3">
-          <p className="text-sm text-on-surface-variant">© {new Date().getFullYear()} UniShare · Al-Zaytoonah University of Jordan</p>
-          <p className="text-xs text-on-surface-variant">Built for ZUJ students, by ZUJ students.</p>
+        <div className="mt-10 pt-6 border-t border-outline-variant/20 flex flex-col md:flex-row justify-between gap-3 text-sm text-on-surface-variant">
+          <p>(c) {new Date().getFullYear()} UniShare - Al-Zaytoonah University of Jordan</p>
+          <p>Built for ZUJ students by ZUJ students.</p>
         </div>
       </div>
     </footer>

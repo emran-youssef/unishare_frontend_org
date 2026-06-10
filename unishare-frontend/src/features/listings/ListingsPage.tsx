@@ -50,38 +50,49 @@ export function ListingsPage() {
   return (
     <div className="max-w-screen-2xl mx-auto px-6 py-8">
       {/* Hero */}
-      <div className="mb-10">
-        <h1 className="font-headline text-4xl md:text-5xl font-bold tracking-tight text-on-surface mb-3">
-          Borrow from ZUJ campus
+      <div className="mb-8 text-center">
+        <h1 className="mx-auto mb-3 max-w-3xl font-headline text-4xl font-bold tracking-tight text-primary md:text-5xl">
+          Why buy when you can borrow?
         </h1>
-        <p className="text-on-surface-variant font-body text-lg max-w-2xl">
+        <p className="mx-auto max-w-2xl text-lg text-on-surface-variant font-body">
           Rent textbooks, cameras, calculators, and more — directly from fellow Al-Zaytoonah University students.
         </p>
       </div>
 
       {/* Search + Filters bar */}
-      <div className="flex flex-col md:flex-row gap-4 mb-8">
-        <div className="relative flex-1">
-          <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+      <div className="mx-auto mb-8 flex max-w-4xl flex-col items-center gap-4">
+        <div className="relative w-full">
+          <span className="material-symbols-outlined absolute left-5 top-1/2 -translate-y-1/2 text-[24px] text-primary">search</span>
           <input
             type="text"
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
             placeholder="Search listings…"
-            className="us-input pl-12"
+            className="w-full rounded-2xl border border-outline-variant/30 bg-surface-container-lowest py-4 pl-14 pr-14 text-base text-on-surface shadow-card outline-none transition-all placeholder:text-on-surface-variant/60 focus:border-primary/40 focus:shadow-card-lg"
           />
+          {searchInput && (
+            <button
+              type="button"
+              aria-label="Clear search"
+              onClick={() => setSearchInput('')}
+              className="absolute right-3 top-1/2 grid h-9 w-9 -translate-y-1/2 place-items-center rounded-full text-on-surface-variant transition-colors hover:bg-surface-container-low hover:text-primary"
+            >
+              <span className="material-symbols-outlined text-[20px]">close</span>
+            </button>
+          )}
         </div>
 
-        <div className="flex gap-2 flex-wrap">
+        <div className="flex flex-wrap justify-center gap-2">
           {CATEGORIES.map((cat) => (
             <button
               key={cat || 'all'}
               onClick={() => setCategory(cat)}
-              className={`px-4 py-2.5 rounded-lg text-sm font-label font-medium transition-all duration-200
+              className={`inline-flex items-center gap-1.5 rounded-full px-4 py-2.5 text-sm font-label font-semibold transition-all duration-200
                 ${category === cat
                   ? 'bg-primary text-on-primary shadow-primary'
-                  : 'bg-surface-container text-on-surface-variant hover:bg-surface-container-high'}`}
+                  : 'bg-surface-container-lowest text-on-surface-variant shadow-card hover:bg-primary/10 hover:text-primary'}`}
             >
+              {cat === '' && <span className="material-symbols-outlined text-[17px]">apps</span>}
               {cat ? CATEGORY_LABELS[cat] : 'All'}
             </button>
           ))}

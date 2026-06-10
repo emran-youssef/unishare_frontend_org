@@ -53,7 +53,16 @@ export const createBookingSchema = z
   .object({
     startDate: z.string().min(1, 'Select a start date'),
     endDate: z.string().min(1, 'Select an end date'),
-    meetupLocationId: z.number().optional(),
+    //meetupLocationId: z.number().optional(),
+    meetupLocationId: z.preprocess(
+      (val) => {
+        if (val === '' || val === undefined || val === null) return undefined;
+        const num = Number(val);
+        return Number.isNaN(num) ? undefined : num;
+      },
+      z.number().int().positive().optional()
+    ),
+    paymentMethod: z.enum(['CASH', 'ONLINE'], { message: 'Select a payment method' }),
   })
   .refine(
     (data) => new Date(data.endDate) > new Date(data.startDate),

@@ -1,11 +1,10 @@
 import { useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import toast from 'react-hot-toast';
 import { useGetListingByIdQuery, useGetListingImagesQuery } from './listingsApi';
 import { useGetListingReviewsQuery } from '../reviews/reviewsApi';
-import { useCreateBookingMutation } from '../bookings/bookingsApi';
+import { useAttachMeetupLocationMutation, useCreateBookingMutation } from '../bookings/bookingsApi';
 import { useGetMeetupLocationsQuery } from '../user/userApi';
 import { useAuth } from '../../hooks/useAuth';
 import { PageSpinner } from '../../components/ui/Spinner';
@@ -14,6 +13,7 @@ import { FieldError } from '../../components/ui/ErrorMessage';
 import { Button } from '../../components/ui/Button';
 import { getInitials, formatDate, formatCurrency, calcRentalDays, CATEGORY_LABELS, CONDITION_LABELS, getImageUrl } from '../../utils/formatters';
 import { createBookingSchema, type CreateBookingFormData } from '../../utils/validators';
+import { useForm, type Resolver } from 'react-hook-form';
 
 function StarRating({ rating }: { rating: number }) {
   return (
@@ -45,24 +45,41 @@ export function ListingDetailPage() {
   const { data: reviews } = useGetListingReviewsQuery(Number(id));
   const { data: meetupLocations } = useGetMeetupLocationsQuery(undefined, { skip: !isAuthenticated });
   const [createBooking, { isLoading: isBooking }] = useCreateBookingMutation();
+  const [attachMeetupLocation] = useAttachMeetupLocationMutation();
 
-  const { register, handleSubmit, watch, formState: { errors } } = useForm<CreateBookingFormData>({
-    resolver: zodResolver(createBookingSchema),
+  const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm<CreateBookingFormData>({
+    resolver: zodResolver(createBookingSchema) as Resolver<CreateBookingFormData>,
+    defaultValues: {
+      meetupLocationId: undefined,
+      paymentMethod: undefined,
+    },
   });
-
   const [startDate, endDate] = watch(['startDate', 'endDate']);
   const days = startDate && endDate ? calcRentalDays(startDate, endDate) : 0;
   const totalPrice = days > 0 && listing ? days * listing.pricePerDay : 0;
 
   const onBookingSubmit = async (data: CreateBookingFormData) => {
+    console.log('Booking data:', data);
     if (!isAuthenticated) { navigate('/login'); return; }
     try {
-      await createBooking({
+      const booking = await createBooking({
         listingId: Number(id),
         startDate: data.startDate,
         endDate: data.endDate,
+        meetupLocationId: data.meetupLocationId || null,
+        paymentMethod: data.paymentMethod,
       }).unwrap();
-      toast.success('Booking request sent! You can pay once the owner confirms.');   //here
+
+      localStorage.setItem(`booking:${booking.id}:paymentMethod`, data.paymentMethod);
+
+      if (data.meetupLocationId) {
+        await attachMeetupLocation({
+          id: booking.id,
+          locationId: data.meetupLocationId,
+        }).unwrap();
+      }
+
+      toast.success('Booking request sent! You can pay once the owner confirms.');
       navigate('/bookings');
     } catch (err: unknown) {
       const apiErr = err as { data?: { message?: string } };
@@ -248,18 +265,48 @@ export function ListingDetailPage() {
                   </label>
                   <div className="relative">
                     <select
-                      {...register('meetupLocationId', { valueAsNumber: true })}
+                      {...register('meetupLocationId')}
+                      defaultValue=""
                       className="us-input appearance-none pr-10"
                     >
-                      <option value="">Select a campus meetup spot…</option>
-                      {meetupLocations?.map((loc, i) => (
-                        <option key={i} value={i}>{loc.name}</option>
+                      <option value="">Select a meetup location</option>
+                      {meetupLocations?.map((loc) => (
+                        <option key={loc.id} value={loc.id}>
+                          {loc.name}
+                        </option>
                       ))}
                     </select>
                     <span className="material-symbols-outlined absolute right-3 top-3 text-on-surface-variant pointer-events-none">expand_more</span>
                   </div>
                   <FieldError message={errors.meetupLocationId?.message} />
                 </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-on-surface mb-2">Payment Method</label>
+                  <div className="grid grid-cols-2 gap-3">
+                    {(['CASH', 'ONLINE'] as const).map((method) => {
+                      const selected = watch('paymentMethod') === method;
+                      return (
+                        <button
+                          key={method}
+                          type="button"
+                          onClick={() => setValue('paymentMethod', method, { shouldValidate: true })}
+                          className={`flex items-center gap-3 p-3 rounded-xl border-2 cursor-pointer transition-all
+            ${selected ? 'border-primary bg-primary/5' : 'border-surface-container-highest hover:border-primary/40'}`}
+                        >
+                          <span className="material-symbols-outlined text-[20px] text-primary">
+                            {method === 'CASH' ? 'payments' : 'credit_card'}
+                          </span>
+                          <span className="text-sm font-semibold text-on-surface">
+                            {method === 'CASH' ? 'Cash' : 'Online'}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                  <FieldError message={errors.paymentMethod?.message} />
+                </div>
+
 
                 {/* Price summary */}
                 {days > 0 && (

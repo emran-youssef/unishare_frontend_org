@@ -14,13 +14,16 @@ function useCountdown(initialSeconds: number, active: boolean) {
 
   useEffect(() => {
     if (!active) return;
-    setRemaining(initialSeconds);
+
+    // Start fresh — no synchronous setState
+    const start = Date.now();
     const id = setInterval(() => {
-      setRemaining((s) => {
-        if (s <= 1) { clearInterval(id); return 0; }
-        return s - 1;
-      });
+      const elapsed = Math.floor((Date.now() - start) / 1000);
+      const next = Math.max(initialSeconds - elapsed, 0);
+      setRemaining(next);
+      if (next === 0) clearInterval(id);
     }, 1000);
+
     return () => clearInterval(id);
   }, [active, initialSeconds]);
 
@@ -28,7 +31,6 @@ function useCountdown(initialSeconds: number, active: boolean) {
   const ss = String(remaining % 60).padStart(2, '0');
   return { remaining, formatted: `${mm}:${ss}` };
 }
-
 // ── Step indicator ────────────────────────────────────────────────────────────
 function StepIndicator({ step }: { step: 1 | 2 }) {
   return (
@@ -39,7 +41,7 @@ function StepIndicator({ step }: { step: 1 | 2 }) {
             className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300
               ${n < step ? 'bg-primary text-on-primary'
                 : n === step ? 'bg-primary text-on-primary ring-4 ring-primary/20'
-                : 'bg-surface-container-highest text-on-surface-variant'}`}
+                  : 'bg-surface-container-highest text-on-surface-variant'}`}
           >
             {n < step
               ? <span className="material-symbols-outlined text-[16px]">check</span>
@@ -202,10 +204,6 @@ export function ForgotPasswordPage() {
 
     if (newPassword.length < 8) {
       setPasswordError('Password must be at least 8 characters'); valid = false;
-    } else if (!/[A-Z]/.test(newPassword)) {
-      setPasswordError('Must contain at least one uppercase letter'); valid = false;
-    } else if (!/[0-9]/.test(newPassword)) {
-      setPasswordError('Must contain at least one number'); valid = false;
     } else {
       setPasswordError('');
     }
@@ -407,8 +405,8 @@ export function ForgotPasswordPage() {
                 ${otpExpired
                   ? 'bg-error-container/30 text-error'
                   : remaining < 120
-                  ? 'bg-error-container/20 text-error'
-                  : 'bg-surface-container text-on-surface-variant'}`}
+                    ? 'bg-error-container/20 text-error'
+                    : 'bg-surface-container text-on-surface-variant'}`}
               >
                 <div className="flex items-center gap-2">
                   <span className="material-symbols-outlined text-[18px]">

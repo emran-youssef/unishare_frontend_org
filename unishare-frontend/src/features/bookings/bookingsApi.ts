@@ -1,5 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQueryWithReauth } from '../../app/baseQuery';
+import { listingsApi } from '../listings/listingsApi';
 import type { BookingDto, CreateBookingRequest } from '../../types/api.types';
 
 export const bookingsApi = createApi({
@@ -46,6 +47,17 @@ export const bookingsApi = createApi({
     // Owner marks booking as completed
     completeBooking: builder.mutation<BookingDto, number>({
       query: (id) => ({ url: `/bookings/${id}/complete`, method: 'PUT' }),
+      async onQueryStarted(_id, { dispatch, queryFulfilled }) {
+        const { data } = await queryFulfilled;
+
+        dispatch(
+          listingsApi.util.invalidateTags([
+            'Listing',
+            'MyListings',
+            { type: 'Listing', id: data.listing.id },
+          ])
+        );
+      },
       invalidatesTags: ['Booking'],
     }),
 

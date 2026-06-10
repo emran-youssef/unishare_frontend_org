@@ -7,6 +7,10 @@ import { EmptyState } from '../../components/ui/EmptyState';
 import { BookingStatusBadge } from '../../components/ui/Badge';
 import { formatDate, formatCurrency } from '../../utils/formatters';
 
+function getUserEmail(user: { universityEmail?: string; email?: string } | undefined) {
+  return user?.universityEmail ?? user?.email ?? '—';
+}
+
 export function AdminBookingsPage() {
   const [page, setPage] = useState(0);
   const { data, isLoading, isError, refetch } = useGetAdminBookingsQuery({ page, size: 15 });
@@ -36,6 +40,8 @@ export function AdminBookingsPage() {
                   <tr className="border-b border-surface-container-highest bg-surface-container-low/50">
                     <th className="text-left px-6 py-4 text-xs font-bold uppercase tracking-wider text-on-surface-variant">Listing</th>
                     <th className="text-left px-6 py-4 text-xs font-bold uppercase tracking-wider text-on-surface-variant hidden md:table-cell">Renter</th>
+                    <th className="text-left px-6 py-4 text-xs font-bold uppercase tracking-wider text-on-surface-variant hidden xl:table-cell">Renter Email</th>
+                    <th className="text-left px-6 py-4 text-xs font-bold uppercase tracking-wider text-on-surface-variant hidden xl:table-cell">Owner Email</th>
                     <th className="text-left px-6 py-4 text-xs font-bold uppercase tracking-wider text-on-surface-variant hidden lg:table-cell">Dates</th>
                     <th className="text-left px-6 py-4 text-xs font-bold uppercase tracking-wider text-on-surface-variant hidden lg:table-cell">Total</th>
                     <th className="text-left px-6 py-4 text-xs font-bold uppercase tracking-wider text-on-surface-variant">Status</th>
@@ -47,9 +53,17 @@ export function AdminBookingsPage() {
                       <td className="px-6 py-4">
                         <p className="font-semibold text-on-surface text-sm">{booking.listing.title}</p>
                         <p className="text-xs text-on-surface-variant">Owner: {booking.listing.owner?.fullName}</p>
+                        <p className="text-xs text-on-surface-variant xl:hidden">{getUserEmail(booking.listing.owner)}</p>
                       </td>
                       <td className="px-6 py-4 text-sm text-on-surface hidden md:table-cell">
-                        {booking.renter?.fullName ?? '—'}
+                        <p>{booking.renter?.fullName ?? '—'}</p>
+                        <p className="text-xs text-on-surface-variant xl:hidden">{getUserEmail(booking.renter)}</p>
+                      </td>
+                      <td className="px-6 py-4 text-sm text-on-surface hidden xl:table-cell">
+                        {getUserEmail(booking.renter)}
+                      </td>
+                      <td className="px-6 py-4 text-sm text-on-surface hidden xl:table-cell">
+                        {getUserEmail(booking.listing.owner)}
                       </td>
                       <td className="px-6 py-4 text-sm text-on-surface hidden lg:table-cell">
                         {formatDate(booking.startDate)} — {formatDate(booking.endDate)}

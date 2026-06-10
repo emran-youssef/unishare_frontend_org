@@ -7,8 +7,8 @@ import { ErrorMessage, FieldError } from '../../components/ui/ErrorMessage';
 import { Button } from '../../components/ui/Button';
 import { BookingStatusBadge } from '../../components/ui/Badge';
 import { formatDate, formatCurrency, calcRentalDays, getImageUrl } from '../../utils/formatters';
-import { useState } from 'react';
-import type { ApiError } from '../../types/api.types';
+import { useEffect, useState } from 'react';
+import type { ApiError, BookingDto } from '../../types/api.types';
 
 type PaymentMethod = 'ONLINE' | 'CASH';
 
@@ -17,12 +17,26 @@ interface FieldErrors {
   cvv?: string;
 }
 
+function isPaymentMethod(value: string | null | undefined): value is PaymentMethod {
+  return value === 'ONLINE' || value === 'CASH';
+}
+
+function getStoredPaymentMethod(bookingId: string | undefined) {
+  if (!bookingId) return undefined;
+  const stored = localStorage.getItem(`booking:${bookingId}:paymentMethod`);
+  return isPaymentMethod(stored) ? stored : undefined;
+}
+
+function getBookingPaymentMethod(booking: BookingDto | undefined, bookingId: string | undefined) {
+  return booking?.paymentMethod ?? getStoredPaymentMethod(bookingId);
+}
+
 export function CheckoutPage() {
   const { bookingId } = useParams<{ bookingId: string }>();
   const navigate = useNavigate();
 
   // ── Payment method selection (undefined = nothing chosen yet) ──────────────
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod | undefined>(undefined);
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod | undefined>(() => getStoredPaymentMethod(bookingId));
 
   // ── Card fields (ONLINE only — never persisted beyond component state) ─────
   const [cardNumber, setCardNumber] = useState('');
@@ -38,6 +52,14 @@ export function CheckoutPage() {
   // ── API hooks ──────────────────────────────────────────────────────────────
   const { data: booking, isLoading, isError } = useGetBookingByIdQuery(Number(bookingId));
   const [processPayment, { isLoading: isPaying }] = useProcessPaymentMutation();
+  const fixedPaymentMethod = getBookingPaymentMethod(booking, bookingId);
+
+  useEffect(() => {
+    if (fixedPaymentMethod) {
+      setPaymentMethod(fixedPaymentMethod);
+      setFieldErrors({});
+    }
+  }, [fixedPaymentMethod]);
 
   // Fetch payment receipt once payment succeeds
   const { data: receipt } = useGetPaymentQuery(
@@ -173,6 +195,7 @@ export function CheckoutPage() {
           <form onSubmit={handleSubmit} noValidate className="space-y-6">
 
             {/* ── Payment method cards ─────────────────────────────────────── */}
+            {!fixedPaymentMethod && (
             <div className="bg-surface-container-lowest rounded-xl p-6 shadow-card">
               <h2 className="font-headline text-xl font-bold text-on-surface mb-5">
                 Payment Method
@@ -229,6 +252,7 @@ export function CheckoutPage() {
 
               </div>
             </div>
+            )}
 
             {/* ── Cash info banner ─────────────────────────────────────────── */}
             {paymentMethod === 'CASH' && (

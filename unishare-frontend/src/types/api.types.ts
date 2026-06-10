@@ -136,6 +136,7 @@ export interface BookingDto {
   totalPrice: number;
   status: BookingStatus;
   meetupLocation?: MeetupLocationDto | null;
+  paymentMethod?: PaymentMethod;
   createdAt: string;
 }
 
@@ -145,6 +146,7 @@ export interface CreateBookingRequest {
   startDate: string;
   endDate: string;
   meetupLocationId?: number | null;
+  paymentMethod: PaymentMethod;
 }
 
 // ─── Payment DTOs ──────────────────────────────────────────────────────────
