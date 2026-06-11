@@ -151,8 +151,7 @@ export function ForgotPasswordPage() {
   const validateEmail = (val: string) => {
     if (!val.trim()) return 'University email is required';
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) return 'Must be a valid email address';
-    const domain = val.toLowerCase().split('@')[1] ?? '';
-    if (!domain.endsWith('.edu')) return 'Must be a valid university .edu email address';
+    if (!val.toLowerCase().endsWith('@std-zuj.edu.jo')) return 'Must be a valid @std-zuj.edu.jo email address';
     return '';
   };
 
@@ -268,7 +267,7 @@ export function ForgotPasswordPage() {
       {/* Steps */}
       <div className="relative z-10 flex flex-col gap-3 w-full max-w-xs">
         {[
-          { icon: 'mail', label: 'Enter your .edu email' },
+          { icon: 'mail', label: 'Enter your ZUJ student email' },
           { icon: 'password', label: 'Enter your 6-digit code' },
           { icon: 'check_circle', label: 'Set your new password' },
         ].map(({ icon, label }) => (
@@ -356,7 +355,7 @@ export function ForgotPasswordPage() {
                       value={email}
                       onChange={(e) => { setEmail(e.target.value); if (emailError) setEmailError(''); }}
                       className={`us-input pl-10 ${emailError ? 'border-error focus:ring-error/20' : ''}`}
-                      placeholder="your@zuj.edu.jo"
+                      placeholder="your@std-zuj.edu.jo"
                     />
                   </div>
                   {emailError && (
@@ -383,7 +382,7 @@ export function ForgotPasswordPage() {
               <div className="mt-8 p-4 bg-surface-container rounded-xl flex items-start gap-3">
                 <span className="material-symbols-outlined text-secondary text-[20px] mt-0.5">info</span>
                 <p className="text-xs text-on-surface-variant leading-relaxed">
-                  The code will be sent to your <strong>.edu</strong> university email address and expires in <strong>15 minutes</strong>.
+                  The code will be sent to your <strong>@std-zuj.edu.jo</strong> university email address and expires in <strong>15 minutes</strong>.
                 </p>
               </div>
             </>

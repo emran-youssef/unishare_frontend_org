@@ -96,7 +96,7 @@ export function RegisterPage() {
         {/* Trust points */}
         <div className="relative z-10 space-y-4">
           {[
-            { icon: 'school',            text: 'Exclusive to @zuj.edu.jo holders'       },
+            { icon: 'school',            text: 'Exclusive to @std-zuj.edu.jo holders'   },
             { icon: 'lock',              text: 'Safe, ZUJ student-verified transactions' },
             { icon: 'currency_exchange', text: 'Earn from items you already own'         },
             { icon: 'handshake',         text: 'Pre-approved ZUJ campus meetup spots'    },
@@ -116,12 +116,15 @@ export function RegisterPage() {
       {/* Right panel — form */}
       <div className="flex-1 flex items-center justify-center px-6 py-12 bg-surface overflow-y-auto">
         <div className="w-full max-w-lg">
-          <div className="mb-8">
-            <h1 className="font-headline text-3xl font-bold text-on-surface mb-2">Create your account</h1>
-            <p className="text-on-surface-variant font-body">Join Al-Zaytoonah University students on UniShare</p>
+          <div className="mb-5 text-center">
+            <h1 className="font-headline text-3xl font-bold text-tertiary">Join UniShare</h1>
           </div>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="space-y-5 rounded-2xl border border-outline-variant/40 bg-surface-container-lowest/80 p-6 shadow-card backdrop-blur-sm"
+            noValidate
+          >
             {/* Full Name */}
             <div>
               <label className="block text-sm font-semibold text-on-surface mb-2">Full Name</label>
@@ -133,9 +136,9 @@ export function RegisterPage() {
             <div>
               <label className="block text-sm font-semibold text-on-surface mb-2">
                 University Email
-                <span className="ml-1 text-secondary text-xs font-normal">.edu required</span>
+                <span className="ml-1 text-secondary text-xs font-normal">@std-zuj.edu.jo required</span>
               </label>
-              <input {...rhfReg('universityEmail')} type="email" className="us-input" placeholder="your@zuj.edu.jo" />
+              <input {...rhfReg('universityEmail')} type="email" className="us-input" placeholder="your@std-zuj.edu.jo" />
               <FieldError message={errors.universityEmail?.message} />
             </div>
 

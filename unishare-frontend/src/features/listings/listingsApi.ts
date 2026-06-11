@@ -16,7 +16,10 @@ export const listingsApi = createApi({
   endpoints: (builder) => ({
     // Public: browse all listings
     getListings: builder.query<Page<ListingDto>, ListingsQueryParams>({
-      query: (params) => ({ url: '/listing', params }),
+      query: ({ search, ...params }) => {
+        const keyword = search?.trim();
+        return { url: '/listing', params: { ...params, keyword: keyword || undefined } };
+      },
       providesTags: ['Listing'],
     }),
 

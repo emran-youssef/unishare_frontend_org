@@ -13,6 +13,7 @@ import { ListingsPage } from '../features/listings/ListingsPage';
 import { ListingDetailPage } from '../features/listings/ListingDetailPage';
 import { CreateListingPage } from '../features/listings/CreateListingPage';
 import { MyListingsPage } from '../features/listings/MyListingsPage';
+import { EditListingPage } from '../features/listings/EditListingPage';
 
 // Bookings
 import { MyBookingsPage } from '../features/bookings/MyBookingsPage';
@@ -56,6 +57,7 @@ export function AppRouter() {
           {/* Protected student routes */}
           <Route element={<ProtectedRoute />}>
             <Route path="/listings/create" element={<CreateListingPage />} />
+            <Route path="/listings/:id/edit" element={<EditListingPage />} />
             <Route path="/my-listings" element={<MyListingsPage />} />
             <Route path="/bookings" element={<MyBookingsPage />} />
             <Route path="/checkout/:bookingId" element={<CheckoutPage />} />

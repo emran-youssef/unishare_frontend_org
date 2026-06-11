@@ -7,14 +7,20 @@ import { ErrorMessage } from '../../components/ui/ErrorMessage';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { RoleBadge, VerifiedBadge } from '../../components/ui/Badge';
 import { formatDate, getInitials } from '../../utils/formatters';
+import { useDebounce } from '../../hooks/useDebounce';
 import type { Role } from '../../types/api.types';
 
 
 export function AdminUsersPage() {
   const [search, setSearch] = useState('');
+  const debouncedSearch = useDebounce(search.trim(), 350);
   const [page, setPage] = useState(0);
 
-  const { data, isLoading, isError, refetch } = useGetAdminUsersQuery({ page, size: 15 });
+  const { data, isLoading, isError, refetch } = useGetAdminUsersQuery({
+    page,
+    size: 15,
+    name: debouncedSearch || undefined,
+  });
   const [changeRole,     { isLoading: isChangingRole }]   = useChangeUserRoleMutation();
   const [deactivateUser, { isLoading: isDeactivating }]   = useDeactivateUserMutation();
   const [activateUser,   { isLoading: isActivating }]     = useActivateUserMutation();

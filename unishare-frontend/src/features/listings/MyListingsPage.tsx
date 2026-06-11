@@ -141,6 +141,7 @@ export function MyListingsPage() {
                   <p className="text-on-surface-variant text-sm mb-3">{formatCurrency(listing.pricePerDay)} / day</p>
                   <div className="flex gap-2">
                     <Link to={`/listings/${listing.id}`} className="btn-surface text-xs px-3 py-1.5 rounded-lg">View</Link>
+                    <Link to={`/listings/${listing.id}/edit`} className="btn-surface text-xs px-3 py-1.5 rounded-lg">Edit</Link>
                     <button
                       onClick={() => handleToggleStatus(listing)}
                       className="btn-surface text-xs px-3 py-1.5 rounded-lg"

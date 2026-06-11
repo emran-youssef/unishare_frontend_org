@@ -36,6 +36,12 @@ function getPaymentMethod(booking: BookingDto) {
   return booking.paymentMethod ?? storedMethod;
 }
 
+function getApiErrorMessage(err: unknown) {
+  const apiErr = err as { data?: { message?: string } };
+
+  return apiErr?.data?.message;
+}
+
 function RenterPaymentAction({ booking, paymentMethod }: { booking: BookingDto; paymentMethod?: PaymentMethod }) {
   const { data: payment, isFetching } = useGetPaymentQuery(booking.id, {
     skip: paymentMethod !== 'ONLINE',
@@ -101,8 +107,19 @@ export function MyBookingsPage() {
       await action();
       toast.success(successMsg);
     } catch (err: unknown) {
-      const apiErr = err as { data?: { message?: string } };
-      toast.error(apiErr?.data?.message ?? 'Action failed. Please try again.');
+      toast.error(getApiErrorMessage(err) ?? 'Action failed. Please try again.');
+    }
+  };
+
+  const handleConfirmBooking = async (bookingId: number) => {
+    try {
+      await confirmBooking(bookingId).unwrap();
+      toast.success('Booking confirmed!');
+    } catch (err: unknown) {
+      toast.error(
+        getApiErrorMessage(err) ??
+          'You already have an active confirmed booking. Complete it before confirming another one.'
+      );
     }
   };
 
@@ -284,7 +301,7 @@ export function MyBookingsPage() {
 
                       {booking.status === 'PENDING' && isOwner && (
                         <Button size="sm" loading={isConfirming}
-                          onClick={() => handleAction(() => confirmBooking(booking.id).unwrap(), 'Booking confirmed!')}>
+                          onClick={() => handleConfirmBooking(booking.id)}>
                           Confirm Booking
                         </Button>
                       )}

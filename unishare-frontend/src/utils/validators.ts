@@ -5,8 +5,8 @@ import { z } from 'zod';
 export const eduEmailSchema = z
   .string()
   .email('Must be a valid email address')
-  .refine((val) => val.toLowerCase().split('@')[1]?.endsWith('.edu'), {
-    message: 'Must be a valid university .edu email address',
+  .refine((val) => val.toLowerCase().endsWith('@std-zuj.edu.jo'), {
+    message: 'Must be a valid @std-zuj.edu.jo email address',
   });
 
 // Backend only enforces a minimum length of 8 characters.

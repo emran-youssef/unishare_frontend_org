@@ -103,12 +103,15 @@ export function LoginPage() {
       {/* Right panel — form */}
       <div className="flex-1 flex items-center justify-center px-6 py-12 bg-surface">
         <div className="w-full max-w-md">
-          <div className="mb-10">
-            <h1 className="font-headline text-3xl font-bold text-on-surface mb-2">Welcome back</h1>
-            <p className="text-on-surface-variant font-body">Sign in to your UniShare account</p>
+          <div className="mb-5 text-center">
+            <h1 className="font-headline text-3xl font-bold text-tertiary">Login to UniShare</h1>
           </div>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="space-y-5 rounded-2xl border border-outline-variant/40 bg-surface-container-lowest/80 p-6 shadow-card backdrop-blur-sm"
+            noValidate
+          >
             {/* Email */}
             <div>
               <label className="block text-sm font-semibold text-on-surface mb-2">Email address</label>
@@ -117,7 +120,7 @@ export function LoginPage() {
                 type="email"
                 autoComplete="email"
                 className="us-input"
-                placeholder="your@zuj.edu.jo"
+                placeholder="your@std-zuj.edu.jo"
               />
               <FieldError message={errors.email?.message} />
             </div>
@@ -159,7 +162,7 @@ export function LoginPage() {
           <div className="mt-8 p-4 bg-surface-container rounded-xl flex items-start gap-3">
             <span className="material-symbols-outlined text-secondary text-[20px] mt-0.5">verified</span>
             <p className="text-xs text-on-surface-variant leading-relaxed">
-              UniShare is exclusively for Al-Zaytoonah University students. A verified <strong>@zuj.edu.jo</strong> email is required to register.
+              UniShare is exclusively for Al-Zaytoonah University students. A verified <strong>@std-zuj.edu.jo</strong> email is required to register.
             </p>
           </div>
         </div>

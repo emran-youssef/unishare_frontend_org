@@ -14,7 +14,7 @@ export const adminApi = createApi({
     }),
 
     // ── Users ────────────────────────────────────────────────────────────
-    getAdminUsers: builder.query<Page<UserDto>, { page?: number; size?: number }>({
+    getAdminUsers: builder.query<Page<UserDto>, { page?: number; size?: number; name?: string }>({
       query: (params) => ({ url: '/admin/users', params }),
       providesTags: ['AdminUsers'],
     }),

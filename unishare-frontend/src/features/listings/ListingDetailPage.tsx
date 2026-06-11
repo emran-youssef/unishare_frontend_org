@@ -219,7 +219,13 @@ export function ListingDetailPage() {
               <div className="text-center py-6">
                 <span className="material-symbols-outlined text-4xl text-on-surface-variant mb-2 block">info</span>
                 <p className="text-on-surface-variant text-sm">This is your listing. You cannot book your own item.</p>
-                <Link to={`/my-listings`} className="btn-surface mt-4 inline-block text-sm">Manage My Listings</Link>
+                <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:justify-center">
+                  <Link to={`/listings/${listing.id}/edit`} className="btn-primary inline-flex items-center justify-center gap-2 text-sm">
+                    <span className="material-symbols-outlined text-[18px]">edit</span>
+                    Edit Listing
+                  </Link>
+                  <Link to="/my-listings" className="btn-surface inline-flex items-center justify-center text-sm">Manage My Listings</Link>
+                </div>
               </div>
             ) : listing.status === 'RENTED' ? (
               <div className="text-center py-6">
