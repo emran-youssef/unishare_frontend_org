@@ -1,5 +1,5 @@
 export function Footer() {
-  const team = ['Emran Atrooz', 'Abdulrahman Alamas', 'Abdulkareem Al-Baik', 'Abdulrahman AlQaisi'];
+  const team = ['Emran Atrooz', 'Mohammad Alamas', 'Abdulkareem Al-Baik', 'Abdulrahman AlQaisi'];
 
   return (
     <footer className="mt-auto border-t border-outline-variant/20 bg-surface-container-lowest">
