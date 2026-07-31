@@ -58,7 +58,7 @@ export function truncate(text: string, maxLength: number): string {
 }
 
 // Resolve image URL — prepend backend base URL for server-uploaded paths
-const API_BASE = 'http://localhost:8080';
+const API_BASE = import.meta.env.VITE_API_BASE_URL as string;
 export function getImageUrl(path: string | undefined | null): string | undefined {
   if (!path) return undefined;
   if (typeof path !== 'string') return undefined;
