@@ -1,6 +1,4 @@
 export function Footer() {
-  const team = ['Emran Atrooz', 'Mohammad Alamas', 'Abdulkareem Al-Baik', 'Abdulrahman AlQaisi'];
-
   return (
     <footer className="mt-auto border-t border-outline-variant/20 bg-surface-container-lowest">
       <div className="max-w-screen-2xl mx-auto px-6 py-12">
@@ -51,21 +49,20 @@ export function Footer() {
           </section>
 
           <section className="lg:border-l lg:border-outline-variant/30 lg:pl-8">
-            <h4 className="font-headline text-lg font-bold text-on-surface mb-5">Development Team</h4>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-3">
-              {team.map((member) => (
-                <div key={member} className="flex items-center gap-3 rounded-xl bg-surface-container-low px-4 py-3">
-                  <span className="material-symbols-outlined text-[20px] text-primary">person</span>
-                  <span className="text-sm font-medium text-on-surface">{member}</span>
-                </div>
-              ))}
+            <h4 className="font-headline text-lg font-bold text-on-surface mb-5">Built By</h4>
+            <div className="flex items-center gap-3 rounded-xl bg-surface-container-low px-4 py-3">
+              <span className="material-symbols-outlined text-[20px] text-primary">person</span>
+              <div>
+                <p className="text-sm font-medium text-on-surface">Emran Atrooz</p>
+                <p className="text-xs text-on-surface-variant">Full-Stack Developer</p>
+              </div>
             </div>
           </section>
         </div>
 
         <div className="mt-10 pt-6 border-t border-outline-variant/20 flex flex-col md:flex-row justify-between gap-3 text-sm text-on-surface-variant">
           <p>(c) {new Date().getFullYear()} UniShare - Al-Zaytoonah University of Jordan</p>
-          <p>Built for ZUJ students by ZUJ students.</p>
+          <p>Built for ZUJ students, by a ZUJ student.</p>
         </div>
       </div>
     </footer>
