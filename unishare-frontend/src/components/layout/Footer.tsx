@@ -1,3 +1,5 @@
+import { getInitials } from '../../utils/formatters';
+
 export function Footer() {
   return (
     <footer className="mt-auto border-t border-outline-variant/20 bg-surface-container-lowest">
@@ -50,11 +52,15 @@ export function Footer() {
 
           <section className="lg:border-l lg:border-outline-variant/30 lg:pl-8">
             <h4 className="font-headline text-lg font-bold text-on-surface mb-5">Built By</h4>
-            <div className="flex items-center gap-3 rounded-xl bg-surface-container-low px-4 py-3">
-              <span className="material-symbols-outlined text-[20px] text-primary">person</span>
+            <div className="flex items-center gap-4 rounded-2xl bg-gradient-to-br from-primary-container/15 to-secondary-container/15 border border-outline-variant/20 p-4">
+              <div className="w-12 h-12 rounded-full bg-primary text-on-primary flex items-center justify-center font-headline font-bold text-sm shrink-0 shadow-primary">
+                {getInitials('Emran Al-Khaleel')}
+              </div>
               <div>
-                <p className="text-sm font-medium text-on-surface">Emran Atrooz</p>
-                <p className="text-xs text-on-surface-variant">Full-Stack Developer</p>
+                <p className="font-headline text-base font-bold text-on-surface leading-tight">Emran Al-Khaleel</p>
+                <span className="mt-1.5 inline-flex items-center rounded-full bg-secondary/10 px-2.5 py-0.5 text-xs font-label font-semibold text-secondary">
+                  Backend Developer
+                </span>
               </div>
             </div>
           </section>
