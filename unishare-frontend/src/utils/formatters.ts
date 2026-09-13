@@ -99,6 +99,7 @@ export const BOOKING_STATUS_STYLES: Record<string, { label: string; className: s
   CONFIRMED: { label: 'Confirmed', className: 'bg-secondary-fixed-dim/30 text-secondary' },
   COMPLETED: { label: 'Completed', className: 'bg-tertiary-fixed-dim/20 text-tertiary' },
   CANCELLED: { label: 'Cancelled', className: 'bg-error-container/50 text-error' },
+  REJECTED: { label: 'Rejected', className: 'bg-error-container/50 text-error' },
 };
 
 // Listing status styles

@@ -44,6 +44,12 @@ export const bookingsApi = createApi({
       invalidatesTags: ['Booking'],
     }),
 
+    // Owner rejects booking
+    rejectBooking: builder.mutation<BookingDto, number>({
+      query: (id) => ({ url: `/bookings/${id}/reject`, method: 'PUT' }),
+      invalidatesTags: ['Booking'],
+    }),
+
     // Owner marks booking as completed
     completeBooking: builder.mutation<BookingDto, number>({
       query: (id) => ({ url: `/bookings/${id}/complete`, method: 'PUT' }),
@@ -80,6 +86,7 @@ export const {
   useGetBookingByIdQuery,
   useCancelBookingMutation,
   useConfirmBookingMutation,
+  useRejectBookingMutation,
   useCompleteBookingMutation,
   useAttachMeetupLocationMutation,
 } = bookingsApi;

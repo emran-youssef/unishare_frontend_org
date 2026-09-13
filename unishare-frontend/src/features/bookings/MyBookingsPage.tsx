@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import { useGetMyBookingsQuery, useGetIncomingBookingsQuery, useCancelBookingMutation, useConfirmBookingMutation, useCompleteBookingMutation } from './bookingsApi';
+import { useGetMyBookingsQuery, useGetIncomingBookingsQuery, useCancelBookingMutation, useConfirmBookingMutation, useRejectBookingMutation, useCompleteBookingMutation } from './bookingsApi';
 import { useAuth } from '../../hooks/useAuth';
 import { PageSpinner } from '../../components/ui/Spinner';
 import { EmptyState } from '../../components/ui/EmptyState';
@@ -15,7 +15,7 @@ import type { BookingDto, BookingStatus, PaymentMethod } from '../../types/api.t
 import { getInitials } from '../../utils/formatters';
 
 type TabType = 'renter' | 'owner';
-const STATUS_FILTERS: (BookingStatus | 'ALL')[] = ['ALL', 'PENDING', 'CONFIRMED', 'COMPLETED', 'CANCELLED'];
+const STATUS_FILTERS: (BookingStatus | 'ALL')[] = ['ALL', 'PENDING', 'CONFIRMED', 'COMPLETED', 'CANCELLED', 'REJECTED'];
 
 const STATUS_ICONS: Record<BookingStatus | 'ALL', string> = {
   ALL: 'calendar_month',
@@ -23,6 +23,7 @@ const STATUS_ICONS: Record<BookingStatus | 'ALL', string> = {
   CONFIRMED: 'check_circle',
   COMPLETED: 'task_alt',
   CANCELLED: 'cancel',
+  REJECTED: 'block',
 };
 
 function formatStatus(status: BookingStatus | 'ALL') {
@@ -91,6 +92,7 @@ export function MyBookingsPage() {
   const { data: incoming = [], isLoading: incomingLoading } = useGetIncomingBookingsQuery();
   const [cancelBooking, { isLoading: isCancelling }] = useCancelBookingMutation();
   const [confirmBooking, { isLoading: isConfirming }] = useConfirmBookingMutation();
+  const [rejectBooking, { isLoading: isRejecting }] = useRejectBookingMutation();
   const [completeBooking, { isLoading: isCompleting }] = useCompleteBookingMutation();
 
   const renterBookings = bookings.filter((b) => b.renter.id === user?.id);
@@ -303,6 +305,12 @@ export function MyBookingsPage() {
                         <Button size="sm" loading={isConfirming}
                           onClick={() => handleConfirmBooking(booking.id)}>
                           Confirm Booking
+                        </Button>
+                      )}
+                      {booking.status === 'PENDING' && isOwner && (
+                        <Button variant="danger" size="sm" loading={isRejecting}
+                          onClick={() => handleAction(() => rejectBooking(booking.id).unwrap(), 'Booking rejected.')}>
+                          Reject
                         </Button>
                       )}
                       {booking.status === 'CONFIRMED' && isOwner && (
