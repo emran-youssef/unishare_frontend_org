@@ -37,12 +37,6 @@ export function Footer() {
             }`}
           />
         ))}
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent" />
-        <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-end px-6 pb-8 text-center">
-          <h2 className="font-headline text-3xl font-bold tracking-tight text-white md:text-4xl">
-            Al-Zaytoonah University of Jordan
-          </h2>
-        </div>
       </div>
 
       {/* Section 2 — Contact Us */}
