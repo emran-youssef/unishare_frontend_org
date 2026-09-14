@@ -125,15 +125,6 @@ export function ListingsPage() {
         </div>
       </div>
 
-      {/* Results count */}
-      {data && (
-        <p className="text-sm text-on-surface-variant mb-6 font-body">
-          {data.totalElements} listing{data.totalElements !== 1 ? 's' : ''} found
-          {debouncedSearch && <> for <strong className="text-on-surface">"{debouncedSearch}"</strong></>}
-          {category && <> in <strong className="text-on-surface">{CATEGORY_LABELS[category]}</strong></>}
-        </p>
-      )}
-
       {/* Grid */}
       {isLoading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
