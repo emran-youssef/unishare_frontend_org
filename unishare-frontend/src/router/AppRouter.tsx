@@ -43,7 +43,7 @@ export function AppRouter() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Public routes wrapped in AppLayout (Navbar + Footer) */}
+        {/* Public routes wrapped in AppLayout (Sidebar + Footer) */}
         <Route element={<AppLayout />}>
           <Route path="/" element={<ListingsPage />} />
           <Route path="/listings/:id" element={<ListingDetailPage />} />

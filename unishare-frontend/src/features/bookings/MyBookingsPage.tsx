@@ -141,9 +141,15 @@ export function MyBookingsPage() {
   return (
     <div className="max-w-screen-xl mx-auto px-6 py-12">
       <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-        <div>
-          <h1 className="font-headline text-4xl md:text-5xl font-bold tracking-tight text-on-surface mb-2">My Bookings</h1>
-          <p className="text-on-surface-variant font-body text-lg">Track and manage all your rental activity.</p>
+        <div className="flex items-center gap-4">
+          <div className="hidden sm:grid h-16 w-16 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-primary to-primary-container text-on-primary shadow-primary">
+            <span className="material-symbols-outlined text-[30px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+              event_available
+            </span>
+          </div>
+          <h1 className="font-headline text-4xl md:text-5xl font-bold tracking-tight text-primary">
+            My Bookings
+          </h1>
         </div>
         <Link to="/" className="btn-surface inline-flex items-center gap-2 self-start text-sm">
           <span className="material-symbols-outlined text-[18px]">add_circle</span>

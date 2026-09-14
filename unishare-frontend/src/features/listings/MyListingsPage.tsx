@@ -53,11 +53,15 @@ export function MyListingsPage() {
     <div className="max-w-screen-xl mx-auto px-6 py-12">
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6">
-        <div>
-          <h1 className="font-headline text-4xl md:text-5xl font-bold tracking-tight text-on-surface mb-2">
+        <div className="flex items-center gap-4">
+          <div className="hidden sm:grid h-16 w-16 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-primary to-primary-container text-on-primary shadow-primary">
+            <span className="material-symbols-outlined text-[30px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+              inventory_2
+            </span>
+          </div>
+          <h1 className="font-headline text-4xl md:text-5xl font-bold tracking-tight text-primary">
             My Listings
           </h1>
-          <p className="text-on-surface-variant font-body text-lg">Manage your inventory and track performance.</p>
         </div>
         <Link to="/listings/create" className="btn-primary flex items-center gap-2 shrink-0">
           <span className="material-symbols-outlined text-[18px]">add</span>

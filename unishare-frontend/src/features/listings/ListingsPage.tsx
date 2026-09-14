@@ -1,13 +1,21 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useGetListingsQuery } from './listingsApi';
 import { ListingCard, ListingCardSkeleton } from './components/ListingCard';
 import { EmptyState } from '../../components/ui/EmptyState';
+import { Footer } from '../../components/layout/Footer';
 import { useDebounce } from '../../hooks/useDebounce';
 import type { ListingCategory } from '../../types/api.types';
 import { CATEGORY_LABELS } from '../../utils/formatters';
 
 const CATEGORIES = ['', 'TEXTBOOKS', 'ELECTRONICS', 'FURNITURE', 'CLOTHING', 'OTHER'] as const;
+
+const HERO_TAGLINES = [
+  'Why buy when you can borrow?',
+  'Rent textbooks, cameras, calculators, and more.',
+  'Directly from fellow Al-Zaytoonah University students.',
+  'Save money. Save resources. Share more.',
+];
 
 export function ListingsPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -15,6 +23,20 @@ export function ListingsPage() {
   const debouncedSearch = useDebounce(searchInput, 350);
   const category = (searchParams.get('category') ?? '') as ListingCategory | '';
   const page = parseInt(searchParams.get('page') ?? '0', 10);
+
+  const [taglineIndex, setTaglineIndex] = useState(0);
+  const [taglineVisible, setTaglineVisible] = useState(true);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setTaglineVisible(false);
+      setTimeout(() => {
+        setTaglineIndex((i) => (i + 1) % HERO_TAGLINES.length);
+        setTaglineVisible(true);
+      }, 300);
+    }, 3000);
+    return () => clearInterval(id);
+  }, []);
 
   //automaticlly update each 30 sec
   const { data, isLoading, isError } = useGetListingsQuery({
@@ -48,15 +70,19 @@ export function ListingsPage() {
   };
 
   return (
+    <>
+    <div className="bg-white">
     <div className="max-w-screen-2xl mx-auto px-6 py-8">
       {/* Hero */}
       <div className="mb-8 text-center">
-        <h1 className="mx-auto mb-3 max-w-3xl font-headline text-4xl font-bold tracking-tight text-primary md:text-5xl">
-          Why buy when you can borrow?
+        <h1
+          aria-live="polite"
+          className={`mx-auto mb-3 max-w-3xl font-headline text-3xl font-bold tracking-tight text-primary transition-opacity duration-300 md:text-4xl ${
+            taglineVisible ? 'opacity-100' : 'opacity-0'
+          }`}
+        >
+          {HERO_TAGLINES[taglineIndex]}
         </h1>
-        <p className="mx-auto max-w-2xl text-lg text-on-surface-variant font-body">
-          Rent textbooks, cameras, calculators, and more — directly from fellow Al-Zaytoonah University students.
-        </p>
       </div>
 
       {/* Search + Filters bar */}
@@ -174,5 +200,8 @@ export function ListingsPage() {
         </>
       )}
     </div>
+    </div>
+    <Footer />
+    </>
   );
 }
