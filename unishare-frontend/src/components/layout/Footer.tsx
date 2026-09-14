@@ -16,6 +16,20 @@ export function Footer() {
   const { isAuthenticated } = useAuth();
   const [activePhoto, setActivePhoto] = useState(0);
 
+  const quickLinks = [
+    { to: '/', icon: 'storefront', label: 'Browse Listings' },
+    ...(isAuthenticated
+      ? [
+          { to: '/listings/create', icon: 'add_circle', label: 'Post a Listing' },
+          { to: '/my-listings', icon: 'inventory_2', label: 'My Listings' },
+          { to: '/bookings', icon: 'event_available', label: 'My Bookings' },
+        ]
+      : [
+          { to: '/login', icon: 'login', label: 'Sign in' },
+          { to: '/register', icon: 'person_add', label: 'Get Started' },
+        ]),
+  ];
+
   useEffect(() => {
     const id = setInterval(() => {
       setActivePhoto((i) => (i + 1) % CAMPUS_PHOTOS.length);
@@ -81,51 +95,18 @@ export function Footer() {
               <h4 className="mb-5 font-headline text-sm font-bold uppercase tracking-wider text-on-surface-variant">
                 Quick Links
               </h4>
-              <ul className="space-y-3">
-                <li>
-                  <Link to="/" className="inline-flex items-center gap-2 text-sm text-on-surface-variant transition-colors hover:text-primary">
-                    <span className="material-symbols-outlined text-[18px]">storefront</span>
-                    Browse Listings
+              <div className="flex flex-wrap gap-2.5">
+                {quickLinks.map((l) => (
+                  <Link
+                    key={l.to}
+                    to={l.to}
+                    className="inline-flex items-center gap-2 rounded-full border border-outline-variant/20 bg-surface-container-low px-4 py-2.5 text-sm font-label font-semibold text-on-surface-variant shadow-card transition-all hover:border-primary/30 hover:bg-primary hover:text-on-primary hover:shadow-primary"
+                  >
+                    <span className="material-symbols-outlined text-[18px]">{l.icon}</span>
+                    {l.label}
                   </Link>
-                </li>
-                {isAuthenticated ? (
-                  <>
-                    <li>
-                      <Link to="/listings/create" className="inline-flex items-center gap-2 text-sm text-on-surface-variant transition-colors hover:text-primary">
-                        <span className="material-symbols-outlined text-[18px]">add_circle</span>
-                        Post a Listing
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/my-listings" className="inline-flex items-center gap-2 text-sm text-on-surface-variant transition-colors hover:text-primary">
-                        <span className="material-symbols-outlined text-[18px]">inventory_2</span>
-                        My Listings
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/bookings" className="inline-flex items-center gap-2 text-sm text-on-surface-variant transition-colors hover:text-primary">
-                        <span className="material-symbols-outlined text-[18px]">event_available</span>
-                        My Bookings
-                      </Link>
-                    </li>
-                  </>
-                ) : (
-                  <>
-                    <li>
-                      <Link to="/login" className="inline-flex items-center gap-2 text-sm text-on-surface-variant transition-colors hover:text-primary">
-                        <span className="material-symbols-outlined text-[18px]">login</span>
-                        Sign in
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/register" className="inline-flex items-center gap-2 text-sm text-on-surface-variant transition-colors hover:text-primary">
-                        <span className="material-symbols-outlined text-[18px]">person_add</span>
-                        Get Started
-                      </Link>
-                    </li>
-                  </>
-                )}
-              </ul>
+                ))}
+              </div>
             </div>
 
             <div className="lg:border-l lg:border-outline-variant/30 lg:pl-10">
