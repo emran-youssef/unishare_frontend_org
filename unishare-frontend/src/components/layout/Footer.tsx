@@ -95,7 +95,7 @@ export function Footer() {
               <h4 className="mb-5 font-headline text-sm font-bold uppercase tracking-wider text-on-surface-variant">
                 Quick Links
               </h4>
-              <div className="flex flex-wrap gap-2.5">
+              <div className="flex flex-wrap items-center gap-2.5 rounded-2xl border border-outline-variant/15 bg-surface-container-lowest p-5 shadow-card-lg">
                 {quickLinks.map((l) => (
                   <Link
                     key={l.to}
@@ -109,7 +109,7 @@ export function Footer() {
               </div>
             </div>
 
-            <div className="lg:border-l lg:border-outline-variant/30 lg:pl-10">
+            <div>
               <h4 className="mb-5 font-headline text-sm font-bold uppercase tracking-wider text-on-surface-variant">
                 Built By
               </h4>
