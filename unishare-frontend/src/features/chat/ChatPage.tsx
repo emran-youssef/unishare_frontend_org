@@ -4,6 +4,9 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import toast from 'react-hot-toast';
 import { useGetConversationsQuery, useGetMessagesQuery, useSendMessageMutation } from './chatApi';
+import { resolveConversationTarget } from './resolveConversationTarget';
+import { useGetIncomingBookingsQuery } from '../bookings/bookingsApi';
+import { useGetPublicProfileQuery } from '../user/userApi';
 import { useAuth } from '../../hooks/useAuth';
 import { PageSpinner } from '../../components/ui/Spinner';
 import { EmptyState } from '../../components/ui/EmptyState';
@@ -21,12 +24,18 @@ export function ChatPage() {
 
   // Backend returns List<ListingDto> — each item is a listing with an active conversation
   const { data: conversations = [], isLoading: convLoading } = useGetConversationsQuery();
+  const { data: incomingBookings = [] } = useGetIncomingBookingsQuery();
 
   // Fetch messages only when both listingId and userId are present
   const { data: messages = [], isLoading: msgLoading } = useGetMessagesQuery(
     { listingId: listingIdNum!, userId: userIdNum! },
     { skip: !listingIdNum || !userIdNum },
   );
+
+  // The route already tells us exactly who the other person is — fetch their
+  // profile directly instead of guessing from the listing (which only ever
+  // carries the listing's owner, not the actual conversation partner).
+  const { data: otherUser } = useGetPublicProfileQuery(userIdNum!, { skip: !userIdNum });
 
   const [sendMessage, { isLoading: isSending }] = useSendMessageMutation();
 
@@ -56,10 +65,6 @@ export function ChatPage() {
   // Find the active conversation listing
   const activeListing = conversations.find((c) => c.id === listingIdNum);
 
-  // The other person: if I'm the owner → it's someone else; use userId from route
-  // We show the listing title in the thread header
-  const otherPersonId = userIdNum;
-
   const hasActiveThread = Boolean(listingIdNum && userIdNum);
 
   return (
@@ -79,26 +84,24 @@ export function ChatPage() {
             <EmptyState icon="chat_bubble" title="No conversations" description="Start chatting from a listing page." />
           ) : (
             conversations.map((listing) => {
-              // Navigate to /chat/{listingId}/{ownerId}
-              const targetUserId = listing.owner.id === user?.id
-                ? otherPersonId  // I'm the owner — use route param
-                : listing.owner.id; // I'm the renter — other person is the owner
+              const target = resolveConversationTarget(listing, user?.id, incomingBookings);
+              if (!target) return null;
 
               return (
                 <Link
                   key={listing.id}
-                  to={`/chat/${listing.id}/${targetUserId ?? listing.owner.id}`}
+                  to={`/chat/${listing.id}/${target.userId}`}
                   className={`flex items-center gap-3 px-5 py-4 hover:bg-surface-container-low transition-colors border-b border-surface-container-highest
                     ${listing.id === listingIdNum ? 'bg-surface-container-low' : ''}`}
                 >
                   {/* Avatar */}
                   <div className="w-11 h-11 rounded-full bg-primary-container flex items-center justify-center font-bold text-on-primary-container font-headline shrink-0">
-                    {getInitials(listing.owner.fullName)}
+                    {getInitials(target.fullName)}
                   </div>
 
                   {/* Content */}
                   <div className="flex-grow min-w-0">
-                    <p className="font-semibold text-on-surface text-sm truncate">{listing.owner.fullName}</p>
+                    <p className="font-semibold text-on-surface text-sm truncate">{target.fullName}</p>
                     <p className="text-xs text-on-surface-variant truncate mt-0.5 flex items-center gap-1">
                       <span className="material-symbols-outlined text-[13px]">sell</span>
                       <span className="truncate">{listing.title}</span>
@@ -128,17 +131,19 @@ export function ChatPage() {
               >
                 <span className="material-symbols-outlined text-[20px]">arrow_back</span>
               </Link>
-              {activeListing && (
+              {otherUser && (
                 <>
                   <div className="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center font-bold text-on-primary-container font-headline text-sm shrink-0">
-                    {getInitials(activeListing.owner.fullName)}
+                    {getInitials(otherUser.fullName)}
                   </div>
                   <div className="min-w-0">
-                    <p className="font-semibold text-on-surface truncate">{activeListing.owner.fullName}</p>
-                    <p className="text-xs text-on-surface-variant truncate flex items-center gap-1">
-                      <span className="material-symbols-outlined text-[13px]">sell</span>
-                      <span className="truncate">{activeListing.title}</span>
-                    </p>
+                    <p className="font-semibold text-on-surface truncate">{otherUser.fullName}</p>
+                    {activeListing && (
+                      <p className="text-xs text-on-surface-variant truncate flex items-center gap-1">
+                        <span className="material-symbols-outlined text-[13px]">sell</span>
+                        <span className="truncate">{activeListing.title}</span>
+                      </p>
+                    )}
                   </div>
                 </>
               )}

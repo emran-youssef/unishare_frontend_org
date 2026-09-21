@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import toast from 'react-hot-toast';
 import { useGetConversationsQuery, useGetMessagesQuery, useSendMessageMutation } from './chatApi';
+import { useGetPublicProfileQuery } from '../user/userApi';
 import { useAuth } from '../../hooks/useAuth';
 import { sendMessageSchema, type SendMessageFormData } from '../../utils/validators';
 import { formatRelativeTime, getInitials } from '../../utils/formatters';
@@ -21,6 +22,7 @@ export function FloatingChatWindow({ listingId, userId, minimized, offset, onClo
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const { data: conversations = [] } = useGetConversationsQuery();
+  const { data: otherUser } = useGetPublicProfileQuery(userId);
   const { data: messages = [], isLoading } = useGetMessagesQuery(
     { listingId, userId },
     { pollingInterval: minimized ? undefined : 5000 },
@@ -45,7 +47,7 @@ export function FloatingChatWindow({ listingId, userId, minimized, offset, onClo
   };
 
   const listing = conversations.find((c) => c.id === listingId);
-  const personName = listing?.owner.fullName ?? 'Conversation';
+  const personName = otherUser?.fullName ?? 'Conversation';
   const listingTitle = listing?.title ?? '';
 
   return (

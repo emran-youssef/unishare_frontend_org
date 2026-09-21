@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
 import { useGetConversationsQuery } from './chatApi';
 import { useChatWidget } from './useChatWidget';
+import { resolveConversationTarget } from './resolveConversationTarget';
+import { useGetIncomingBookingsQuery } from '../bookings/bookingsApi';
 import { useAuth } from '../../hooks/useAuth';
 import { PageSpinner } from '../../components/ui/Spinner';
 import { EmptyState } from '../../components/ui/EmptyState';
@@ -13,6 +15,7 @@ export function ChatDropdown() {
   const { user } = useAuth();
   const { listOpen, toggleList, closeList, openChat } = useChatWidget();
   const { data: conversations = [], isLoading } = useGetConversationsQuery();
+  const { data: incomingBookings = [] } = useGetIncomingBookingsQuery();
 
   return (
     <>
@@ -56,18 +59,15 @@ export function ChatDropdown() {
                   <EmptyState icon="chat_bubble" title="No conversations" description="Start chatting from a listing page." />
                 ) : (
                   conversations.map((listing) => {
-                    // The conversations endpoint only carries the listing owner,
-                    // so when we ARE the owner there's no way to know which
-                    // renter this row belongs to — send those to the full inbox.
-                    const targetUserId = listing.owner.id === user?.id ? undefined : listing.owner.id;
+                    const target = resolveConversationTarget(listing, user?.id, incomingBookings);
 
                     const rowContent = (
                       <>
                         <div className="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center font-bold text-on-primary-container font-headline shrink-0">
-                          {getInitials(listing.owner.fullName)}
+                          {getInitials(target?.fullName ?? listing.title)}
                         </div>
                         <div className="flex-grow min-w-0">
-                          <p className="font-semibold text-on-surface text-sm truncate">{listing.owner.fullName}</p>
+                          <p className="font-semibold text-on-surface text-sm truncate">{target?.fullName ?? 'Unknown user'}</p>
                           <p className="text-xs text-on-surface-variant truncate mt-0.5 flex items-center gap-1">
                             <span className="material-symbols-outlined text-[13px]">sell</span>
                             <span className="truncate">{listing.title}</span>
@@ -78,8 +78,8 @@ export function ChatDropdown() {
 
                     const rowClass = 'w-full flex items-center gap-3 px-4 py-3 hover:bg-surface-container-low transition-colors border-b border-surface-container-highest last:border-b-0 text-left';
 
-                    return targetUserId ? (
-                      <button key={listing.id} type="button" onClick={() => openChat(listing.id, targetUserId)} className={rowClass}>
+                    return target ? (
+                      <button key={listing.id} type="button" onClick={() => openChat(listing.id, target.userId)} className={rowClass}>
                         {rowContent}
                       </button>
                     ) : (
