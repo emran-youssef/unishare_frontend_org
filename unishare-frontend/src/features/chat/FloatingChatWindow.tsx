@@ -104,9 +104,9 @@ export function FloatingChatWindow({ listingId, userId, minimized, offset, onClo
                       </div>
                     )}
                     <div className={`max-w-[78%] px-3 py-2 rounded-2xl text-xs leading-relaxed
-                      ${isMine ? 'bg-surface-container text-on-surface rounded-bl-sm' : 'bg-primary text-on-primary rounded-br-sm'}`}>
+                      ${isMine ? 'bg-primary text-on-primary rounded-bl-sm' : 'bg-surface-container text-on-surface rounded-br-sm'}`}>
                       <p>{msg.content}</p>
-                      <p className={`text-[9px] mt-0.5 ${isMine ? 'text-on-surface-variant' : 'text-on-primary/60'}`}>
+                      <p className={`text-[9px] mt-0.5 ${isMine ? 'text-on-primary/60' : 'text-on-surface-variant'}`}>
                         {formatRelativeTime(msg.createdAt)}
                       </p>
                     </div>
