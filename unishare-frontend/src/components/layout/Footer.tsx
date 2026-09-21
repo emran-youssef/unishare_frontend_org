@@ -53,54 +53,55 @@ export function Footer() {
         ))}
       </div>
 
-      {/* Section 2 — Contact Us */}
+      {/* Section 2 — Contact Us, Quick Links & Built By, merged */}
       <div className="bg-gradient-to-br from-primary via-primary to-on-primary-fixed-variant text-on-primary">
-        <div className="max-w-screen-2xl mx-auto px-6 py-14 text-center">
-          <h4 className="mb-8 font-headline text-2xl font-bold">Contact Us</h4>
-          <div className="flex flex-col items-center justify-center gap-8 sm:flex-row sm:gap-14">
-            <div className="flex items-center gap-3">
-              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-white/15">
-                <span className="material-symbols-outlined text-[20px]">phone</span>
-              </span>
-              <span className="font-medium text-white">+962 6 429 1511</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-white/15">
-                <span className="material-symbols-outlined text-[20px]">location_on</span>
-              </span>
-              <span className="text-left text-white/85">Queen Alia Airport St 594,<br />Amman, Jordan</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-white/15">
-                <span className="material-symbols-outlined text-[20px]">language</span>
-              </span>
-              <a
-                href="https://www.zuj.edu.jo"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-medium text-white transition-colors hover:underline"
-              >
-                zuj.edu.jo
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Section 3 — Quick Links, Built By & copyright */}
-      <div className="bg-surface-container-lowest">
-        <div className="max-w-screen-2xl mx-auto px-6 py-12">
-          <div className="grid grid-cols-1 gap-10 lg:grid-cols-2">
+        <div className="max-w-screen-2xl mx-auto px-6 py-16">
+          <div className="grid grid-cols-1 gap-12 lg:grid-cols-3 lg:gap-10">
+            {/* Contact */}
             <div>
-              <h4 className="mb-5 font-headline text-sm font-bold uppercase tracking-wider text-on-surface-variant">
+              <h4 className="mb-6 font-headline text-sm font-bold uppercase tracking-wider text-white/70">
+                Contact Us
+              </h4>
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-white/10">
+                    <span className="material-symbols-outlined text-[18px]">phone</span>
+                  </span>
+                  <span className="font-medium text-white">+962 6 429 1511</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-white/10">
+                    <span className="material-symbols-outlined text-[18px]">location_on</span>
+                  </span>
+                  <span className="text-white/85">Queen Alia Airport St 594, Amman, Jordan</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-white/10">
+                    <span className="material-symbols-outlined text-[18px]">language</span>
+                  </span>
+                  <a
+                    href="https://www.zuj.edu.jo"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-medium text-white transition-colors hover:underline"
+                  >
+                    zuj.edu.jo
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            {/* Quick Links */}
+            <div>
+              <h4 className="mb-6 font-headline text-sm font-bold uppercase tracking-wider text-white/70">
                 Quick Links
               </h4>
-              <div className="flex flex-wrap items-center gap-2.5 rounded-2xl border border-outline-variant/15 bg-surface-container-lowest p-5 shadow-card-lg">
+              <div className="flex flex-wrap gap-2.5">
                 {quickLinks.map((l) => (
                   <Link
                     key={l.to}
                     to={l.to}
-                    className="inline-flex items-center gap-2 rounded-full border border-outline-variant/20 bg-surface-container-low px-4 py-2.5 text-sm font-label font-semibold text-on-surface-variant shadow-card transition-all hover:border-primary/30 hover:bg-primary hover:text-on-primary hover:shadow-primary"
+                    className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2.5 text-sm font-label font-semibold text-white/90 backdrop-blur-sm transition-all hover:bg-white hover:text-primary hover:border-white"
                   >
                     <span className="material-symbols-outlined text-[18px]">{l.icon}</span>
                     {l.label}
@@ -109,12 +110,13 @@ export function Footer() {
               </div>
             </div>
 
+            {/* Built By */}
             <div>
-              <h4 className="mb-5 font-headline text-sm font-bold uppercase tracking-wider text-on-surface-variant">
+              <h4 className="mb-6 font-headline text-sm font-bold uppercase tracking-wider text-white/70">
                 Built By
               </h4>
-              <div className="flex items-center gap-5 rounded-2xl border border-outline-variant/15 bg-surface-container-lowest p-5 shadow-card-lg">
-                <div className="h-16 w-16 shrink-0 overflow-hidden rounded-full ring-4 ring-primary/15">
+              <div className="flex items-center gap-4 rounded-2xl border border-white/15 bg-white/10 p-5 backdrop-blur-sm">
+                <div className="h-14 w-14 shrink-0 overflow-hidden rounded-full ring-4 ring-white/20">
                   <img
                     src={emranAvatar}
                     alt="Emran Al-khaleel"
@@ -122,28 +124,35 @@ export function Footer() {
                   />
                 </div>
                 <div className="min-w-0">
-                  <p className="font-headline text-lg font-bold leading-tight text-on-surface">
-                    Emran Al-khaleel <span className="mx-1 font-normal text-outline-variant">|</span>{' '}
-                    <span className="text-base font-semibold text-secondary">Backend Developer</span>
-                  </p>
-                  <div className="mt-3 flex flex-wrap items-center gap-2">
+                  <p className="font-headline text-base font-bold leading-tight text-white">Emran Al-khaleel</p>
+                  <p className="text-sm font-semibold text-white/70">Backend Developer</p>
+                  <div className="mt-2.5 flex flex-wrap items-center gap-2">
                     <a
                       href="https://www.linkedin.com/in/emran-al-khaleel-1b86b0343/"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 rounded-full bg-primary px-3.5 py-1.5 text-xs font-label font-semibold text-on-primary shadow-primary transition-transform hover:scale-105 active:scale-95"
+                      className="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 text-xs font-label font-semibold text-primary shadow-card transition-transform hover:scale-105 active:scale-95"
                     >
-                      <span className="material-symbols-outlined text-[14px]">link</span>
-                      LinkedIn profile
+                      <span className="material-symbols-outlined text-[13px]">link</span>
+                      LinkedIn
                     </a>
-                    <span className="inline-flex items-center gap-1.5 rounded-full bg-primary px-3.5 py-1.5 text-xs font-label font-semibold text-on-primary shadow-primary">
-                      <span className="material-symbols-outlined text-[14px]">mail</span>
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1.5 text-xs font-label font-semibold text-white">
+                      <span className="material-symbols-outlined text-[13px]">mail</span>
                       emrankhaleel03@gmail.com
                     </span>
                   </div>
                 </div>
               </div>
             </div>
+          </div>
+
+          {/* Bottom bar */}
+          <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-white/15 pt-6 text-sm text-white/70 sm:flex-row">
+            <p>© {new Date().getFullYear()} Unishare. All rights reserved.</p>
+            <p className="flex items-center gap-1.5">
+              <span className="material-symbols-outlined text-[16px]">school</span>
+              Al-Zaytoonah University of Jordan
+            </p>
           </div>
         </div>
       </div>
