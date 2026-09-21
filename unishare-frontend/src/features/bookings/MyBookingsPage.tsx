@@ -13,6 +13,7 @@ import { useGetPaymentQuery } from '../payments/paymentsApi';
 import { formatDate, formatCurrency, getImageUrl } from '../../utils/formatters';
 import type { BookingDto, BookingStatus, PaymentMethod } from '../../types/api.types';
 import { getInitials } from '../../utils/formatters';
+import { useChatWidget } from '../chat/useChatWidget';
 
 type TabType = 'renter' | 'owner';
 const STATUS_FILTERS: (BookingStatus | 'ALL')[] = ['ALL', 'PENDING', 'CONFIRMED', 'COMPLETED', 'CANCELLED', 'REJECTED'];
@@ -83,6 +84,7 @@ function RenterPaymentAction({ booking, paymentMethod }: { booking: BookingDto; 
 
 export function MyBookingsPage() {
   const { user } = useAuth();
+  const { openChat } = useChatWidget();
   const [tab, setTab] = useState<TabType>('renter');
   const [statusFilter, setStatusFilter] = useState<BookingStatus | 'ALL'>('ALL');
   const [reviewBooking, setReviewBooking] = useState<BookingDto | null>(null);
@@ -334,10 +336,21 @@ export function MyBookingsPage() {
                           Leave a Review
                         </Button>
                       )}
-                      <Link to={`/chat/${booking.listing.id}/${otherUser.id}`} className="btn-surface text-sm px-4 py-2 rounded-lg flex items-center gap-2">
+                      <Link
+                        to={`/chat/${booking.listing.id}/${otherUser.id}`}
+                        className="md:hidden btn-surface text-sm px-4 py-2 rounded-lg flex items-center gap-2"
+                      >
                         <span className="material-symbols-outlined text-[16px]">chat</span>
                         Message
                       </Link>
+                      <button
+                        type="button"
+                        onClick={() => openChat(booking.listing.id, otherUser.id)}
+                        className="hidden md:flex btn-surface text-sm px-4 py-2 rounded-lg items-center gap-2"
+                      >
+                        <span className="material-symbols-outlined text-[16px]">chat</span>
+                        Message
+                      </button>
                     </div>
                   </div>
                 </div>

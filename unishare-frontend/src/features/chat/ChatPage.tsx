@@ -60,10 +60,14 @@ export function ChatPage() {
   // We show the listing title in the thread header
   const otherPersonId = userIdNum;
 
+  const hasActiveThread = Boolean(listingIdNum && userIdNum);
+
   return (
-    <div className="h-[calc(100vh-72px)] flex bg-surface">
+    <div className="h-[calc(100vh-72px)] flex bg-surface overflow-hidden">
       {/* LEFT — conversations list */}
-      <div className="w-full md:w-80 lg:w-96 border-r border-surface-container-highest flex flex-col shrink-0">
+      <div
+        className={`${hasActiveThread ? 'hidden md:flex' : 'flex'} w-full md:w-80 lg:w-96 border-r border-surface-container-highest flex-col shrink-0`}
+      >
         <div className="p-5 border-b border-surface-container-highest">
           <h1 className="font-headline text-2xl font-bold text-on-surface">Messages</h1>
         </div>
@@ -94,9 +98,10 @@ export function ChatPage() {
 
                   {/* Content */}
                   <div className="flex-grow min-w-0">
-                    <p className="font-semibold text-on-surface text-sm truncate">{listing.title}</p>
-                    <p className="text-xs text-on-surface-variant truncate mt-0.5">
-                      with {listing.owner.fullName}
+                    <p className="font-semibold text-on-surface text-sm truncate">{listing.owner.fullName}</p>
+                    <p className="text-xs text-on-surface-variant truncate mt-0.5 flex items-center gap-1">
+                      <span className="material-symbols-outlined text-[13px]">sell</span>
+                      <span className="truncate">{listing.title}</span>
                     </p>
                   </div>
                 </Link>
@@ -107,25 +112,37 @@ export function ChatPage() {
       </div>
 
       {/* CENTER — message thread */}
-      <div className="flex-grow flex flex-col min-w-0">
-        {!listingIdNum || !userIdNum ? (
+      <div className={`${hasActiveThread ? 'flex' : 'hidden md:flex'} flex-grow flex-col min-w-0`}>
+        {!hasActiveThread ? (
           <div className="flex items-center justify-center h-full">
             <EmptyState icon="forum" title="Select a conversation" description="Choose a conversation from the left to start messaging." />
           </div>
         ) : (
           <>
             {/* Thread header */}
-            {activeListing && (
-              <div className="p-5 border-b border-surface-container-highest flex items-center gap-3 bg-surface-container-lowest">
-                <div className="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center font-bold text-on-primary-container font-headline text-sm">
-                  {getInitials(activeListing.title)}
-                </div>
-                <div>
-                  <p className="font-semibold text-on-surface">{activeListing.title}</p>
-                  <p className="text-xs text-on-surface-variant">with {activeListing.owner.fullName}</p>
-                </div>
-              </div>
-            )}
+            <div className="p-5 border-b border-surface-container-highest flex items-center gap-3 bg-surface-container-lowest">
+              <Link
+                to="/chat"
+                aria-label="Back to conversations"
+                className="md:hidden -ml-2 grid h-9 w-9 shrink-0 place-items-center rounded-full text-on-surface-variant transition-colors hover:bg-surface-container-low"
+              >
+                <span className="material-symbols-outlined text-[20px]">arrow_back</span>
+              </Link>
+              {activeListing && (
+                <>
+                  <div className="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center font-bold text-on-primary-container font-headline text-sm shrink-0">
+                    {getInitials(activeListing.owner.fullName)}
+                  </div>
+                  <div className="min-w-0">
+                    <p className="font-semibold text-on-surface truncate">{activeListing.owner.fullName}</p>
+                    <p className="text-xs text-on-surface-variant truncate flex items-center gap-1">
+                      <span className="material-symbols-outlined text-[13px]">sell</span>
+                      <span className="truncate">{activeListing.title}</span>
+                    </p>
+                  </div>
+                </>
+              )}
+            </div>
 
             {/* Messages */}
             <div className="flex-grow overflow-y-auto p-6 space-y-4">
@@ -143,7 +160,7 @@ export function ChatPage() {
                           {getInitials(msg.sender.fullName)}
                         </div>
                       )}
-                      <div className={`max-w-[70%] px-4 py-3 rounded-2xl text-sm font-body leading-relaxed
+                      <div className={`max-w-[85%] sm:max-w-[70%] px-4 py-3 rounded-2xl text-sm font-body leading-relaxed
                         ${isMine ? 'bg-surface-container text-on-surface rounded-bl-sm' : 'bg-primary text-on-primary rounded-br-sm'}`}>
                         <p>{msg.content}</p>
                         <p className={`text-[10px] mt-1 ${isMine ? 'text-on-surface-variant' : 'text-on-primary/60'}`}>

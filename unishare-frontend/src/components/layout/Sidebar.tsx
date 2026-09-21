@@ -2,6 +2,7 @@ import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import { getInitials } from '../../utils/formatters';
+import { ChatDropdown } from '../../features/chat/ChatDropdown';
 
 const sidebarLinkClass = ({ isActive }: { isActive: boolean }) =>
   `mobile-nav-link ${isActive ? 'mobile-nav-link-active' : ''}`;
@@ -124,10 +125,6 @@ export function Sidebar() {
             <span className="material-symbols-outlined text-[19px]">event_available</span>
             My Bookings
           </NavLink>
-          <NavLink to="/chat" onClick={closeDrawer} className={sidebarLinkClass}>
-            <span className="material-symbols-outlined text-[19px]">chat_bubble</span>
-            Messages
-          </NavLink>
         </>
       )}
       {isAdmin && (
@@ -203,6 +200,7 @@ export function Sidebar() {
           </Link>
         </div>
         <div className="flex items-center gap-1">
+          {isAuthenticated && <ChatDropdown />}
           {notificationsButton}
           {profileMenu}
         </div>
